@@ -37,7 +37,7 @@
                                             <div class="form-group">
                                                 <label for="">Kelas</label>
                                                 <select name="kelas" id="kelas" class="form-control">
-                                                    <option value="{{ $zoom->kelas }}">-- Pilih Kelas --</option>
+                                                    <option value="">-- Pilih Kelas --</option>
                                                     <option value="Kelas A"
                                                         {{ $zoom->kelas == 'Kelas A' ? 'selected' : '' }}>Kelas A
                                                     </option>

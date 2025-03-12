@@ -49,7 +49,9 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->kelas }}</td>
-                                                <td>{{ $item->link }}</td>
+                                                <td>
+                                                    <a href="{{ $item->link }}" target="_blank">Hantam disini</a>
+                                                </td>
                                                 <td>
                                                     <!-- Button trigger modal -->
                                                     <a href="{{ url('admin/zoom/ubah/' . $item->kdzoom) }}"
@@ -73,6 +75,7 @@
         </div>
     </div>
 
+    @include('admin.master.zoom.hapus')
 @endsection
 
 @push('js')

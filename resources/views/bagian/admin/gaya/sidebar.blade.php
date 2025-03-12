@@ -67,7 +67,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="admin/master/dataperpustakaan">
                                     <span class="sub-item">Data Perpustakaan</span>
                                 </a>
                             </li>
@@ -92,6 +92,13 @@
                     </div>
                 </li>
 
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span>
+                    <h4 class="text-section">User</h4>
+                </li>
+                {{-- Data User --}}
                 <li class="nav-item">
                     <a href="#base">
                         <i class="fa-solid fa-user"></i>

@@ -85,6 +85,8 @@
         </div>
     </div>
 
+    @include('admin.master.modul.hapus')
+
 @endsection
 
 @push('js')

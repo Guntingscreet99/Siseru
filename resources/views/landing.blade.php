@@ -485,19 +485,22 @@
                             <li><i class="bi bi-check"></i> <span>Modul pembelajaran terpercaya</span></li>
                             <li><i class="bi bi-check"></i> <span>Cocok untuk pengajar Sekolah Dasar </span></li>
                             <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span></li>
-                            <li class="na"><i class="bi bi-x"></i> <span>Tidak mencakup seluruh pembelajaran</span>
+                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span></li>
+                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span></li>
+                            {{-- <li class="na"><i class="bi bi-x"></i> <span>Tidak mencakup seluruh pembelajaran</span>
                             </li>
                             <li class="na"><i class="bi bi-x"></i> <span>Massa ultricies mi quis
-                                    hendrerit</span></li>
+                                    hendrerit</span></li> --}}
                         </ul>
                         <a href="#" class="buy-btn">Click Now</a>
                     </div>
                 </div><!-- End Pricing Item -->
 
                 <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
-                    <div class="pricing-item featured">
+                    <div class="pricing-item ">
+                        {{-- <div class="pricing-item featured"> --}}
                         <h3>Jurnal</h3>
-                        <h4><sup></sup>100<span> / Jurnal</span></h4>
+                        <h4><sup></sup>100<span> / Artikel</span></h4>
                         <ul>
                             <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>
                             <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>

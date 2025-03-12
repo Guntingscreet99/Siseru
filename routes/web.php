@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Master\DataModulController;
+use App\Http\Controllers\Admin\Master\DataPerpustakaanController;
 use App\Http\Controllers\Admin\Master\DataVideoController;
 use App\Http\Controllers\Admin\Master\DataZoomController;
 use App\Http\Controllers\LandingController;
+use App\Models\DataPerpustakaan;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -57,7 +59,16 @@ Route::get('admin/zoom/cari', [DataZoomController::class, 'caridata'])->name('ad
 Route::get('admin/zoom/ubah/{kdzoom}', [DataZoomController::class, 'tampiledit'])->name('admin.zoom.edit-tampil');
 Route::put('admin/zoom-edit/{kdzoom}', [DataZoomController::class, 'editdata'])->name('admin.zoom.edit');
 // HAPUS
-Route::delete('admin/zoom-hapus/{kdzoom}', [DataZoomController::class, 'hapus'])->name('admmin.zoom.hapus');
+Route::delete('admin/zoom-hapus/{kdzoom}', [DataZoomController::class, 'hapus'])->name('admin.zoom.hapus');
+
+// MASTER PERPUSTAKAAN
+// INDEX
+Route::get('admin/master/dataperpustakaan', [DataPerpustakaanController::class, 'index'])->name('admin.master.perpustakaan');
+// TAMBAH
+Route::post('admin/perpustakaan/tambah', [DataPerpustakaanController::class, 'tambah'])->name('admin.perpustakaan.tambah');
+// EDIT
+
+// HAPUS
 
 
 // USER

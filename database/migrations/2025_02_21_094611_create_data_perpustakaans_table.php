@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('data_perpustakaans', function (Blueprint $table) {
             $table->id();
+            $table->string('judulbuku');
+            $table->string('kategoribuku');
+            $table->string('judulmodul');
+            $table->string('kategorimodul');
+            $table->string('judulartikel');
+            $table->string('kategoriartikel');
             $table->timestamps();
         });
     }

@@ -62,12 +62,12 @@ class DataZoomController extends Controller
         $zoom = DataZoom::where('kdzoom', $kdzoom)->firstOrFail();
 
         $request->validate([
-            'judul' => 'required',
+            'kelas' => 'required',
             'link' => 'required',
         ]);
 
         $zoom->update([
-            'judul' => $request->judul,
+            'kelas' => $request->kelas,
             'link' => $request->link,
         ]);
 
@@ -76,7 +76,10 @@ class DataZoomController extends Controller
 
     // Hapus
     public function hapus($kdzoom){
+        // dd($kdzoom);
         $zoom = DataZoom::where('kdzoom', $kdzoom)->firstOrFail();
+
+        $zoom->delete();
 
         return redirect()->route('admin.master.zoom')->with('success', 'Data Berhasil Dihapus');
     }
