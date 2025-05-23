@@ -1,5 +1,5 @@
 @extends('bagian.admin.rumah.home')
-@section('judul', 'Admin | Master Data Video')
+@section('judul', 'Admin | Master Data Karya')
 @section('isi')
 
     <div class="container">
@@ -13,8 +13,8 @@
                         <!-- Button trigger modal -->
                         <div class="mb-3" style="display: flex; justify-content: space-between">
                             <div class="form-group">
-                                <a href="{{ url('admin/master/tambahvideo') }}" class="btn btn-primary">
-                                    <i class="fas fa-plus"></i> Tambah Data Video
+                                <a href="{{ url('admin/karya/tampil') }}" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Tambah Data Karya
                                 </a>
                                 {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahguru">
                                  <i class="fas fa-plus"></i> Tambah Data Agama
@@ -34,10 +34,9 @@
                                 <thead class="table-primary">
                                     <tr>
                                         <th scope="col">No</th>
-                                        <th scope="col">Judul Video</th>
-                                        <th scope="col">Deskripsi Video</th>
-                                        <th scope="col">Link Video</th>
-                                        <th scope="col">File Video</th>
+                                        <th scope="col">Nama Karya</th>
+                                        <th scope="col">Deskripsi Karya</th>
+                                        <th scope="col">File Karya</th>
                                         <th scope="col">Aksi</th>
                                     </tr>
                                 </thead>
@@ -50,32 +49,32 @@
                                         @foreach ($video as $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->judul }}</td>
+                                                <td>{{ $item->nama }}</td>
                                                 <td>{{ $item->deskripsi }}</td>
-                                                <td>
+                                                {{-- <td>
                                                     <a href="{{ $item->link }}" target="_blank">
                                                         {{ $item->link }}
                                                     </a>
-                                                </td>
+                                                </td> --}}
                                                 <td>
                                                     @if ($item->fileVideo)
                                                         <video width="250" controls>
-                                                            <source src="{{ Storage::url($item->fileVideo) }}"
-                                                                type="video/mp4">
-                                                            Browser Anda tidak mendukung tag video.
+                                                            <source src="{{ Storage::url($item->fileKarya) }}"
+                                                                type="video/mp4/jpg/png/">
+                                                            Browser Anda tidak mendukung tag karya.
                                                         </video>
                                                     @else
-                                                        <p>Tidak ada Video</p>
+                                                        <p>Tidak ada Karya</p>
                                                     @endif
                                                 </td>
                                                 <td>
                                                     <!-- Button trigger modal -->
-                                                    <a href="{{ url('admin/master/video-tampiledit/' . $item->kdvideo) }}"
+                                                    <a href="{{ url('admin/karya/ubah/' . $item->kdkarya) }}"
                                                         class="btn btn-warning">
                                                         <i class="fas fa-pen"></i> Edit
                                                     </a>
                                                     <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                        data-bs-target="#Hapus{{ $item->kdvideo }}">
+                                                        data-bs-target="#Hapus{{ $item->kdkarya }}">
                                                         <i class="fas fa-trash"> </i>Hapus
                                                     </button>
                                                 </td>
@@ -91,7 +90,7 @@
         </div>
     </div>
 
-    @include('admin.master.video.hapus')
+    @include('admin.master.karya.hapus')
 
 @endsection
 
@@ -106,13 +105,13 @@
                 let query = $(this).val().trim();
 
                 if (query === "") {
-                    $('#video-body').html(""); // Kosongkan jika tidak ada input
+                    $('#karya-body').html(""); // Kosongkan jika tidak ada input
                     return;
                 }
 
                 timer = setTimeout(function() {
                     $.ajax({
-                        url: "{{ route('admin.video.cari') }}",
+                        url: "{{ route('admin.karya.cari') }}",
                         method: "GET",
                         data: {
                             query: query
@@ -128,29 +127,28 @@
                                     rows += `
                                     <tr>
                                         <td>${index + 1}</td>
-                                        <td>${item.judul}</td>
+                                        <td>${item.nama}</td>
                                         <td>${item.deskripsi}</td>
-                                        <td>${item.link}</td>
                                         <td>
                                             <!-- Button Edit -->
-                                            <a href="admin/master/video-tampiledit/${item.kdvideo}" class="btn btn-warning">
+                                            <a href="admin/karya/ubah/${item.kdkarya}" class="btn btn-warning">
                                                 <i class="fas fa-pen"></i> Edit
                                             </a>
 
                                             <!-- Button Hapus -->
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Hapus${item.kdvideo}">
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Hapus${item.kdkarya}">
                                                 <i class="fas fa-trash"></i> Hapus
                                             </button>
 
                                             <!-- Modal Hapus -->
-                                            <div class="modal fade" id="Hapus${item.kdvideo}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal fade" id="Hapus${item.kdkarya}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="staticBackdropLabel">Hapus Data Video</h5>
+                                                            <h5 class="modal-title" id="staticBackdropLabel">Hapus Data Karya</h5>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                        <form action="admin/master/video-hapus/${item.kdvideo}" method="POST">
+                                                        <form action="admin/karya-hapus/${item.kdkarya}" method="POST">
                                                             <input type="hidden" name="_method" value="DELETE">
                                                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                                             <div class="modal-body">
@@ -172,7 +170,7 @@
                                 });
                             }
 
-                            $('#video-body').html(rows);
+                            $('#karya-body').html(rows);
                         },
                         error: function() {
                             console.log("Gagal mengambil data!");

@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('data_karyas', function (Blueprint $table) {
-            $table->id();
+            $table->id('kdkarya');
+            $table->string('nama')->nullable();
+            $table->string('deskripsi')->nullable();
+            $table->text('fileKarya')->nullable();
+            $table->string('judulFileAsli')->nullable();
             $table->timestamps();
         });
     }

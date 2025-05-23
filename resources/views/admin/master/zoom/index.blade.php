@@ -50,7 +50,7 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->kelas }}</td>
                                                 <td>
-                                                    <a href="{{ $item->link }}" target="_blank">Hantam disini</a>
+                                                    <a href="{{ $item->link }}" target="_blank">Link</a>
                                                 </td>
                                                 <td>
                                                     <!-- Button trigger modal -->

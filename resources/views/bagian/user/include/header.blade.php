@@ -17,7 +17,7 @@
                     </a>
                     <ul>
                         <li>
-                            <a href="">Modul Pembelajaran</a>
+                            <a href="{{ url('admin/dashboard') }}">Modul Pembelajaran</a>
                         </li>
                         <li>
                             <a href="">Video Tutorial</a>

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\Master\DataHasilController;
+use App\Http\Controllers\Admin\Master\DataKaryaController;
 use App\Http\Controllers\Admin\Master\DataModulController;
 use App\Http\Controllers\Admin\Master\DataPerpustakaanController;
 use App\Http\Controllers\Admin\Master\DataVideoController;
@@ -63,13 +65,31 @@ Route::delete('admin/zoom-hapus/{kdzoom}', [DataZoomController::class, 'hapus'])
 
 // MASTER PERPUSTAKAAN
 // INDEX
-Route::get('admin/master/dataperpustakaan', [DataPerpustakaanController::class, 'index'])->name('admin.master.perpustakaan');
+Route::get('admin/master/dataperpus', [DataPerpustakaanController::class, 'index'])->name('admin.master.perpus');
 // TAMBAH
-Route::post('admin/perpustakaan/tambah', [DataPerpustakaanController::class, 'tambah'])->name('admin.perpustakaan.tambah');
+Route::get('admin/perpus/tampil', [DataPerpustakaanController::class, 'tampildata'])->name('admin.perpus.tampil');
+Route::post('admin/perpus/tambah', [DataPerpustakaanController::class, 'tambahdata'])->name('admin.perpus.tambah');
+// CARI
+Route::get('admin/perpus/cari', [DataPerpustakaanController::class, 'cari'])->name('admin.perpus.cari');
 // EDIT
-
+Route::get('admin/perpus/ubah/{kdperpus}', [DataPerpustakaanController::class, 'tampiledit'])->name('admin.perpus.edit-tampil');
+Route::put('admin/perpus-edit/{kdperpus}', [DataPerpustakaanController::class, 'editdata'])->name('admin.perpus.edit');
 // HAPUS
+Route::delete('admin/perpus-hapus/{kdperpus}', [DataPerpustakaanController::class, 'hapus'])->name('admin.perpus.hapus');
 
+// MASTER KARYA MAHASISWA
+//INDEX
+Route::get('admin/master/datakarya', [DataKaryaController::class, 'index'])->name('admin.master.karya');
+//TAMBAH
+Route::get('admin/karya/tampil', [DataKaryaController::class, 'tampildata'])->name('admin.karya.tampil');
+Route::put('admin/karya/tambah', [DataKaryaController::class, 'tambahdata'])->name('admin.karya.tambah');
+// CARI
+Route::get('admin/karya/cari', [DataKaryaController::class, 'cari'])->name('admin.karya.cari');
+// EDIT
+Route::get('admin/karya/ubah/{kdkarya}', [DataKaryaController::class, 'tampiledit'])->name('admin.karya.edit-tampil');
+Route::put('admin/karya-edit/{kdkarya}', [DataKaryaController::class, 'editdata'])->name('admin.karya.edit');
+// HAPUS
+Route::delete('admin/karya-hapus/{kdkarya}', [DataKaryaController::class, 'hapus'])->name('admin.karya.hapus');
 
 // USER
 
