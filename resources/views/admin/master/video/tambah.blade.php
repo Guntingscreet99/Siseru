@@ -17,13 +17,13 @@
                                     <i class="fas fas fa-arrow-left"></i> Kembali
                                 </a>
                             </div>
-                            <div class="form-group" style="display: flex; align-items: center;">
+                            {{-- <div class="form-group" style="display: flex; align-items: center;">
                                 <input type="text" name="search" id="search" class="form-control"
                                     placeholder="Cari..." style="width: 70%;">
                                 <button class="btn btn-info" type="button">
                                     <i class="fas fa-search"></i>
                                 </button>
-                            </div>
+                            </div> --}}
                         </div>
                         <form action="{{ url('admin/master/tambah/video') }}" method="POST" enctype="multipart/form-data">
                             @csrf
@@ -49,6 +49,17 @@
                                             <div class="form-group">
                                                 <label for="">File Video</label>
                                                 <input type="file" name="fileVideo" id="fileVideo" class="form-control">
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="judulFileAsli">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Status Video</label>
+                                                <select name="status" id="status" class="form-control">
+                                                    <option value="">-- Pilih Status --</option>
+                                                    <option value="Ditampilkan">Ditampilkan</option>
+                                                    <option value="Tidak ditampilkan">Tidak Ditampilkan</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">

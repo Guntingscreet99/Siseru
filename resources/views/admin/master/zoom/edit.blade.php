@@ -17,13 +17,6 @@
                                     <i class="fas fas fa-arrow-left"></i> Kembali
                                 </a>
                             </div>
-                            <div class="form-group" style="display: flex; align-items: center;">
-                                <input type="text" name="search" id="search" class="form-control"
-                                    placeholder="Cari..." style="width: 70%;">
-                                <button class="btn btn-info" type="button">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
                         </div>
                         <form action="{{ url('admin/zoom-edit/' . $zoom->kdzoom) }}" method="POST"
                             enctype="multipart/form-data">
@@ -70,9 +63,32 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label for="">Link</label>
-                                                <input type="text" name="link" id="link" class="form-control"
-                                                    value="{{ $zoom->link }}" placeholder="Masukkan Link">
+                                                <label for="">Link Zoom</label>
+                                                <input type="text" name="linkZoom" id="linkZoom" class="form-control"
+                                                    value="{{ $zoom->linkZoom }}" placeholder="Masukkan Link Zoom">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Link Webinar</label>
+                                                <input type="text" name="linkWebinar" id="linkWebinar"
+                                                    class="form-control" value="{{ $zoom->linkWebinar }}"
+                                                    placeholder="Masukkan Link Webinar">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Status</label>
+                                                <select name="status" id="status" class="form-control">
+                                                    <option value="">-- Pilih Status --</option>
+                                                    <option value="Ditampilkan"
+                                                        {{ $zoom->status == 'Ditampilkan' ? 'selected' : '' }}>Ditampilkan
+                                                    </option>
+                                                    <option value="Tidak Ditampilkan"
+                                                        {{ $zoom->status == 'Tidak Ditampilkan' ? 'selected' : '' }}>Tidak
+                                                        Ditampilkan
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>

@@ -18,6 +18,29 @@
                                 </a>
                             </div>
                         </div>
+                        {{-- ALERT UNTUK PESAN SUKSES --}}
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        {{-- ALERT UNTUK PESAN ERROR VALIDASI --}}
+                        @if ($errors->any())
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Terjadi kesalahan!</strong>
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endif
+
                         <form action="{{ url('admin/modul-tambah') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="modal-body">
@@ -66,6 +89,17 @@
                                             <div class="form-group">
                                                 <label for="">File Modul</label>
                                                 <input type="file" name="fileModul" id="fileModul" class="form-control">
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="judulFileAsli">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Status Modul</label>
+                                                <select name="status" id="status" class="form-control">
+                                                    <option value="">-- Pilih Status --</option>
+                                                    <option value="Ditampilkan">Ditampilkan</option>
+                                                    <option value="Tidak ditampilkan">Tidak Ditampilkan</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">

@@ -1,14 +1,14 @@
 {{-- Modal hapus --}}
-@foreach ($video as $item)
-    <div class="modal fade" id="Hapus{{ $item->kdvideo }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+@foreach ($semester as $item)
+    <div class="modal fade" id="hapus{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Hapus Data Video</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Hapus Data Modul</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ url('admin/master/video-hapus/' . $item->kdvideo) }}"method="POST"
+                <form action="{{ url('admin/master/semester-hapus/' . $item->id) }}"method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     @method('DELETE')

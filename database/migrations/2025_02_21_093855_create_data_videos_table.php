@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('judul')->nullable();
             $table->string('deskripsi')->nullable();
             $table->string('link')->nullable();
+            $table->string('status')->nullable();
             $table->text('fileVideo')->nullable();
             $table->string('judulFileAsli')->nullable();
             $table->timestamps();

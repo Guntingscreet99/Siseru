@@ -12,13 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('data_perpustakaans', function (Blueprint $table) {
-            $table->id();
-            $table->string('judulbuku');
-            $table->string('kategoribuku');
-            $table->string('judulmodul');
-            $table->string('kategorimodul');
-            $table->string('judulartikel');
-            $table->string('kategoriartikel');
+            $table->id('kdperpus');
+            $table->string('judul')->nullable();
+            $table->string('deskripsi')->nullable();
+            $table->string('kategori')->nullable();
+            $table->string('topik')->nullable();
+            $table->string('tahun')->nullable();
+            $table->string('status')->nullable();
+            $table->text('filePerpus')->nullable();
+            $table->string('judulFileAsli')->nullable();
             $table->timestamps();
         });
     }

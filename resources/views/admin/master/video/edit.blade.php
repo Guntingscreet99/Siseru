@@ -17,13 +17,13 @@
                                     <i class="fas fas fa-arrow-left"></i> Kembali
                                 </a>
                             </div>
-                            <div class="form-group" style="display: flex; align-items: center;">
+                            {{-- <div class="form-group" style="display: flex; align-items: center;">
                                 <input type="text" name="search" id="search" class="form-control"
                                     placeholder="Cari..." style="width: 70%;">
                                 <button class="btn btn-info" type="button">
                                     <i class="fas fa-search"></i>
                                 </button>
-                            </div>
+                            </div> --}}
                         </div>
                         <form action="{{ url('admin/master/video/edit/' . $video->kdvideo) }}" method="POST"
                             enctype="multipart/form-data">
@@ -111,6 +111,21 @@
                                                         </label>
                                                     </div>
                                                 @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Status</label>
+                                                <select name="status" id="status" class="form-control">
+                                                    <option value="">-- Pilih Status --</option>
+                                                    <option value="Ditampilkan"
+                                                        {{ $video->status == 'Ditampilkan' ? 'selected' : '' }}>Ditampilkan
+                                                    </option>
+                                                    <option value="Tidak Ditampilkan"
+                                                        {{ $video->status == 'Tidak Ditampilkan' ? 'selected' : '' }}>Tidak
+                                                        Ditampilkan
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>

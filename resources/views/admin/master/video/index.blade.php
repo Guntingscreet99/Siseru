@@ -38,13 +38,14 @@
                                         <th scope="col">Deskripsi Video</th>
                                         <th scope="col">Link Video</th>
                                         <th scope="col">File Video</th>
+                                        <th scope="col">Status</th>
                                         <th scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="video-body">
                                     @if ($video->isEmpty())
                                         <tr>
-                                            <td colspan="6" class="text-center">Data Masih Kosong</td>
+                                            <td colspan="7" class="text-center">Data Masih Kosong</td>
                                         </tr>
                                     @else
                                         @foreach ($video as $item)
@@ -67,6 +68,23 @@
                                                     @else
                                                         <p>Tidak ada Video</p>
                                                     @endif
+                                                </td>
+                                                <td>
+                                                    <form method="POST" action="{{ url('admin/video/update-status') }}">
+                                                        @csrf
+                                                        <input type="hidden" name="kdvideo" value="{{ $item->kdvideo }}">
+                                                        <div class="status-wrapper">
+                                                            <input type="checkbox" name="status"
+                                                                id="status_{{ $item->kdvideo }}" value="Ditampilkan"
+                                                                onchange="this.form.submit()"
+                                                                {{ $item->status === 'Ditampilkan' ? 'checked' : '' }}>
+                                                            <label for="status_{{ $item->kdvideo }}"
+                                                                class="status-button"></label>
+                                                            <div class="status-text">
+                                                                <span>{{ $item->status }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </form>
                                                 </td>
                                                 <td>
                                                     <!-- Button trigger modal -->
@@ -95,6 +113,61 @@
 
 @endsection
 
+@push('css')
+    <style>
+        .status-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Hide the default checkbox */
+        .status-wrapper input[type="checkbox"] {
+            display: none;
+        }
+
+        /* Custom switch style */
+        .status-button {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+            background-color: #ccc;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .status-button::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        /* Checked state */
+        .status-wrapper input[type="checkbox"]:checked+.status-button {
+            background-color: #3314fe;
+        }
+
+        .status-wrapper input[type="checkbox"]:checked+.status-button::after {
+            transform: translateX(24px);
+        }
+
+        .status-text span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+    </style>
+@endpush
+
 @push('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -122,7 +195,7 @@
 
                             if (data.length === 0) {
                                 rows =
-                                    `<tr><td colspan="3" class="text-center">Data tidak ditemukan.</td></tr>`;
+                                    `<tr><td colspan="5" class="text-center">Data tidak ditemukan.</td></tr>`;
                             } else {
                                 $.each(data, function(index, item) {
                                     rows += `
@@ -131,6 +204,7 @@
                                         <td>${item.judul}</td>
                                         <td>${item.deskripsi}</td>
                                         <td>${item.link}</td>
+                                        <td>${item.status}</td>
                                         <td>
                                             <!-- Button Edit -->
                                             <a href="admin/master/video-tampiledit/${item.kdvideo}" class="btn btn-warning">

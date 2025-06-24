@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 class DataZoomController extends Controller
 {
     // data
-    public function index(){
+    public function index()
+    {
         $zoom = DataZoom::all();
         return view('admin.master.zoom.index', compact('zoom'));
     }
@@ -18,12 +19,14 @@ class DataZoomController extends Controller
     public function cari(Request $request)
     {
         if ($request->ajax()) {
-            $query = $request-> input('query');
+            $query = $request->input('query');
 
-            $zoom = DataZoom::Where('id', 'like',"%$query%")
-                        ->orWhere('kelas', 'like', "%$query%")
-                        ->orWhere('link', 'like', "%$query%")
-                        ->get();
+            $zoom = DataZoom::Where('id', 'like', "%$query%")
+                ->orWhere('kelas', 'like', "%$query%")
+                ->orWhere('linkZoom', 'like', "%$query%")
+                ->orWhere('linkWebinar', 'like', "%$query%")
+                ->orWhere('status', 'like', "%$query%")
+                ->get();
             return response()->json($zoom);
         }
 
@@ -31,56 +34,82 @@ class DataZoomController extends Controller
     }
 
     // tambah
-    public function tampildata(){
+    public function tampildata()
+    {
         return view('admin.master.zoom.tambah');
     }
 
-    public function tambahdata(Request $request){
+    public function tambahdata(Request $request)
+    {
         $request->validate([
             'kelas' => 'required',
-            'link' => 'required',
-        ],[
+            'linkZoom' => 'required',
+            'linkWebinar' => 'required',
+            'status' => 'required',
+        ], [
             'kelas.required' => 'Kelas Wajib Diisi!',
-            'link.required' => 'link Wajib Diisi!',
+            'status.required' => 'Status Wajib Diisi!',
         ]);
 
         DataZoom::create([
             'kelas' => $request->input('kelas'),
-            'link' => $request->input('link'),
+            'linkZoom' => $request->input('linkZoom'),
+            'linkWebinar' => $request->input('linkWebinar'),
+            'status' => $request->input('status'),
         ]);
 
         return redirect()->route('admin.master.zoom')->with('success', 'Data Berhasil Ditambah');
     }
 
     // Edit Data
-    public function tampiledit($kdzoom){
+    public function tampiledit($kdzoom)
+    {
         $zoom = DataZoom::where('kdzoom', $kdzoom)->firstOrFail();
         return view('admin.master.zoom.edit', compact('zoom'));
     }
 
-    public function editdata(Request $request, $kdzoom){
+    public function editdata(Request $request, $kdzoom)
+    {
         $zoom = DataZoom::where('kdzoom', $kdzoom)->firstOrFail();
 
         $request->validate([
             'kelas' => 'required',
-            'link' => 'required',
+            'linkZoom' => 'required',
+            'linkWebinar' => 'required',
+            'status' => 'required',
         ]);
 
         $zoom->update([
             'kelas' => $request->kelas,
-            'link' => $request->link,
+            'linkZoom' => $request->linkZoom,
+            'linkWebinar' => $request->linkWebinar,
+            'status' => $request->status,
         ]);
 
         return redirect()->route('admin.master.zoom')->with('success', 'Data Berhasil Diubah');
     }
 
     // Hapus
-    public function hapus($kdzoom){
+    public function hapus($kdzoom)
+    {
         // dd($kdzoom);
         $zoom = DataZoom::where('kdzoom', $kdzoom)->firstOrFail();
 
         $zoom->delete();
 
         return redirect()->route('admin.master.zoom')->with('success', 'Data Berhasil Dihapus');
+    }
+
+    // Status
+    public function updateStatus(Request $request)
+    {
+        $zoomId = $request->input('kdzoom');
+        $isChecked = $request->has('status') ? 'Ditampilkan' : 'Tidak Ditampilkan';
+
+        $zoom = DataZoom::findOrFail($zoomId);
+        $zoom->status = $isChecked;
+        $zoom->save();
+
+        return redirect()->back()->with('status', 'Status Berhasil Diubah!');
     }
 }

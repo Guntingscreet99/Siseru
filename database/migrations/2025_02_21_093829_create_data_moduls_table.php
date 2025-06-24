@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('tahun')->nullable();
             $table->text('fileModul')->nullable();
             $table->string('judulFileAsli')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

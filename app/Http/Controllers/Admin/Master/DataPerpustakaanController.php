@@ -5,71 +5,162 @@ namespace App\Http\Controllers\Admin\Master;
 use App\Http\Controllers\Controller;
 use App\Models\DataPerpustakaan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DataPerpustakaanController extends Controller
 {
-    public function index(){
-        $perpustakaan = DataPerpustakaan::all();
-        return view('admin.master.perpustakaan.index', compact('perpustakaan'));
+    public function index()
+    {
+        $perpus = DataPerpustakaan::all();
+        return view('admin.master.perpustakaan.index', compact('perpus'));
     }
 
-    public function tambah(Request $request)
+    public function cari(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = $request->input('query');
+
+            $perpus = DataPerpustakaan::where('id', 'like', "%$query%")
+                ->orWhere('judul', 'like', "%$query%")
+                ->orWhere('deskripsi', 'like', "%$query%")
+                ->orWhere('kategori', 'like', "%$query%")
+                ->orWhere('topik', 'like', "%$query%")
+                ->orWhere('tahun', 'like', "%$query%")
+                ->orWhere('judulFileAsli', 'like', "%$query%")
+                ->orWhere('status', 'like', "%$query%")
+                ->get();
+
+            return response()->json($perpus);
+        }
+
+        return redirect()->route('admin.master.perpus');
+    }
+
+    // Tambah Data
+    public function tampildata()
+    {
+        return view('admin.master.perpustakaan.tambah');
+    }
+
+    public function tambahdata(Request $request)
     {
         // Validasai imput data di modal
         $request->validate([
-            'judulbuku' => 'required|max:225',
-            'kategoribuku' => 'required|max:225',
-            'judulmodul' => 'required|max:225',
-            'kategorimodul' => 'required|max:225',
-            'judulartikel' => 'required|max:225',
-            'kategoriartikel' => 'required|max:225',
-        ],[
-            'judulbuku.required' => 'Judul Buku Harus Diisi!.',
-            'kategoribuku.required' => 'Kategori Buku Harus Diisi!.',
-            'judulmodul.required' => 'Judul Modul Harus Diisi!.',
-            'kategorimodul.required' => 'Kategori Modul Harus Diisi!.',
-            'judulartikel.required' => 'Judul Artikel Harus Diisi!.',
-            'kategoriartikel.required' => 'Kategori Artikel Harus Diisi!.',
+            'judul' => 'required',
+            'deskripsi' => 'required',
+            'kategori' => 'required',
+            'topik' => 'required',
+            'tahun' => 'required',
+            'filePerpus' => 'nullable|file|max:20480',
+            'status' => 'required',
+        ], [
+            'judul.required' => 'Judul Wajib Diisi!.',
+            'deskripsi.required' => 'Deskripsi Wajib Diisi!.',
+            'kategori.required' => 'Kategori Wajib Diisi!.',
+            'topik.required' => 'Topik Wajib Diisi!.',
+            'tahun.required' => 'Tahun Wajib Diisi!.',
+            // 'filePerpus.required' => 'File Perpustakaan Wajib Diisi!.',
+        ]);
+
+        $mdl = null;
+        $judulAsli = null;
+
+        if ($request->hasFile('filePerpus')) {
+            $file = $request->file('filePerpus');
+            $judulAsli = $file->getClientOriginalName();
+            $mdl = $file->store('filePerpus', 'public');
+        }
+
+        $data = [
+            'judul' => $request->input('judul'),
+            'deskripsi' => $request->input('deskripsi'),
+            'kategori' => $request->input('kategori'),
+            'topik' => $request->input('topik'),
+            'tahun' => $request->input('tahun'),
+            'status' => $request->input('status'),
+            'filePerpus' => $mdl ?? '',
+            'judulFileAsli' => $judulAsli,
+        ];
+
+        DataPerpustakaan::create($data);
+
+        // dd($data);
+        return redirect()->route('admin.master.perpus')->with('success', 'Data Berhasil Ditambah');
+    }
+
+    // Edit Data
+    public function tampiledit($kdperpus)
+    {
+        $perpus = DataPerpustakaan::where('kdperpus', $kdperpus)->firstOrFail();
+        return view('admin.master.perpustakaan.edit', compact('perpus'));
+    }
+
+    public function editdata(Request $request, $kdperpus)
+    {
+        $request->validate([
+            'judul' => 'required',
+            'deskripsi' => 'required',
+            'kategori' => 'required',
+            'topik' => 'required',
+            'tahun' => 'required',
+            'filePerpus' => 'nullable|file|max:20480',
+            'status' => 'required',
+        ]);
+
+        $perpus = DataPerpustakaan::where('kdperpus', $kdperpus)->firstOrFail();
+
+        if (!$request->has('gunakan_file_lama') && $request->hasFile('filePerpus')) {
+            if ($perpus->filePerpus) {
+                Storage::disk('public')->delete($perpus->filePerpus);
+            }
+
+            $file = $request->file('filePerpus');
+            $judulAsli = $file->getClientOriginalName();
+            $mdl = $file->store('filePerpus', 'public');
+
+            $perpus->update([
+                'filePerpus' => $mdl,
+                'judulFileAsli' => $judulAsli,
+            ]);
+        }
+
+        $perpus->update([
+            'judul' => $request->input('judul'),
+            'deskripsi' => $request->input('deskripsi'),
+            'kategori' => $request->input('kategori'),
+            'topik' => $request->input('topik'),
+            'tahun' => $request->input('tahun'),
+            'status' => $request->input('status'),
 
         ]);
 
-        $data = [
-            'judulbuku' => $request->judulbuku,
-            'kategoribuku' => $request->kategoribuku,
-            'judulmodul' => $request->judulmodul,
-            'kategorimodul' => $request->kategorimodul,
-            'judulartikel' => $request->judulartikel,
-            'kategoriartikel' => $request->kategoriartikel,
-        ];
-
-        // dd($data);
-
-        DataPerpustakaan::create($data);
-        return redirect()->route('dataperpustakaan.index')->with('success', 'Data Berhasil Ditambah!.');
+        return redirect()->route('admin.master.perpus')->with('success', 'Data Berhasil Diubah');
     }
 
-//Edit
-    public function edit(Request $request, $id)
-        {
-            $data = [
-                'judulbuku' => $request->judulbuku,
-                'kategoribuku' => $request->kategoribuku,
-                'judulmodul' => $request->judulmodul,
-                'kategorimodul' => $request->kategorimodul,
-                'judulartikel' => $request->judulartikel,
-                'kategoriartikel' => $request->kategoriartikel,
-            ];
+    // Hapus Data
+    public function hapus($kdperpus)
+    {
+        $perpus = DataPerpustakaan::where('kdperpus', $kdperpus)->firstOrFail();
 
-            Dataperpustakaan::find($id)->update($data);
-
-            return redirect()->route('admin.master.perpustakaan')->with('success','Data Berhasil Diedit!.');
+        if ($perpus->filePerpus) {
+            Storage::disk('public')->delete($perpus->filePerpus);
         }
 
-// Hapus
-    public function hapus ($id)
+        $perpus->delete();
+
+        return redirect()->route('admin.master.perpus')->with('success', 'Data Berhasil Dihapus');
+    }
+
+    // Status
+    public function updateStatus(Request $request)
     {
-        DataPerpustakaan::destroy($id);
-        return redirect()->route('dataperpustakaan.index')->with('success','Data Berhasil Disimpan!.');
+        $perpusId = $request->input('kdperpus');
+        $isChecked = $request->has('status') ? 'Ditampilkan' : 'Tidak Ditampilkan';
+
+        $perpus = DataPerpustakaan::findorFail($perpusId);
+        $perpus->status = $isChecked;
+        $perpus->save();
+
+        return redirect()->back()->with('status', 'Status Berhasil Diubah');
     }
 }
-

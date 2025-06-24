@@ -10,4 +10,10 @@ class DataPerpustakaan extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $table = 'data_perpustakaans';
+    protected $primaryKey = 'kdperpus';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
+    protected $fillable = ['judul', 'deskripsi', 'kategori', 'topik', 'tahun', 'filePerpus', 'status'];
 }

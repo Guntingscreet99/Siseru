@@ -15,7 +15,7 @@ class DataVideo extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
-    protected $fillable = ['judul', 'deskripsi', 'link', 'fileVideo']; // Pastikan field ini ada di DB
+    protected $fillable = ['judul', 'deskripsi', 'link', 'fileVideo', 'status']; // Pastikan field ini ada di DB
 
 
 

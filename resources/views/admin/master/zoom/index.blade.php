@@ -35,14 +35,16 @@
                                     <tr>
                                         <th scope="col">No</th>
                                         <th scope="col">Kelas</th>
-                                        <th scope="col">Link</th>
+                                        <th scope="col">Link Zoom</th>
+                                        <th scope="col">Link Webinar</th>
+                                        <th scope="col">Status</th>
                                         <th scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="zoom-body">
                                     @if ($zoom->isEmpty())
                                         <tr>
-                                            <td colspan="4" class="text-center">Data Masih Kosong</td>
+                                            <td colspan="6" class="text-center">Data Masih Kosong</td>
                                         </tr>
                                     @else
                                         @foreach ($zoom as $item)
@@ -50,7 +52,27 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->kelas }}</td>
                                                 <td>
-                                                    <a href="{{ $item->link }}" target="_blank">Link</a>
+                                                    <a href="{{ $item->linkZoom }}" target="_blank">Link Zoom</a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ $item->linkWebinar }}" target="_blank">Link Webinar</a>
+                                                </td>
+                                                <td>
+                                                    <form method="POST" action="{{ url('admin/zoom/update-status') }}">
+                                                        @csrf
+                                                        <input type="hidden" name="kdzoom" value="{{ $item->kdzoom }}">
+                                                        <div class="status-wrapper">
+                                                            <input type="checkbox" name="status"
+                                                                id="status_{{ $item->kdzoom }}" value="Ditampilkan"
+                                                                onchange="this.form.submit()"
+                                                                {{ $item->status === 'Ditampilkan' ? 'checked' : '' }}>
+                                                            <label for="status_{{ $item->kdzoom }}"
+                                                                class="status-button"></label>
+                                                            <div class="status-text">
+                                                                <span>{{ $item->status }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </form>
                                                 </td>
                                                 <td>
                                                     <!-- Button trigger modal -->
@@ -77,6 +99,61 @@
 
     @include('admin.master.zoom.hapus')
 @endsection
+
+@push('css')
+    <style>
+        .status-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Hide the default checkbox */
+        .status-wrapper input[type="checkbox"] {
+            display: none;
+        }
+
+        /* Custom switch style */
+        .status-button {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+            background-color: #ccc;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .status-button::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        /* Checked state */
+        .status-wrapper input[type="checkbox"]:checked+.status-button {
+            background-color: #3314fe;
+        }
+
+        .status-wrapper input[type="checkbox"]:checked+.status-button::after {
+            transform: translateX(24px);
+        }
+
+        .status-text span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+    </style>
+@endpush
 
 @push('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -107,7 +184,7 @@
 
                                 if (data.length === 0) {
                                     rows =
-                                        `<tr><td colspan="2" class="text-center">Data tidak ditemukan.</td></tr>`;
+                                        `<tr><td colspan="5" class="text-center">Data tidak ditemukan.</td></tr>`;
                                 } else {
                                     // $.each(data, function(index, item) {
                                     //     let fileUrl = item.fileModul ?
@@ -119,7 +196,9 @@
                                     <tr>
                                         <td>${index + 1}</td>
                                         <td>${item.kelas}</td>
-                                        <td>${item.link}</td>
+                                        <td>${item.linkZoom}</td>
+                                        <td>${item.linkWebinar}</td>
+                                        <td>${item.status}</td>
 
                                         <td>
                                             <a href="{{ url('admin/zoom-edit') }}/${item.id}" class="btn btn-warning">

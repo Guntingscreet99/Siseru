@@ -47,6 +47,71 @@
                     <div class="collapse" id="base">
                         <ul class="nav nav-collapse">
                             <li>
+                                <a href="{{ url('admin/master/kelas') }}">
+                                    <span class="sub-item">Data Kelas</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('admin/master/semester') }}">
+                                    <span class="sub-item">Data Semester</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('admin/master-modul') }}">
+                                    <span class="sub-item">Data Akun</span>
+                                </a>
+                            </li>
+                            {{-- <li>
+                                <a href="{{ url('admin/master/datavideo') }}">
+                                    <span class="sub-item">Data Video</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('admin/master/datazoom') }}">
+                                    <span class="sub-item">Data Zoom/Webinar</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('admin/master/dataforum') }}">
+                                    <span class="sub-item">Data Forum</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="admin/master/dataperpustakaan">
+                                    <span class="sub-item">Data Perpustakaan</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('admin/master/datakarya') }}">
+                                    <span class="sub-item">Data Karya Mahasiswa
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="sub-item">Data Ujian/Evaluasi</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="sub-item">Data Peringkat</span>
+                                </a>
+                            </li> --}}
+
+                        </ul>
+                    </div>
+                </li>
+
+                {{-- Data Menu --}}
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#menu">
+                        <i class="fas fa-list"></i>
+                        <p>Data Menu</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="menu">
+                        <ul class="nav nav-collapse">
+                            <li>
                                 <a href="{{ url('admin/master-modul') }}">
                                     <span class="sub-item">Data Modul</span>
                                 </a>
@@ -62,17 +127,17 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ url('admin/master/') }}">
+                                <a href="{{ url('admin/master/dataforum') }}">
                                     <span class="sub-item">Data Forum</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="admin/master/dataperpustakaan">
+                                <a href="{{ url('admin/master/dataperpus') }}">
                                     <span class="sub-item">Data Perpustakaan</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="{{ url('admin/master/datakarya') }}">
                                     <span class="sub-item">Data Karya Mahasiswa
                                     </span>
                                 </a>

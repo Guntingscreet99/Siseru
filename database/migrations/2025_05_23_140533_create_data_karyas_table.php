@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('data_forums', function (Blueprint $table) {
-            $table->id('kdforum');
-            $table->string('akun')->nullable();
-            $table->string('kelas')->nullable();
-            $table->string('semester')->nullable();
-            $table->text('topik')->nullable();
-            $table->string('tahun')->nullable();
-            $table->text('fileForum')->nullable();
+        Schema::create('data_karyas', function (Blueprint $table) {
+            $table->id('kdkarya');
+            $table->string('nama')->nullable();
+            $table->string('deskripsi')->nullable();
+            $table->string('status')->nullable();
+            $table->text('fileKarya')->nullable();
             $table->string('judulFileAsli')->nullable();
             $table->timestamps();
         });
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('data_forums');
+        Schema::dropIfExists('data_karyas');
     }
 };

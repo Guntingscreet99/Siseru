@@ -1,5 +1,5 @@
 @extends('bagian.admin.rumah.home')
-@section('judul', 'Admin | Tambah Zoom')
+@section('judul', 'Admin | Tambah Data Zoom')
 @section('isi')
 
     <div class="container">
@@ -42,9 +42,27 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label for="">Link</label>
-                                                <input type="text" name="link" id="link" class="form-control"
-                                                    placeholder="Masukkan Link">
+                                                <label for="">Link Zoom</label>
+                                                <input type="text" name="linkZoom" id="linkZoom" class="form-control"
+                                                    placeholder="Masukkan Link Zoom">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Link Webinar</label>
+                                                <input type="text" name="linkWebinar" id="linkWebinar"
+                                                    class="form-control" placeholder="Masukkan Link Webinar">
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="judulFileAsli">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Status</label>
+                                                <select name="status" id="status" class="form-control">
+                                                    <option value="">-- Pilih Status --</option>
+                                                    <option value="Ditampilkan">Ditampilkan</option>
+                                                    <option value="Tidak ditampilkan">Tidak Ditampilkan</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>

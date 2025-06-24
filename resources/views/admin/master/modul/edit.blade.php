@@ -17,13 +17,6 @@
                                     <i class="fas fas fa-arrow-left"></i> Kembali
                                 </a>
                             </div>
-                            <div class="form-group" style="display: flex; align-items: center;">
-                                <input type="text" name="search" id="search" class="form-control"
-                                    placeholder="Cari..." style="width: 70%;">
-                                <button class="btn btn-info" type="button">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
                         </div>
                         <form action="{{ url('admin/modul-edit/' . $modul->kdmodul) }}" method="POST"
                             enctype="multipart/form-data">
@@ -87,7 +80,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-12">
+                                        <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">File Modul</label>
                                                 <input type="file" name="fileModul" id="fileModul" class="form-control">
@@ -108,6 +101,21 @@
                                                     <label class="form-check-label" for="gunakan_file_lama">Gunakan file
                                                         lama</label>
                                                 @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Status</label>
+                                                <select name="status" id="status" class="form-control">
+                                                    <option value="">-- Pilih Status --</option>
+                                                    <option value="Ditampilkan"
+                                                        {{ $modul->status == 'Ditampilkan' ? 'selected' : '' }}>Ditampilkan
+                                                    </option>
+                                                    <option value="Tidak Ditampilkan"
+                                                        {{ $modul->status == 'Tidak Ditampilkan' ? 'selected' : '' }}>Tidak
+                                                        Ditampilkan
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">

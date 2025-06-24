@@ -1,82 +1,106 @@
 @extends('bagian.admin.rumah.home')
-@section('judul', 'Admin | Tambah Data perpustakaan')
+@section('judul', 'Admin | Tambah Data Perpustakaan')
 @section('isi')
 
-    <!--Modal Tambah -->
-    <div class="modal fade" id="tambahhasil" data-bs-backdrop="static" data-bs-keyboard="false"tabindex="-1"
-        aria-labelledby="staticBackdropLabel"aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h5 class="modal-title" id="tambahperpustakaan">Tambah Data Perpustakaan</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="container">
+        <div class="page-inner">
+            <div class="guru">
+                <div class="judul">
+                    <h1>@yield('judul')</h1>
                 </div>
-                <form action="{{ url('admin/perpustakaan/tambah') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="">Judul Buku</label>
-                                    <input type="text" class="form-control" placeholder="Masukkan Judul Buku"
-                                        name="judulbuku" id="judulbuku" required></input>
-                                </div>
-                                {{-- <div class="form-group">
-                                <label for="">Kelas Siswa</label>
-                                <select name="kelas" id="kelas"class="form-control">
-                                    <option value="">--Pilih Kelas Anak--</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                </select>
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Button trigger modal -->
+                        <div class="mb-3" style="display: flex; justify-content: space-between">
+                            <div class="form-group">
+                                <a href="{{ url('admin/master/dataperpus') }}" class="btn btn-primary">
+                                    <i class="fas fas fa-arrow-left"></i> Kembali
+                                </a>
+                            </div>
+                            {{-- <div class="form-group" style="display: flex; align-items: center;">
+                                <input type="text" name="search" id="search" class="form-control"
+                                    placeholder="Cari..." style="width: 70%;">
+                                <button class="btn btn-info" type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
                             </div> --}}
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="">Kategori Buku</label>
-                                    <input type="text" class="form-control" placeholder="Masukkan Kategori Buku"
-                                        name="kategoribuku" id="kategoribuku" required>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="">Judul Modul</label>
-                                    <input type="text" class="form-control" placeholder="Masukkan Judul Modul"
-                                        name="judulmodul" id="judulmodul" required>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="">Kategori Modul</label>
-                                    <input type="text" class="form-control" placeholder="Masukkan Kategori Modul"
-                                        name="kategorimodul" id="kategorimodul" required>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="">Judul Artikel</label>
-                                    <input type="text" class="form-control" placeholder="Masukkan Judul Artikel"
-                                        name="judulartikel" id="judulartikel" required>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="">Kategori Artikel</label>
-                                    {{-- <textarea name="hasil" id="hasil" cols="20" rows="5" class="form-control"></textarea> --}}
-                                    <input type="text" class="form-control" placeholder="Masukkan Kategori Artikel"
-                                        name="kategoriartikel" id="kategoriartikel" required>
-                                </div>
-                            </div>
                         </div>
+                        <form action="{{ url('admin/perpus/tambah') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-body">
+                                <table class="table table-responsive table-striped table-bordered text-center"
+                                    style="white-space: nowrap; overflow-x: auto; width: 100%">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Judul</label>
+                                                <input type="text" name="judul" id="judul" class="form-control"
+                                                    placeholder="Masukkan Judul" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Kategori</label>
+                                                <select name="kategori" id="kategori" class="form-control">
+                                                    <option value="">-- Pilih Kategori --</option>
+                                                    <option value="Buku">Buku</option>
+                                                    <option value="Jurnal">Jurnal</option>
+                                                    <option value="Artikel">Artikel</option>
+                                                    <option value="Modul Pembelajaran">Modul Pembelajaran</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Tahun</label>
+                                                <input type="text" name="tahun" id="tahun" class="form-control"
+                                                    placeholder="Masukkan Tahun Terbit" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Tema</label>
+                                                <input type="text" name="topik" id="topik" class="form-control"
+                                                    placeholder="Masukkan Tema" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">File Perpustakaan</label>
+                                                <input type="file" name="filePerpus" id="filePerpus"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="judulFileAsli">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Status File</label>
+                                                <select name="status" id="status" class="form-control">
+                                                    <option value="">-- Pilih Status --</option>
+                                                    <option value="Ditampilkan">Ditampilkan</option>
+                                                    <option value="Tidak ditampilkan">Tidak Ditampilkan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="">Deskripsi</label>
+                                                <textarea name="deskripsi" id="deskripsi" class="form-control" cols="10" rows="5"></textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                {{-- <button type="button" class="btn btn-secondary" style="margin-right: 10px">Tutup</button> --}}
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
+
+@endsection

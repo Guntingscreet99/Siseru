@@ -9,5 +9,8 @@ class DataModul extends Model
     protected $guarded = [];
     protected $table = 'data_moduls';
     protected $primaryKey = 'kdmodul';
-    public $incrementing = false;
+    public $incrementing = true;
+    protected $keyType = 'int';
+
+    protected $fillable =['judul','kelas','semester','topik','tahun','fileModul', 'judulFileAsli', 'status'];
 }
