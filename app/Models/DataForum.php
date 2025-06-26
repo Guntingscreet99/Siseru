@@ -12,5 +12,5 @@ class DataForum extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
-    protected $fillable = ['akun', 'kelas', 'semester', 'topik', 'tahun', 'fileForum'];
+    // protected $fillable = ['akun', 'kelas', 'semester', 'topik', 'tahun', 'fileForum'];
 }

@@ -15,7 +15,7 @@ class DataZoom extends Model
 
     protected $primaryKey = 'kdzoom'; // Jika primary key bukan 'id', harus didefinisikan
 
-    protected $fillable = ['kelas', 'linkZoom', 'linkWebinar', 'status']; // Pastikan atribut ini bisa diisi
+    // protected $fillable = ['kelas', 'linkZoom', 'linkWebinar', 'status']; // Pastikan atribut ini bisa diisi
 
     public $timestamps = false; // Jika tidak ada `created_at` dan `updated_at`
 }

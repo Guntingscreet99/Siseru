@@ -36,39 +36,28 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">Kelas</label>
-                                                <select name="kelas" id="kelas" class="form-control">
-                                                    <option value="{{ $modul->kelas }}">-- Pilih Kelas --</option>
-                                                    <option value="Kelas 1"
-                                                        {{ $modul->kelas == 'Kelas 1' ? 'selected' : '' }}>Kelas 1
-                                                    </option>
-                                                    <option value="Kelas 2"
-                                                        {{ $modul->kelas == 'Kelas 2' ? 'selected' : '' }}>Kelas 2
-                                                    </option>
-                                                    <option value="Kelas 3"
-                                                        {{ $modul->kelas == 'Kelas 3' ? 'selected' : '' }}>Kelas 3
-                                                    </option>
-                                                    <option value="Kelas 4"
-                                                        {{ $modul->kelas == 'Kelas 4' ? 'selected' : '' }}>Kelas 4
-                                                    </option>
-                                                    <option value="Kelas 5"
-                                                        {{ $modul->kelas == 'Kelas 5' ? 'selected' : '' }}>Kelas 5
-                                                    </option>
-                                                    <option value="Kelas 6"
-                                                        {{ $modul->kelas == 'Kelas 6' ? 'selected' : '' }}>Kelas 6
-                                                    </option>
+                                                <select name="id_kelas" id="id_kelas" class="form-control">
+                                                    <option value="">-- Pilih Kelas --</option>
+                                                    @foreach ($kelas as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ $modul->id_kelas == $item->id ? 'selected' : '' }}>
+                                                            {{ $item->nama_kelas }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">Semester</label>
-                                                <select name="semester" id="semester" class="form-control">
+                                                <select name="id_semester" id="id_semester" class="form-control">
                                                     <option value="">-- Pilih Semester --</option>
-                                                    <option value="Ganjil"
-                                                        {{ $modul->semester == 'Ganjil' ? 'selected' : '' }}>Ganjil
-                                                    </option>
-                                                    <option value="Genap"
-                                                        {{ $modul->semester == 'Genap' ? 'selected' : '' }}>Genap</option>
+                                                    @foreach ($semester as $sem)
+                                                        <option value="{{ $sem->id }}"
+                                                            {{ $modul->id_semester == $sem->id ? 'selected' : '' }}>
+                                                            {{ $sem->nama_semester }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -111,9 +100,9 @@
                                                     <option value="Ditampilkan"
                                                         {{ $modul->status == 'Ditampilkan' ? 'selected' : '' }}>Ditampilkan
                                                     </option>
-                                                    <option value="Tidak Ditampilkan"
-                                                        {{ $modul->status == 'Tidak Ditampilkan' ? 'selected' : '' }}>Tidak
-                                                        Ditampilkan
+                                                    <option value="Tidak ditampilkan"
+                                                        {{ $modul->status == 'Tidak ditampilkan' ? 'selected' : '' }}>Tidak
+                                                        ditampilkan
                                                     </option>
                                                 </select>
                                             </div>

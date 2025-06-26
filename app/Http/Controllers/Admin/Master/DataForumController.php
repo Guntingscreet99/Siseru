@@ -12,6 +12,7 @@ class DataForumController extends Controller
     public function index()
     {
         $forum = DataForum::all();
+        // dd($forum);
         return view('admin.master.forum.index', compact('forum'));
     }
 

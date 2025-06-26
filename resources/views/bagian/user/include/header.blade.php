@@ -4,7 +4,7 @@
         <a href="index.html" class="logo d-flex align-items-center me-auto">
             <!-- Uncomment the line below if you also wish to use an image logo -->
             <!-- <img src="landing/img/logo.png" alt=""> -->
-            <h1 class="sitename">SISERU!</h1>
+            <h1 class="sitename">RUPAKU!</h1>
         </a>
 
         <nav id="navmenu" class="navmenu">
@@ -54,7 +54,7 @@
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
 
-        <a class="btn-getstarted" href="#">LOGIN</a>
+        <a class="btn-getstarted" href="{{ url('login') }}">Login</a>
 
     </div>
 </header>

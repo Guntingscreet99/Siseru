@@ -18,29 +18,6 @@
                                 </a>
                             </div>
                         </div>
-                        {{-- ALERT UNTUK PESAN SUKSES --}}
-                        @if (session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        {{-- ALERT UNTUK PESAN ERROR VALIDASI --}}
-                        @if ($errors->any())
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>Terjadi kesalahan!</strong>
-                                <ul class="mb-0">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
                         <form action="{{ url('admin/modul-tambah') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="modal-body">
@@ -57,24 +34,23 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">Kelas</label>
-                                                <select name="kelas" id="kelas" class="form-control">
+                                                <select name="id_kelas" id="id_kelas" class="form-control">
                                                     <option value="">-- Pilih Kelas --</option>
-                                                    <option value="Kelas 1">Kelas 1</option>
-                                                    <option value="Kelas 2">Kelas 2</option>
-                                                    <option value="Kelas 3">Kelas 3</option>
-                                                    <option value="Kelas 4">Kelas 4</option>
-                                                    <option value="Kelas 5">Kelas 5</option>
-                                                    <option value="Kelas 6">Kelas 6</option>
+                                                    @foreach ($kelas as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nama_kelas }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">Semester</label>
-                                                <select name="semester" id="semester" class="form-control">
+                                                <select name="id_semester" id="id_semester" class="form-control">
                                                     <option value="">-- Pilih Semester --</option>
-                                                    <option value="Ganjil">Ganjil</option>
-                                                    <option value="Genap">Genap</option>
+                                                    @foreach ($semester as $sem)
+                                                        <option value="{{ $sem->id }}">{{ $sem->nama_semester }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -98,7 +74,7 @@
                                                 <select name="status" id="status" class="form-control">
                                                     <option value="">-- Pilih Status --</option>
                                                     <option value="Ditampilkan">Ditampilkan</option>
-                                                    <option value="Tidak ditampilkan">Tidak Ditampilkan</option>
+                                                    <option value="Tidak ditampilkan">Tidak ditampilkan</option>
                                                 </select>
                                             </div>
                                         </div>

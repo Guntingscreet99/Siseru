@@ -13,7 +13,6 @@ class DataKaryaController extends Controller
     {
         $karya = DataKarya::all();
         // dd($karya);
-
         return view('admin.master.karya.index', compact('karya'));
     }
 
@@ -43,12 +42,12 @@ class DataKaryaController extends Controller
 
     public function tambahdata(Request $request)
     {
-
+        // dd($request->all());
         $request->validate(
             [
-                'nama' => 'required|string|max:255',
-                'fileKarya' => 'required|file|mimes:jpg,jpeg,png,mp4,mkv,avi|max:51200',
-                'deskripsi' => 'nullable|string',
+                'nama' => 'required',
+                'fileKarya' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mkv,avi|max:51200',
+                'deskripsi' => 'required',
                 'status' => 'required'
             ],
             [
@@ -70,12 +69,12 @@ class DataKaryaController extends Controller
         $data = [
             'nama' => $request->input('nama'),
             'deskripsi' => $request->input('deskripsi'),
-            // 'status' => $request->input('status'),
+            'status' => $request->input('status'),
             'fileKarya' => $mdl ?? '',
             'judulFileAsli' => $judulAsli,
         ];
 
-        // dd($data)
+        // dd($data);
 
         DataKarya::create($data);
 
@@ -92,62 +91,32 @@ class DataKaryaController extends Controller
 
     public function editdata(Request $request, $kdkarya)
     {
-        $karya = DataKarya::where('kdkarya', $kdkarya)->firstOrFail();
-
         $request->validate([
             'nama' => 'required',
             'deskripsi' => 'required',
             // 'status' => 'required',
-            'fileKarya' => 'required|file|mimes:jpg,jpeg,png,mp4,mkv,avi|max:51200',
+            'fileKarya' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mkv,avi|max:51200',
         ]);
 
-        $mdl = $karya->fileKarya;
-        $judulAsli = $karya->judulFileAsli;
+        $karya = DataKarya::where('kdkarya', $kdkarya)->firstOrFail();
 
+        $data = [
+            'nama' => $request->input('nama'),
+            'deskripsi' => $request->input('deskripsi'),
+            'status' => $request->input('status'),
+        ];
 
         if (!$request->has('gunakan_file_lama') && $request->hasFile('fileKarya')) {
-            // Hapus file lama jika ada
             if ($karya->fileKarya) {
                 Storage::disk('public')->delete($karya->fileKarya);
             }
 
-            // if ($request->hasFile('fileKarya')) {
             $file = $request->file('fileKarya');
-            $judulAsli = $file->getClientOriginalName();
-            $mdl = $file->store('fileKarya', 'public');
-
-            // } else {
-            //     $mdl = null;
-            //     $judulAsli = null;
-            // }
-            $karya->update([
-                'fileKarya' => $mdl,
-                'judulFileAsli' => $judulAsli,
-            ]);
-
-
-            // $file = $request->file('fileKarya');
-            // $judulAsli = $file->getClientOriginalName();
-            // $mdl = $file->store('fileKarya', 'public');
-
-            // $karya->update([
-            //     'fileKarya' => $mdl,
-            //     'judulFileAsli' => $judulAsli,
-            // ]);
+            $data['fileKarya'] = $file->store('fileKarya', 'public');
+            $data['judulFileAsli'] = $file->getClientOriginalName();
         }
 
-        $karya->update([
-            'nama' => $request->nama,
-            'deskripsi' => $request->deskripsi,
-            // 'status' => $request->status,
-            'fileKarya' => $mdl,
-            'judulFileAsli' => $judulAsli,
-
-            // 'nama' => $request->input('nama'),
-            // 'deskripsi' => $request->input('deskripsi'),
-            // 'status' => $request->input('status'),
-
-        ]);
+        $karya->update($data);
 
         return redirect()->route('admin.master.karya')->with('success', 'Data Berhasil Diperbarui');
     }

@@ -55,7 +55,7 @@
                                 <tbody id="modul-body">
                                     @if ($kelas->isEmpty())
                                         <tr>
-                                            <td colspan="2" class="text-center">Data Masih Kosong</td>
+                                            <td colspan="3" class="text-center">Data Masih Kosong</td>
                                         </tr>
                                     @else
                                         @foreach ($kelas as $item)

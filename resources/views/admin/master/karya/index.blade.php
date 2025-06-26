@@ -58,22 +58,67 @@
                                                     </a>
                                                 </td> --}}
                                                 <td>
-                                                    @php
-                                                        $extension = pathinfo($item->fileKarya, PATHINFO_EXTENSION);
-                                                    @endphp
+                                                    <!-- Tombol atau elemen untuk memicu modal -->
+                                                    @if ($item->fileKarya)
+                                                        @php
+                                                            $fileExtension = pathinfo(
+                                                                Storage::path($item->fileKarya),
+                                                                PATHINFO_EXTENSION,
+                                                            );
+                                                            $isVideo = in_array(strtolower($fileExtension), [
+                                                                'mp4',
+                                                                'mkv',
+                                                                'avi',
+                                                            ]);
+                                                            $isImage = in_array(strtolower($fileExtension), [
+                                                                'jpg',
+                                                                'jpeg',
+                                                                'png',
+                                                            ]);
+                                                        @endphp
 
-                                                    @if (in_array(strtolower($extension), ['jpg', 'jpeg', 'png']))
-                                                        <img src="{{ Storage::url($item->fileKarya) }}" width="200">
-                                                    @elseif (in_array(strtolower($extension), ['mp4', 'mkv', 'avi']))
-                                                        <video width="250" controls>
-                                                            <source src="{{ Storage::url($item->fileKarya) }}"
-                                                                type="video/{{ $extension }}">
-                                                            Browser Anda tidak mendukung tag video.
-                                                        </video>
+                                                        <button type="button" class="btn btn-link view-media"
+                                                            data-bs-toggle="modal" data-bs-target="#mediaModal"
+                                                            data-src="{{ Storage::url($item->fileKarya) }}"
+                                                            data-type="{{ $isVideo ? 'video' : ($isImage ? 'image' : 'unknown') }}">
+                                                            @if ($isVideo)
+                                                                <i class="fas fa-video"></i> Lihat Video
+                                                            @elseif ($isImage)
+                                                                <i class="fas fa-image"></i> Lihat Gambar
+                                                            @else
+                                                                <i class="fas fa-file"></i> Lihat File
+                                                            @endif
+                                                        </button>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="mediaModal" tabindex="-1"
+                                                            role="dialog" aria-labelledby="mediaModalLabel"
+                                                            aria-hidden="true">
+                                                            <div class="modal-dialog modal-lg" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="mediaModalLabel">
+                                                                            Pratinjau Media</h5>
+                                                                        <button type="button" class="close"
+                                                                            data-bs-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="mediaContent">
+                                                                            <!-- Konten media akan dimuat di sini oleh JavaScript -->
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Tutup</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     @else
-                                                        <p>File tidak dapat ditampilkan</p>
+                                                        <p>Tidak ada File Karya</p>
                                                     @endif
-
                                                 </td>
                                                 <td>
                                                     <form method="POST" action="{{ url('admin/karya/update-status') }}">
@@ -175,7 +220,8 @@
 @endpush
 
 @push('js')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
             let timer;
@@ -263,6 +309,26 @@
                         }
                     });
                 }, 500);
+            });
+        });
+
+        // MODAL LIHAT GAMBAR DAN VIDEO
+        $(document).ready(function() {
+            $('.view-media').on('click', function() {
+                var src = $(this).data('src');
+                var type = $(this).data('type');
+                var content = '';
+
+                if (type === 'video') {
+                    content = '<video width="100%" controls><source src="' + src + '" type="video/' + src
+                        .split('.').pop() + '">Browser Anda tidak mendukung tag video.</video>';
+                } else if (type === 'image') {
+                    content = '<img src="' + src + '" alt="Gambar" class="img-fluid">';
+                } else {
+                    content = '<p>Tidak ada media yang didukung</p>';
+                }
+
+                $('#mediaContent').html(content);
             });
         });
     </script>

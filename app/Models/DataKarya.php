@@ -15,5 +15,5 @@ class DataKarya extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
-    protected $fillable = ['nama', 'deskripsi', 'filekarya', 'status'];
+    // protected $fillable = ['nama', 'deskripsi', 'filekarya', 'status'];
 }

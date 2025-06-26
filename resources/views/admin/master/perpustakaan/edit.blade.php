@@ -25,7 +25,7 @@
                                 </button>
                             </div> --}}
                         </div>
-                        <form action="{{ url('admin/karya-edit/' . $perpus->kdperpus) }}" method="POST"
+                        <form action="{{ url('admin/perpus-edit/' . $perpus->kdperpus) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')

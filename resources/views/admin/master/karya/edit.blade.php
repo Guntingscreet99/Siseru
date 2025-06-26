@@ -90,12 +90,13 @@
 
                                                 @if ($karya->fileKarya)
                                                     <p class="mt-2">
-                                                        <strong>File saat ini:</strong>
-                                                        <a href="{{ Storage::url($karya->fileKarya) }}" target="_blank">
-                                                            {{ $karya->judulFileAsli }}
-                                                        </a>
+                                                        <li>
+                                                            *File saat ini
+                                                            <a href="{{ Storage::url($karya->fileKarya) }}" target="_blank">
+                                                                {{ $karya->judulFileAsli }}
+                                                            </a>
+                                                        </li>
                                                     </p>
-
                                                     <div class="form-check">
                                                         <input type="checkbox" name="gunakan_file_lama"
                                                             id="gunakan_file_lama" class="form-check-input" checked>

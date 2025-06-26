@@ -12,5 +12,13 @@ class DataModul extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
-    protected $fillable =['judul','kelas','semester','topik','tahun','fileModul', 'judulFileAsli', 'status'];
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class, 'id_kelas', 'id');
+    }
+
+    public function semester()
+    {
+        return $this->belongsTo(Semester::class, 'id_semester', 'id');
+    }
 }

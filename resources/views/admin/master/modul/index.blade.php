@@ -54,8 +54,8 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->judul }}</td>
-                                                <td>{{ $item->kelas }}</td>
-                                                <td>{{ $item->semester }}</td>
+                                                <td>{{ $item->kelas->nama_kelas }}</td>
+                                                <td>{{ $item->semester->nama_semester }}</td>
                                                 <td>{{ $item->topik }}</td>
                                                 <td>{{ $item->tahun }}</td>
 

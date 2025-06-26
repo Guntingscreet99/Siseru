@@ -30,32 +30,28 @@
                                                 <input type="text" name="nama" id="nama" class="form-control"
                                                     placeholder="Masukkan Nama Karya" required>
                                             </div>
-                                            <div class="col-lg-12">
-                                                <div class="form-group">
-                                                    <label for="">File Karya</label>
-                                                    <input type="file" name="fileKarya" id="fileKarya"
-                                                        class="form-control">
-                                                    <small class="text-muted">Jenis file yang diperbolehkan: JPG, PNG, MP4,
-                                                        MKV, AVI, PDF, DOCX, TXT</small>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="form-group">
-                                                    <label for="">Deskripsi Karya</label>
-                                                    <textarea name="deskripsi" id="deskripsi" class="form-control" cols="10" rows="5"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="form-group">
-                                                    <label for="">Status Karya</label>
-                                                    <select name="status" id="status" class="form-control">
-                                                        <option value="">-- Pilih Status --</option>
-                                                        <option value="Ditampilkan">Ditampilkan</option>
-                                                        <option value="Tidak Ditampilkan">Tidak Ditampilkan</option>
-                                                    </select>
-                                                </div>
+                                            <div class="form-group">
+                                                <label for="fileKarya">File Karya</label>
+                                                <input type="file" name="fileKarya" class="form-control" required>
                                             </div>
                                         </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="">Deskripsi Karya</label>
+                                                <textarea name="deskripsi" id="deskripsi" class="form-control" cols="10" rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="">Status Karya</label>
+                                                <select name="status" id="status" class="form-control">
+                                                    <option value="">-- Pilih Status --</option>
+                                                    <option value="Ditampilkan">Ditampilkan</option>
+                                                    <option value="Tidak Ditampilkan">Tidak Ditampilkan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </table>
                             </div>
                             <div class="modal-footer">

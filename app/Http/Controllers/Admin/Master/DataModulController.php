@@ -4,14 +4,18 @@ namespace App\Http\Controllers\Admin\Master;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataModul;
+use App\Models\Kelas;
+use App\Models\Semester;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class DataModulController extends Controller
 {
     public function index()
     {
-        $modul = DataModul::all();
+        $modul = DataModul::with('kelas', 'semester')->get();
+
         // dd($modul);
         return view('admin.master.modul.index', compact('modul'));
     }
@@ -40,7 +44,10 @@ class DataModulController extends Controller
     // Tambah Data
     public function tampiltambah()
     {
-        return view('admin.master.modul.tambah');
+        $kelas = Kelas::all();
+        $semester = Semester::all();
+
+        return view('admin.master.modul.tambah', compact('kelas', 'semester'));
     }
 
     public function tambah(Request $request)
@@ -49,16 +56,16 @@ class DataModulController extends Controller
 
         $request->validate([
             'judul' => 'required',
-            'kelas' => 'required',
-            'semester' => 'required',
+            'id_kelas' => 'required',
+            'id_semester' => 'required',
             'tahun' => 'required',
             'topik' => 'required',
             'fileModul' => 'file|max:20480',
             'status' => 'required',
         ], [
             'judul.required' => 'Judul Wajib Diisi!',
-            'kelas.required' => 'Kelas Wajib Diisi!',
-            'semester.required' => 'Semester Wajib Diisi!',
+            'id_kelas.required' => 'Kelas Wajib Diisi!',
+            'id_semester.required' => 'Semester Wajib Diisi!',
             'tahun.required' => 'Tahun Wajib Diisi!',
             'topik.required' => 'Topik Wajib Diisi!',
             'fileModul.required' => 'File Modul Wajib Diisi!',
@@ -74,9 +81,9 @@ class DataModulController extends Controller
         }
 
         $data = [
+            'id_kelas' => $request->id_kelas,
+            'id_semester' => $request->id_semester,
             'judul' => $request->input('judul'),
-            'kelas' => $request->input('kelas'),
-            'semester' => $request->input('semester'),
             'tahun' => $request->input('tahun'),
             'topik' => $request->input('topik'),
             'status' => $request->input('status'),
@@ -96,8 +103,10 @@ class DataModulController extends Controller
     {
         $modul = DataModul::where('kdmodul', $kdmodul)->firstOrFail();
 
+        $kelas = Kelas::all();
+        $semester = Semester::all();
         // dd($modul);
-        return view('admin.master.modul.edit', compact('modul'));
+        return view('admin.master.modul.edit', compact('modul', 'kelas', 'semester'));
     }
 
     public function ubah(Request $request, $kdmodul)
@@ -153,15 +162,29 @@ class DataModulController extends Controller
     // Hapus Data
     public function hapus($kdmodul)
     {
-        $modul = DataModul::where('kdmodul', $kdmodul)->firstOrFail();
+        try {
+            $modul = DataModul::where('kdmodul', $kdmodul)->firstOrFail();
 
-        if ($modul->fileModul) {
-            Storage::disk('public')->delete($modul->fileModul);
+            if ($modul->fileModul) {
+                Log::info('File to delete: ' . $modul->fileModul); // Log path file
+                if (Storage::disk('public')->exists($modul->fileModul)) {
+                    Log::info('File exists, attempting to delete');
+                    $deleted = Storage::disk('public')->delete($modul->fileModul);
+                    Log::info('Deletion result: ' . ($deleted ? 'Success' : 'Failed'));
+                } else {
+                    Log::warning('File does not exist in storage: ' . $modul->fileModul);
+                }
+            } else {
+                Log::warning('No fileModul found for kdmodul: ' . $kdmodul);
+            }
+
+            $modul->delete();
+
+            return redirect()->route('admin.master.modul')->with('success', 'Data Berhasil Dihapus');
+        } catch (\Exception $e) {
+            Log::error('Error deleting modul: ' . $e->getMessage());
+            return redirect()->route('admin.master.modul')->with('error', 'Gagal menghapus data atau file. Silakan coba lagi.');
         }
-
-        $modul->delete();
-
-        return redirect()->route('admin.master.modul')->with('success', 'Data Berhasil Dihapus');
     }
 
     public function updateStatus(Request $request)

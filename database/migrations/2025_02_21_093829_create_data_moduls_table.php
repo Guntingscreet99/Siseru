@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('data_moduls', function (Blueprint $table) {
             $table->id('kdmodul');
+            $table->foreignId('id_kelas')->constrained('kelas')->onDelete('cascade');
+            $table->foreignId('id_semester')->constrained('semesters')->onDelete('cascade');
             $table->string('judul')->nullable();
-            $table->text('kelas')->nullable();
-            $table->string('semester')->nullable();
             $table->string('topik')->nullable();
             $table->string('tahun')->nullable();
             $table->text('fileModul')->nullable();

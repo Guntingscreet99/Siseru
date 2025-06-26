@@ -91,6 +91,38 @@
         <!-- End Custom template -->
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Cek session success
+        @if (session('success'))
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "{{ session('success') }}",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        @endif
+
+        // Cek errors
+        @if ($errors->any())
+            Swal.fire({
+                icon: "error",
+                title: "Terjadi Kesalahan!",
+                html: `
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            `,
+                showConfirmButton: true,
+                confirmButtonText: "OK"
+            });
+        @endif
+    </script>
+
     @include('bagian.admin.gaya.js')
     @stack('js')
 

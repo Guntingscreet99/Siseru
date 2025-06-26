@@ -109,30 +109,27 @@ class DataPerpustakaanController extends Controller
 
         $perpus = DataPerpustakaan::where('kdperpus', $kdperpus)->firstOrFail();
 
-        if (!$request->has('gunakan_file_lama') && $request->hasFile('filePerpus')) {
-            if ($perpus->filePerpus) {
-                Storage::disk('public')->delete($perpus->filePerpus);
-            }
-
-            $file = $request->file('filePerpus');
-            $judulAsli = $file->getClientOriginalName();
-            $mdl = $file->store('filePerpus', 'public');
-
-            $perpus->update([
-                'filePerpus' => $mdl,
-                'judulFileAsli' => $judulAsli,
-            ]);
-        }
-
-        $perpus->update([
+        $data = [
             'judul' => $request->input('judul'),
             'deskripsi' => $request->input('deskripsi'),
             'kategori' => $request->input('kategori'),
             'topik' => $request->input('topik'),
             'tahun' => $request->input('tahun'),
             'status' => $request->input('status'),
+        ];
 
-        ]);
+        // Update file jika ada file baru dan tidak ingin gunakan file lama
+        if (!$request->has('gunakan_file_lama') && $request->hasFile('filePerpus')) {
+            if ($perpus->filePerpus) {
+                Storage::disk('public')->delete($perpus->filePerpus);
+            }
+
+            $file = $request->file('filePerpus');
+            $data['filePerpus'] = $file->store('filePerpus', 'public');
+            $data['judulFileAsli'] = $file->getClientOriginalName();
+        }
+
+        $perpus->update($data);
 
         return redirect()->route('admin.master.perpus')->with('success', 'Data Berhasil Diubah');
     }

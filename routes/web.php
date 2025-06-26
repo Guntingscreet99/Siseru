@@ -6,12 +6,15 @@ use App\Http\Controllers\Admin\Master\DataHasilController;
 use App\Http\Controllers\Admin\Master\DataKaryaController;
 use App\Http\Controllers\Admin\Master\DataModulController;
 use App\Http\Controllers\Admin\Master\DataPerpustakaanController;
+use App\Http\Controllers\Admin\Master\DataUjianController;
 use App\Http\Controllers\Admin\Master\DataVideoController;
 use App\Http\Controllers\Admin\Master\DataZoomController;
 use App\Http\Controllers\Admin\Master\Utama\KelasController;
 use App\Http\Controllers\Admin\Master\Utama\SemesterController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\LandingController;
 use App\Models\DataPerpustakaan;
+use App\Models\DataUjian;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -23,6 +26,8 @@ Route::get('/', [LandingController::class, 'index']);
 
 // ADMIN
 Route::get('admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+Route::get('login', [LoginController::class, 'login'])->name('login');
 
 // ADMIN MASTER KELAS
 Route::get('admin/master/kelas', [KelasController::class, 'index'])->name('admin.kelas.index');
@@ -131,4 +136,19 @@ Route::put('admin/forum-edit/{kdforum}', [DataForumController::class, 'editdata'
 // HAPUS
 Route::delete('admin/forum-hapus/{kdforum}', [DataForumController::class, 'hapus'])->name('admin.forum.hapus');
 
+// MASTER UJIAN
+// INDEX
+Route::get('admin/master/dataujian', [DataUjianController::class, 'index'])->name('admin.master.ujian');
+// TAMBAH
+Route::get('admin/ujian/tampil', [DataUjianController::class, 'tampildata'])->name('admin.ujian.tampil');
+Route::post('admin/ujian/tambah', [DataUjianController::class, 'tambahdata'])->name('admin.master.tambah');
+// CARI
+Route::get('admin/ujian/cari', [DataUjianController::class, 'cari'])->name('admin.ujian.cari');
+// EDIT
+Route::get('admin/ujian/ubah/{kdujian}', [DataUjianController::class, 'tampiledit'])->name('admin.ujian.edit-tampil');
+Route::put('admin/ujian-edit/{kdujian}', [DataUjianController::class, 'editdata'])->name('admin.ujian.edit');
+// HAPUS
+Route::delete('admin/ujian-hapus/{kdujian}', [DataUjianController::class, 'hapus'])->name('admin.ujian.hapus');
+// STATUS
+Route::post('admin/ujian/update-status', [DataUjianController::class, 'updateStatus'])->name('ujian.status');
 // USER
