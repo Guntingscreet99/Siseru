@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin\Master;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataKarya;
+use App\Models\Kelas;
+use App\Models\Semester;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class DataKaryaController extends Controller
@@ -23,7 +26,10 @@ class DataKaryaController extends Controller
             $query = $request->input('query');
 
             $karya = DataKarya::where('kdkarya', 'like', "%$query%")
-                ->orwhere('nama', 'like', "%$query%")
+                ->orwhere('id_user', 'like', "%$query%")
+                ->orwhere('namaKarya', 'like', "%$query%")
+                ->orwhere('kelas', 'like', "%$query%")
+                ->orwhere('semester', 'like', "%$query%")
                 ->orwhere('deskripsi', 'like', "%$query%")
                 ->orwhere('status', 'like', "%$query%")
                 ->orwhere('judulFileAsli', 'like', "%$query%")
@@ -45,13 +51,18 @@ class DataKaryaController extends Controller
         // dd($request->all());
         $request->validate(
             [
-                'nama' => 'required',
+                'id_user' => 'required',
+                'namaKarya' => 'required',
+                'id_kelas' => 'required',
+                'id_semester' => 'required',
                 'fileKarya' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mkv,avi|max:51200',
                 'deskripsi' => 'required',
-                'status' => 'required'
+                'status' => 'required',
             ],
             [
-                'nama.required' => 'Nama Wajib Diisi!',
+                'nama.required' => 'Nama Karya Wajib Diisi!',
+                'id_kelas.required' => 'Kelas Wajib Diisi!',
+                'id_semester.required' => 'Semester Wajib Diisi!',
                 'deskripsi.required' => 'Deskripsi Wajib Diisi!',
                 'fileKarya.required' => ' File Karya Wajib Diisi!',
             ]
@@ -68,6 +79,8 @@ class DataKaryaController extends Controller
 
         $data = [
             'nama' => $request->input('nama'),
+            'id_kelas' => $request->id_kelas,
+            'id_semester' => $request->id_semester,
             'deskripsi' => $request->input('deskripsi'),
             'status' => $request->input('status'),
             'fileKarya' => $mdl ?? '',
@@ -86,6 +99,8 @@ class DataKaryaController extends Controller
     {
         $karya = DataKarya::where('kdkarya', $kdkarya)->firstOrFail();
 
+        $kelas = Kelas::all();
+        $semester = Semester::all();
         return view('admin.master.karya.edit', compact('karya'));
     }
 
@@ -93,6 +108,8 @@ class DataKaryaController extends Controller
     {
         $request->validate([
             'nama' => 'required',
+            'kelas' => 'required',
+            'semster' => 'required',
             'deskripsi' => 'required',
             // 'status' => 'required',
             'fileKarya' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mkv,avi|max:51200',
@@ -124,15 +141,29 @@ class DataKaryaController extends Controller
     // Hapus Data
     public function hapus($kdkarya)
     {
-        $karya = DataKarya::where('kdkarya', $kdkarya)->findOrFail();
+        try {
+            $karya = DataKarya::where('kdkarya', $kdkarya)->findOrFail();
 
-        if ($karya->fileKarya) {
-            Storage::disk('public')->delete($karya->fileKarya);
+            if ($karya->fileKarya) {
+                Log::info('File to delete: ' . $karya->fileKarya);
+                if (Storage::disk('public')->exists($karya->fileKarya)) {
+                    Log::info('File exists, attempting to deleate');
+                    $deleted = Storage::disk('public')->delete($karya->fileKarya);
+                    Log::info('Deletion result: ' . ($deleted ? 'Success' : 'Failed'));
+                } else {
+                    Log::warning('File does not exist in storage: ' . $karya->fileKarya);
+                }
+            } else {
+                Log::warning('No fileKarya found for kdkarya: ' . $kdkarya);
+            }
+
+            $karya->delete();
+
+            return redirect()->route('admin.master.karya')->with('success', 'Data Berhasil Dihapus');
+        } catch (\Exception $e) {
+            Log::eror('Eror deleting karya: ' . $e->getMessage());
+            return redirect()->route('admin.master.karya')->with('eror', 'Gagal menghapus data atau file. Silahkan coba lagi.');
         }
-
-        $karya->delete();
-
-        return redirect()->route('admin.master.karya')->with('success', 'Data Berhasil Dihapus');
     }
 
     // Status

@@ -15,18 +15,31 @@
             <h1>Selamat Datang!</h1>
             <p>Masukkan kredensial Anda untuk mengakses akun!</p>
         </div>
-        <form>
+        <!-- resources/views/auth/login.blade.php -->
+        <form action="{{ url('login') }}" method="POST">
+            @csrf
             <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" placeholder="name@company.com" required />
+                <label for="identifier">NIM atau Username</label>
+                <input type="text" id="identifier" name="identifier" placeholder="Masukkan NIM atau Username"
+                    value="{{ old('identifier') }}" required />
+                @error('identifier')
+                    <span class="text-light" style="color: white">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="••••••••" required />
+                <input type="password" id="password" name="password" placeholder="••••••••" required />
+                @error('password')
+                    <span class="text-light" style="color: white">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
             <div class="remember-forgot">
                 <div class="remember-me">
-                    <input type="checkbox" id="remember" />
+                    <input type="checkbox" id="remember" name="remember" />
                     <label for="remember">Remember me</label>
                 </div>
                 <a href="#" class="forgot-password">Forgot Password?</a>

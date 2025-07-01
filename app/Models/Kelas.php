@@ -12,4 +12,9 @@ class Kelas extends Model
     {
         return $this->hasMany(DataModul::class, 'id_kelas', 'id');
     }
+
+    public function karya()
+    {
+        return $this->hasMany(DataKarya::class, 'id_kelas', 'id');
+    }
 }

@@ -183,10 +183,11 @@ class DataModulController extends Controller
             return redirect()->route('admin.master.modul')->with('success', 'Data Berhasil Dihapus');
         } catch (\Exception $e) {
             Log::error('Error deleting modul: ' . $e->getMessage());
-            return redirect()->route('admin.master.modul')->with('error', 'Gagal menghapus data atau file. Silakan coba lagi.');
+            return redirect()->route('admin.master.modul')->with('error', 'Gagal menghapus data atau file. Silahkan coba lagi.');
         }
     }
 
+    // Status
     public function updateStatus(Request $request)
     {
         $modulId = $request->input('kdmodul');

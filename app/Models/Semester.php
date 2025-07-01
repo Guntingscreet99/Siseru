@@ -12,4 +12,9 @@ class Semester extends Model
     {
         return $this->hasMany(DataModul::class, 'id_semester', 'id');
     }
+
+    public function karya()
+    {
+        return $this->hasMany(DataKarya::class, 'id_semester', 'id');
+    }
 }

@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('data_karyas', function (Blueprint $table) {
             $table->id('kdkarya');
+            $table->foreignId('id_kelas')->constrained('kelas')->onDelete('cascade');
+            $table->foreignId('id_semester')->constrained('semesters')->onDelete('cascade');
             $table->string('nama')->nullable();
             $table->string('deskripsi')->nullable();
             $table->string('status')->nullable();
+            $table->integer('nilai_karya')->nullable();
             $table->text('fileKarya')->nullable();
             $table->string('judulFileAsli')->nullable();
             $table->timestamps();

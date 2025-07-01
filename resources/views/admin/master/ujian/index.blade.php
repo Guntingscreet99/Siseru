@@ -44,7 +44,7 @@
                                 <tbody id="ujian-body">
                                     @if ($ujian->isEmpty())
                                         <tr>
-                                            <td colspan="5" class="text-center">Data Masih Kosong</td>
+                                            <td colspan="6" class="text-center">Data Masih Kosong</td>
                                         </tr>
                                     @else
                                         @foreach ($ujian as $item)
