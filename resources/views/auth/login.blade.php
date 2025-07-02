@@ -16,6 +16,7 @@
             <p>Masukkan kredensial Anda untuk mengakses akun!</p>
         </div>
         <!-- resources/views/auth/login.blade.php -->
+
         <form action="{{ url('login') }}" method="POST">
             @csrf
             <div class="form-group">
@@ -48,9 +49,10 @@
                 Sign in to your account
             </button>
             <div class="signup-link">
-                Don't have an account? <a href="#">Create account</a>
+                Don't have an account? <a href="{{ url('register') }}">Create account</a>
             </div>
         </form>
+
     </div>
 </body>
 

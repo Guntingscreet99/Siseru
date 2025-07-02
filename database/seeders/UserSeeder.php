@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
                 'email' => 'admin12@gmail.com',
                 'role' => 'admin',
                 'status' => 'A',
+                'no_hp' => '085866090206',
             ],
             [
                 'id' => 2,
@@ -29,6 +30,7 @@ class UserSeeder extends Seeder
                 'email' => 'nurfajrie@gmail.com',
                 'role' => 'dosen',
                 'status' => 'A',
+                'no_hp' => '088866090207',
             ]
         ];
 

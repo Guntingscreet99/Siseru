@@ -31,9 +31,15 @@ Route::post('login', [LoginController::class, 'store'])->name('login.store');
 
 // REGISTER
 Route::get('register', [RegisterController::class, 'register'])->name('register');
+Route::post('register/store', [RegisterController::class, 'store'])->name('register.store');
 
 // LOGOUT
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+// VERIFIKASI OTP
+Route::get('/verify-otp/{user_id}', [RegisterController::class, 'showOtpForm'])->name('verify.otp');
+Route::post('/verify-otp', [RegisterController::class, 'verifyOtp'])->name('verify.otp.submit');
+Route::post('/resend-otp', [RegisterController::class, 'resendOtp'])->name('resend.otp');
 
 // ADMIN
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -165,5 +171,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::middleware(['auth', 'role:dosen'])->group(function () {
     Route::get('dosen/dashboard', [LandingController::class, 'dosen'])->name('dosen.dashboard');
+});
+
+Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
+    Route::get('mahasiswa/dashboard', [LandingController::class, 'index'])->name('mahasiswa.dashboard');
 });
 // USER

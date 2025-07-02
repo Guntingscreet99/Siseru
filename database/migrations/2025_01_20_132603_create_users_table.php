@@ -13,18 +13,15 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('username');
+            $table->string('username')->nullable(); // Tambahkan nullable jika tidak wajib
             $table->string('nama_lengkap')->nullable();
             $table->string('nim')->nullable()->unique();
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable(); // Ubah menjadi nullable jika diizinkan
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->foreignId('id_kelas')->nullable()->constrained('kelas')->onDelete('cascade');
-            $table->foreignId('id_semester')->nullable()->constrained('semesters')->onDelete('cascade');
-            $table->string('jenisKelamin')->nullable();
-            $table->string('alamat')->nullable();
-            $table->string('role')->default('admin');
-            $table->string('status');
+            $table->string('no_hp')->unique();
+            $table->string('role')->default('mahasiswa');
+            $table->string('status')->default('A'); // Tambahkan default
             $table->rememberToken();
             $table->timestamps();
         });
