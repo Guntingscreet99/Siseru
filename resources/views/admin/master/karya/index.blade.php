@@ -34,6 +34,9 @@
                                 <thead class="table-primary">
                                     <tr>
                                         <th scope="col">No</th>
+                                        <th scope="col">Nama Mahasiswa</th>
+                                        <th scope="col">Kelas</th>
+                                        <th scope="col">Semester</th>
                                         <th scope="col">Nama Karya</th>
                                         <th scope="col">Deskripsi Karya</th>
                                         <th scope="col">File Karya</th>
@@ -44,13 +47,16 @@
                                 <tbody id="karya-body">
                                     @if ($karya->isEmpty())
                                         <tr>
-                                            <td colspan="6" class="text-center">Data Masih Kosong</td>
+                                            <td colspan="9" class="text-center">Data Masih Kosong</td>
                                         </tr>
                                     @else
                                         @foreach ($karya as $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->nama }}</td>
+                                                <td>{{ $item->namaMhs }}</td>
+                                                <td>{{ $item->kelas->nama_kelas }}</td>
+                                                <td>{{ $item->semester->nama_semester }}</td>
+                                                <td>{{ $item->namaKarya }}</td>
                                                 <td>{{ $item->deskripsi }}</td>
                                                 {{-- <td>
                                                     <a href="{{ $item->link }}" target="_blank">
@@ -247,13 +253,16 @@
 
                             if (data.length === 0) {
                                 rows =
-                                    `<tr><td colspan="5" class="text-center">Data tidak ditemukan.</td></tr>`;
+                                    `<tr><td colspan="8" class="text-center">Data tidak ditemukan.</td></tr>`;
                             } else {
                                 $.each(data, function(index, item) {
                                     rows += `
                                     <tr>
                                         <td>${index + 1}</td>
-                                        <td>${item.nama}</td>
+                                        <td>${item.namaMhs}</td>
+                                        <td>${item.kelas}</td>
+                                        <td>${item.semester}</td>
+                                        <td>${item.namaKarya}</td>
                                         <td>${item.deskripsi}</td>
                                         <td>
                                             <a href="${fileUrl}" target="_blank">

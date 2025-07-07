@@ -26,7 +26,7 @@ class DataKaryaController extends Controller
             $query = $request->input('query');
 
             $karya = DataKarya::where('kdkarya', 'like', "%$query%")
-                ->orwhere('id_user', 'like', "%$query%")
+                ->orwhere('namaMhs', 'like', "%$query%")
                 ->orwhere('namaKarya', 'like', "%$query%")
                 ->orwhere('kelas', 'like', "%$query%")
                 ->orwhere('semester', 'like', "%$query%")
@@ -43,7 +43,10 @@ class DataKaryaController extends Controller
     // Tambah Data
     public function tampildata()
     {
-        return view('admin.master.karya.tambah');
+        $kelas = Kelas::all();
+        $semester = Semester::all();
+
+        return view('admin.master.karya.tambah', compact('kelas', 'semester'));
     }
 
     public function tambahdata(Request $request)
@@ -51,7 +54,7 @@ class DataKaryaController extends Controller
         // dd($request->all());
         $request->validate(
             [
-                'id_user' => 'required',
+                'namaMhs' => 'required',
                 'namaKarya' => 'required',
                 'id_kelas' => 'required',
                 'id_semester' => 'required',
@@ -60,7 +63,8 @@ class DataKaryaController extends Controller
                 'status' => 'required',
             ],
             [
-                'nama.required' => 'Nama Karya Wajib Diisi!',
+                'namaMhs.required' => 'Nama Mahasiswa Wajib Diisi!',
+                'namaKarya.required' => 'Nama Karya Wajib Diisi!',
                 'id_kelas.required' => 'Kelas Wajib Diisi!',
                 'id_semester.required' => 'Semester Wajib Diisi!',
                 'deskripsi.required' => 'Deskripsi Wajib Diisi!',
@@ -78,7 +82,8 @@ class DataKaryaController extends Controller
         }
 
         $data = [
-            'nama' => $request->input('nama'),
+            'namaMhs' => $request->input('namaMhs'),
+            'namaKarya' => $request->input('namaKarya'),
             'id_kelas' => $request->id_kelas,
             'id_semester' => $request->id_semester,
             'deskripsi' => $request->input('deskripsi'),
@@ -101,13 +106,15 @@ class DataKaryaController extends Controller
 
         $kelas = Kelas::all();
         $semester = Semester::all();
-        return view('admin.master.karya.edit', compact('karya'));
+
+        return view('admin.master.karya.edit', compact('karya', 'kelas', 'semester'));
     }
 
     public function editdata(Request $request, $kdkarya)
     {
         $request->validate([
-            'nama' => 'required',
+            'namaMhs' => 'required',
+            'namaKarya' => 'required',
             'kelas' => 'required',
             'semster' => 'required',
             'deskripsi' => 'required',
@@ -118,7 +125,10 @@ class DataKaryaController extends Controller
         $karya = DataKarya::where('kdkarya', $kdkarya)->firstOrFail();
 
         $data = [
-            'nama' => $request->input('nama'),
+            'namaMhs' => $request->input('namaMhs'),
+            'namaKarya' => $request->input('namaKarya'),
+            'id_kelas' => $request->input('id_kelas'),
+            'id_semester' => $request->input('id_semester'),
             'deskripsi' => $request->input('deskripsi'),
             'status' => $request->input('status'),
         ];

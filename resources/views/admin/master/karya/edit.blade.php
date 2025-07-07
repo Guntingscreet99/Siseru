@@ -68,22 +68,51 @@
                                                 </select>
                                             </div>
                                         </div> --}}
-                                        <div class="col-lg-12">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Nama Mahasiswa</label>
+                                                <input type="text" name="namaMhs" id="namaMhs" class="form-control"
+                                                    value="{{ $karya->namaMhs }}" placeholder="Masukkan Nama Mahasiswa"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Kelas</label>
+                                                <select name="id_kelas" id="id_kelas" class="form-control">
+                                                    <option value="">-- Pilih Kelas --</option>
+                                                    @foreach ($kelas as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ $karya->id_kelas == $item->id ? 'selected' : '' }}>
+                                                            {{ $item->nama_kelas }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="">Semester</label>
+                                                <select name="id_semester" id="id_semester" class="form-control">
+                                                    <option value="">-- Pilih Semester --</option>
+                                                    @foreach ($semester as $sem)
+                                                        <option value="{{ $sem->id }}"
+                                                            {{ $karya->id_semester == $sem->id ? 'selected' : '' }}>
+                                                            {{ $sem->nama_semester }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">Nama Karya</label>
-                                                <input type="text" name="nama" id="nama" class="form-control"
-                                                    value="{{ $karya->nama }}" placeholder="Masukkan Nama Karya" required>
+                                                <input type="text" name="namaKarya" id="namaKarya" class="form-control"
+                                                    value="{{ $karya->namaKarya }}" placeholder="Masukkan Nama Karya"
+                                                    required>
                                             </div>
                                         </div>
-
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">Deskripsi Karya</label>
-                                                <textarea name="deskripsi" id="deskripsi" class="form-control" cols="10" rows="5">{{ old('deskripsi', $karya->deskripsi) }}</textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-12">
+                                        <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="fileKarya">File Karya</label>
                                                 <input type="file" name="fileKarya" id="fileKarya" class="form-control">
@@ -92,7 +121,8 @@
                                                     <p class="mt-2">
                                                         <li>
                                                             *File saat ini
-                                                            <a href="{{ Storage::url($karya->fileKarya) }}" target="_blank">
+                                                            <a href="{{ Storage::url($karya->fileKarya) }}"
+                                                                target="_blank">
                                                                 {{ $karya->judulFileAsli }}
                                                             </a>
                                                         </li>
@@ -107,7 +137,7 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="col-lg-12">
+                                        <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">Status</label>
                                                 <select name="status" id="status" class="form-control">
@@ -120,6 +150,12 @@
                                                         Ditampilkan
                                                     </option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="">Deskripsi Karya</label>
+                                                <textarea name="deskripsi" id="deskripsi" class="form-control" cols="10" rows="5">{{ old('deskripsi', $karya->deskripsi) }}</textarea>
                                             </div>
                                         </div>
                                     </div>
