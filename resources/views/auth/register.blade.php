@@ -1,140 +1,58 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Register!</title>
-    <link rel="icon" href="{{ asset('admin/img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
-    <link rel="stylesheet" href="{{ asset('auth/style.css') }}" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
 
-<style>
-    .form-container {
-        max-height: 500px;
-        /* Sesuaikan tinggi sesuai kebutuhan */
-        overflow-y: auto;
-        /* Scrollbar vertikal */
-        width: 100%;
-        /* Memastikan div mengambil lebar penuh */
-        max-width: 400px;
-        /* Lebar maksimum form, sesuaikan sesuai kebutuhan */
-        padding-right: 20px;
-        /* Ruang untuk scrollbar agar tidak menutupi konten */
-        box-sizing: border-box;
-        /* Memastikan padding tidak menambah lebar */
-    }
+<body class="min-h-screen flex items-center justify-center bg-[#161B2E] p-4">
+    <div class="bg-[#161B2E] rounded-2xl p-8 max-w-md w-full shadow-lg">
+        <h1 class="text-[#6B56F9] font-extrabold text-3xl mb-2">Selamat Datang!</h1>
+        <p class="text-[#7B7B8B] mb-8 text-sm">Masukkan kredensial Anda untuk mengakses akun!</p>
 
-    /* Optional: Styling untuk memperbaiki tampilan scrollbar */
-    .form-container::-webkit-scrollbar {
-        width: 10px;
-        /* Lebar scrollbar */
-    }
+        <form action="{{ url('register/store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <label for="fullname" class="block text-[#7B7B8B] font-semibold mb-1">Nama Lengkap</label>
+            <input id="fullname" name="nama_lengkap" type="text" value="{{ old('nama_lengkap') }}"
+                placeholder="Masukkan Nama Lengkap"
+                class="w-full bg-[#1E223D] border border-[#3B3F5C] rounded-md py-2 px-3 mb-4 text-[#5B5F7D] placeholder-[#5B5F7D] focus:outline-none focus:ring-2 focus:ring-[#6B56F9] focus:border-transparent transition @error('nama_lengkap') is-invalid @enderror" />
+            <label for="nim" class="block text-[#7B7B8B] font-semibold mb-1">NIM</label>
+            <input id="nim" type="text" name="nim" placeholder="Masukkan NIM" value="{{ old('nim') }}"
+                class="w-full bg-[#1E223D] border border-[#3B3F5C] rounded-md py-2 px-3 mb-4 text-[#5B5F7D] placeholder-[#5B5F7D] focus:outline-none focus:ring-2 focus:ring-[#6B56F9] focus:border-transparent transition @error('nim') is-invalid @enderror" />
+            <label for="phone" class="block text-[#7B7B8B] font-semibold mb-1">No HP</label>
+            <input id="no_hp" type="tel" name="no_hp" placeholder="Masukkan No HP" value="{{ old('no_hp') }}"
+                class="w-full bg-[#1E223D] border border-[#3B3F5C] rounded-md py-2 px-3 mb-4 text-[#5B5F7D] placeholder-[#5B5F7D] focus:outline-none focus:ring-2 focus:ring-[#6B56F9] focus:border-transparent transition @error('no_hp') is-invalid @enderror" />
+            <label for="password" class="block text-[#7B7B8B] font-semibold mb-1">Password</label>
+            <input id="password" type="password" name="password" placeholder="********"
+                class="w-full bg-[#1E223D] border border-[#3B3F5C] rounded-md py-2 px-3 mb-6 text-[#5B5F7D] placeholder-[#5B5F7D] focus:outline-none focus:ring-2 focus:ring-[#6B56F9] focus:border-transparent transition @error('password') is-invalid @enderror" />
+            <div class="flex items-center justify-between mb-6 text-[#7B7B8B] text-sm">
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox"
+                        class="w-4 h-4 text-[#6B56F9] bg-[#1E223D] border border-[#3B3F5C] rounded focus:ring-[#6B56F9]" />
+                    <span>Remember me</span>
+                </label>
+                <a href="#" class="text-[#6B56F9] hover:underline">Forgot Password?</a>
+            </div>
+            <button type="submit"
+                class="w-full bg-gradient-to-r from-[#5B4FF9] to-[#8A5BFF] text-white font-semibold py-3 rounded-lg hover:opacity-90 transition">
+                Sign in to your account
+            </button>
+        </form>
 
-    .form-container::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        /* Warna latar scrollbar */
-    }
-
-    .form-container::-webkit-scrollbar-thumb {
-        background: #888;
-        /* Warna thumb scrollbar */
-        border-radius: 5px;
-    }
-
-    .form-container::-webkit-scrollbar-thumb:hover {
-        background: #555;
-        /* Warna thumb saat hover */
-    }
-
-    /* Memastikan form di dalam tidak terpengaruh oleh scrollbar */
-    .form-container form {
-        width: 100%;
-        padding: 20px;
-        box-sizing: border-box;
-    }
-
-    /* Styling untuk form-group agar tidak terpotong */
-    .form-group {
-        margin-bottom: 15px;
-        width: 100%;
-    }
-</style>
-
-<body>
-    <div class="login-container">
-        <div class="login-header">
-            <h1>Selamat Datang!</h1>
-            <p>Silahkan Daftarkan diri anda!</p>
-        </div>
-        <!-- resources/views/auth/login.blade.php -->
-        <div class="form-container">
-            <form action="{{ url('login') }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="identifier">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Username"
-                        value="{{ old('username') }}" required />
-                    @error('username')
-                        <span class="text-light" style="color: white">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="identifier">Nama Lengkap</label>
-                    <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Nama Lengkap"
-                        value="{{ old('nama_lengkap') }}" required />
-                    @error('nama_lengkap')
-                        <span class="text-light" style="color: white">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="">NIM</label>
-                    <input type="text" id="nim" name="nim" placeholder="NIM" value="{{ old('nim') }}"
-                        required />
-                    @error('nim')
-                        <span class="text-light" style="color: white">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="">Email</label>
-                    <input type="email" id="email" name="email" placeholder="email" value="{{ old('email') }}"
-                        required />
-                    @error('email')
-                        <span class="text-light" style="color: white">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="••••••••" required />
-                    @error('password')
-                        <span class="text-light" style="color: white">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="remember-forgot">
-                    <div class="remember-me">
-                        <input type="checkbox" id="remember" name="remember" />
-                        <label for="remember">Remember me</label>
-                    </div>
-                    <a href="#" class="forgot-password">Forgot Password?</a>
-                </div>
-                <button type="submit" class="login-button">
-                    Sign in to your account
-                </button>
-                <div class="signup-link">
-                    Don't have an account? <a href="#">Create account</a>
-                </div>
-            </form>
-        </div>
+        <p class="text-[#7B7B8B] text-center mt-6 text-sm">
+            Don't have an account? <a href="{{ url('login') }}" class="text-[#6B56F9] hover:underline">Create
+                account</a>
+        </p>
     </div>
 </body>
 
