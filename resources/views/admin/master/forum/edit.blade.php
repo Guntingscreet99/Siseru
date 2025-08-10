@@ -43,70 +43,28 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">Kelas</label>
-                                                <select name="kelas" id="kelas" class="form-control">
-                                                    <option value="{{ $forum->kelas }}">-- Pilih Kelas --</option>
-                                                    <option value="Kelas A"
-                                                        {{ $forum->kelas == 'Kelas A' ? 'selected' : '' }}>Kelas A
-                                                    </option>
-                                                    <option value="Kelas B"
-                                                        {{ $forum->kelas == 'Kelas B' ? 'selected' : '' }}>Kelas B
-                                                    </option>
-                                                    <option value="Kelas C"
-                                                        {{ $forum->kelas == 'Kelas C' ? 'selected' : '' }}>Kelas C
-                                                    </option>
-                                                    <option value="Kelas D"
-                                                        {{ $forum->kelas == 'Kelas D' ? 'selected' : '' }}>Kelas D
-                                                    </option>
-                                                    <option value="Kelas E"
-                                                        {{ $forum->kelas == 'Kelas E' ? 'selected' : '' }}>Kelas E
-                                                    </option>
-                                                    <option value="Kelas F"
-                                                        {{ $forum->kelas == 'Kelas F' ? 'selected' : '' }}>Kelas F
-                                                    </option>
-                                                    <option value="Kelas F"
-                                                        {{ $forum->kelas == 'Kelas F' ? 'selected' : '' }}>Kelas F
-                                                    </option>
-                                                    <option value="Kelas G"
-                                                        {{ $forum->kelas == 'Kelas G' ? 'selected' : '' }}>Kelas G
-                                                    </option>
-                                                    <option value="Kelas H"
-                                                        {{ $forum->kelas == 'Kelas H' ? 'selected' : '' }}>Kelas H
-                                                    </option>
-                                                    <option value="Kelas I"
-                                                        {{ $forum->kelas == 'Kelas I' ? 'selected' : '' }}>Kelas I
-                                                    </option>
+                                                <select name="id_kelas" id="id_kelas" class="form-control">
+                                                    <option value="">-- Pilih Kelas --</option>
+                                                    @foreach ($kelas as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ $forum->id_kelas == $item->id ? 'selected' : '' }}>
+                                                            {{ $item->nama_kelas }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">Semester</label>
-                                                <select name="semester" id="semester" class="form-control">
+                                                <select name="id_semester" id="id_semester" class="form-control">
                                                     <option value="">-- Pilih Semester --</option>
-                                                    <option value="Semester 1"
-                                                        {{ $forum->semester == 'Semester 1' ? 'selected' : '' }}>Semester 1
-                                                    </option>
-                                                    <option value="Semester 2"
-                                                        {{ $forum->semester == 'Semester 2' ? 'selected' : '' }}>Semester 2
-                                                    </option>
-                                                    <option value="Semester 3"
-                                                        {{ $forum->semester == 'Semester 3' ? 'selected' : '' }}>Semester 3
-                                                    </option>
-                                                    <option value="Semester 4"
-                                                        {{ $forum->semester == 'Semester 4' ? 'selected' : '' }}>Semester 4
-                                                    </option>
-                                                    <option value="Semester 5"
-                                                        {{ $forum->semester == 'Semester 5' ? 'selected' : '' }}>Semester 5
-                                                    </option>
-                                                    <option value="Semester 6"
-                                                        {{ $forum->semester == 'Semester 6' ? 'selected' : '' }}>Semester 6
-                                                    </option>
-                                                    <option value="Semester 7"
-                                                        {{ $forum->semester == 'Semester 7' ? 'selected' : '' }}>Semester 7
-                                                    </option>
-                                                    <option value="Semester 8"
-                                                        {{ $forum->semester == 'Semester 8' ? 'selected' : '' }}>Semester 8
-                                                    </option>
+                                                    @foreach ($semester as $sem)
+                                                        <option value="{{ $sem->id }}"
+                                                            {{ $forum->id_semester == $sem->id ? 'selected' : '' }}>
+                                                            {{ $sem->nama_semester }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>

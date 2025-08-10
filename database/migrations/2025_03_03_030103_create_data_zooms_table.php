@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('data_zooms', function (Blueprint $table) {
             $table->id('kdzoom');
-            $table->string('kelas')->nullable();
+            $table->string('id_kelas')->nullable();
             $table->string('linkZoom')->nullable();
             $table->string('linkWebinar')->nullable();
             $table->string('status')->nullable();

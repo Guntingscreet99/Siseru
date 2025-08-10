@@ -1,7 +1,4 @@
-@extends('bagian.user.layout.rumah')
-@section('judul', 'Dahsboard')
-@section('isi')
-
+<x-user.layout.rumah title="Dashboard Mahasiswa">
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
 
@@ -12,12 +9,12 @@
             <div class="row gy-4 d-flex justify-content-between">
                 <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
                     <h2 data-aos="fade-up">Sistem Informasi Seni Rupa </h2>
-                    <p data-aos="fade-up" data-aos-delay="100">Selamat datang di SISERU!, platform pembelajaran seni rupa
-                        yang dirancang untuk membantu Anda mengeksplorasi, belajar, dan mengembangkan keterampilan seni
-                        dengan cara yang interaktif dan menyenangkan. Kami percaya bahwa seni adalah bahasa universal yang
-                        menghubungkan setiap individu, dan melalui website ini, kami bertujuan untuk memberikan akses ke
-                        materi pembelajaran seni rupa yang berkualitas dan mudah diakses oleh siapa saja, di mana saja.
-                    </p>
+                    <p data-aos="fade-up" data-aos-delay="100">Selamat datang di SISERU!
+                        Platform pembelajaran seni rupa yang dirancang untuk membantu Anda mengeksplorasi, belajar, dan
+                        mengembangkan keterampilan seni dengan cara yang interaktif dan menyenangkan. Kami percaya bahwa
+                        seni adalah bahasa universal yang menghubungkan setiap individu, dan melalui website ini, kami
+                        bertujuan untuk memberikan akses ke materi pembelajaran seni rupa yang berkualitas dan mudah
+                        diakses oleh siapa saja, di mana saja.</p>
 
                     {{-- <form action="#" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up"
                         data-aos-delay="200">
@@ -72,7 +69,7 @@
     <!-- Featured Services Section -->
     <section id="featured-services" class="featured-services section">
 
-        <div class="container">
+        {{-- <div class="container">
 
             <div class="row gy-4">
 
@@ -112,7 +109,7 @@
 
             </div>
 
-        </div>
+        </div> --}}
 
     </section><!-- /Featured Services Section -->
 
@@ -136,39 +133,36 @@
                 <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox pulsating-play-btn"></a> --}}
                 </div>
 
+
+
                 <div class="col-lg-6 content order-last  order-lg-first" data-aos="fade-up" data-aos-delay="100">
-                    <h3>About Us</h3>
+                    <h3>Visi Kami</h3>
                     <p>
-                        Dolor iure expedita id fuga asperiores qui sunt consequatur minima. Quidem voluptas
-                        deleniti. Sit quia molestiae quia quas qui magnam itaque veritatis dolores. Corrupti totam
-                        ut eius incidunt reiciendis veritatis asperiores placeat.
+                        Menjadi platform pembelajaran seni rupa terdepan yang menyatukan teori dan praktik, memberikan
+                        wawasan mendalam tentang dunia seni, serta menciptakan ruang bagi para seniman muda untuk
+                        berkreasi,
+                        berkolaborasi, dan berkembang.
                     </p>
-                    <ul>
-                        <li>
-                            <i class="bi bi-diagram-3"></i>
-                            <div>
-                                <h5>Ullamco laboris nisi ut aliquip consequat</h5>
-                                <p>Magni facilis facilis repellendus cum excepturi quaerat praesentium libre trade
-                                </p>
-                            </div>
-                        </li>
-                        <li>
-                            <i class="bi bi-fullscreen-exit"></i>
-                            <div>
-                                <h5>Magnam soluta odio exercitationem reprehenderi</h5>
-                                <p>Quo totam dolorum at pariatur aut distinctio dolorum laudantium illo direna
-                                    pasata redi</p>
-                            </div>
-                        </li>
-                        <li>
-                            <i class="bi bi-broadcast"></i>
-                            <div>
-                                <h5>Voluptatem et qui exercitationem</h5>
-                                <p>Et velit et eos maiores est tempora et quos dolorem autem tempora incidunt maxime
-                                    veniam</p>
-                            </div>
-                        </li>
-                    </ul>
+                    <div class="col-lg-6 content order-last  order-lg-first" data-aos="fade-up" data-aos-delay="100">
+                        <h3>Misi Kami</h3>
+                    </div>
+                    <p>
+                        1. Menyediakan materi pembelajaran seni rupa yang lengkap dan mudah dipahami, mulai dari konsep
+                        dasar hingga tingkat lanjut.
+                    </p>
+                    <p>
+                        2. Membantu mahasiswa untuk mengembangkan keterampilan praktis melalui video tutorial
+                        interaktif dan kelas live.
+                    </p>
+                    <p>
+                        3. Menciptakan komunitas pembelajaran yang aktif, di mana setiap orang dapat berdiskusi, berbagi
+                        karya, dan mendapatkan feedback yang membangun.
+                    </p>
+                    <p>
+                        4. Mengintegrasikan teknologi dalam proses belajar untuk meningkatkan pengalaman belajar yang
+                        lebih
+                        efektif dan menyenangkan.
+                    </p>
                 </div>
 
             </div>
@@ -182,9 +176,9 @@
 
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
-            <span>Apa Yang Kami Tawarkan!<br></span>
-            <h2>Apa Yang Kami Tawarkan!</h2>
-            <p>Hal-hal yang dapat kami tawarkan sebagai berikut!</p>
+            <span>Kelas Pembelajaran!<br></span>
+            <h2>Kelas Pembelajaran!</h2>
+            <p>Hal-hal yang dapat kami berikan sebagai berikut!</p>
         </div><!-- End Section Title -->
 
         <div class="container">
@@ -201,7 +195,8 @@
                             object-fit: cover; /* Memastikan gambar tidak terdistorsi */
                             border-radius: 10px; /* Opsional, untuk tampilan lebih rapi */
                         }">
-                            <img src="landing/img/Modul Pembelajaran.avif" alt="" class="img-fluid">
+                            <img src="{{ asset('landing/img/Modul-Pembelajaran.avif') }}" alt=""
+                                class="img-fluid">
                         </div>
                         <h3><a href="#" class="stretched-link">Modul Pembelajaran</a></h3>
                         <p>Berisi materi seni rupa dalam bentuk teks, PDF, infografis, dan e-book.</p>
@@ -218,7 +213,7 @@
                             object-fit: cover; /* Memastikan gambar tidak terdistorsi */
                             border-radius: 10px; /* Opsional, untuk tampilan lebih rapi */
                         }">
-                            <img src="landing/img/video interaktif.jpg" alt="" class="img-fluid">
+                            <img src="{{ asset('landing/img/video-interaktif.jpg') }}" alt="" class="img-fluid">
                         </div>
                         <h3><a href="#" class="stretched-link">Video Tutorial</a></h3>
                         <p>Video demonstrasi pembuatan karya seni (misalnya menggambar, melukis, membuat kolase).
@@ -237,7 +232,7 @@
                             object-fit: cover; /* Memastikan gambar tidak terdistorsi */
                             border-radius: 10px; /* Opsional, untuk tampilan lebih rapi */
                         }">
-                            <img src="landing/img/kelas interaktif.jpg" alt="" class="img-fluid">
+                            <img src="{{ asset('landing/img/kelas-interaktif.jpg') }}" alt="" class="img-fluid">
                         </div>
                         <h3><a href="#" class="stretched-link">Kelas & Webinar</a></h3>
                         <p>ive class menggunakan Zoom atau Google Meet untuk diskusi real-time.
@@ -255,7 +250,7 @@
                             object-fit: cover; /* Memastikan gambar tidak terdistorsi */
                             border-radius: 10px; /* Opsional, untuk tampilan lebih rapi */
                         }">
-                            <img src="landing/img/Diskusi.jpg" alt="" class="img-fluid">
+                            <img src="{{ asset('landing/img/Diskusi.jpg') }}" alt="" class="img-fluid">
                         </div>
                         <h3><a href="#" class="stretched-link">Forum Diskusi & Tanya Jawab</a></h3>
                         <p>Wadah untuk mahasiswa bertanya dan berdiskusi tentang seni rupa.
@@ -273,10 +268,12 @@
                             object-fit: cover; /* Memastikan gambar tidak terdistorsi */
                             border-radius: 10px; /* Opsional, untuk tampilan lebih rapi */
                         }">
-                            <img src="landing/img/Galeri seni.jpg" alt="" class="img-fluid">
+                            <img src="{{ asset('landing/img/Galeri-seni.jpg') }}" alt="" class="img-fluid">
                         </div>
-                        <h3><a href="#" class="stretched-link">Gelar Karya Mahasiswa</a></h3>
-                        <p>Mahasiswa dapat mengunggah hasil karya seni mereka untuk dikomentari oleh dosen atau teman-teman.
+                        <h3><a href="{{ url('user.menu.galeri_karya.index') }}" class="stretched-link">Gelar Karya
+                                Mahasiswa</a></h3>
+                        <p>Mahasiswa dapat mengunggah hasil karya seni mereka untuk dikomentari oleh dosen atau
+                            teman-teman.
                         </p>
                     </div>
                 </div><!-- End Card Item -->
@@ -291,7 +288,7 @@
                             object-fit: cover; /* Memastikan gambar tidak terdistorsi */
                             border-radius: 10px; /* Opsional, untuk tampilan lebih rapi */
                         }">
-                            <img src="landing/img/Gamifikasi.jpg" alt="" class="img-fluid">
+                            <img src="{{ asset('landing/img/Gamifikasi.jpg') }}" alt="" class="img-fluid">
                         </div>
                         <h3><a href="#" class="stretched-link">Sistem Gamifikasi</a></h3>
                         <p>Poin dan badge untuk mahasiswa yang aktif menyelesaikan modul atau berkontribusi di forum.
@@ -305,7 +302,7 @@
 
     </section><!-- /Services Section -->
 
-    <!-- Call To Action Section -->
+    {{-- <!-- Call To Action Section -->
     <section id="call-to-action" class="call-to-action section dark-background">
 
         <img src="{{ asset('landing/img/2.jpg') }}" alt="">
@@ -314,47 +311,50 @@
             <div class="row justify-content-center" data-aos="zoom-in" data-aos-delay="100">
                 <div class="col-xl-10">
                     <div class="text-center">
-                        <h3>Call To Action</h3>
-                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-                            officia deserunt mollit anim id est laborum.</p>
-                        <a class="cta-btn" href="#">Call To Action</a>
+                        <h3>Sudah Punya Akun?</h3>
+                        <p>SIlahkan daftarakan diri anda untuk dapat mengakases Materi-materi yang menarik!
+                            <br> Silahkan yang merasa dirinya TOBRUT hubungi nomor ini 085.....
+                        </p>
+                        <a class="cta-btn" href="#">Register</a>
                     </div>
                 </div>
             </div>
         </div>
 
-    </section><!-- /Call To Action Section -->
+    </section><!-- /Call To Action Section --> --}}
 
     <!-- Features Section -->
     <section id="features" class="features section">
 
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
-            <span>Features</span>
-            <h2>Features</h2>
-            <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+            <span>Hasil Karya</span>
+            <h2>Hasil Karya</h2>
+            <p>Hasil Karya terbaik milik mahasiswa akan di tampilkan dan di diskusikan bersama </p>
         </div><!-- End Section Title -->
 
         <div class="container">
 
             <div class="row gy-4 align-items-center features-item">
                 <div class="col-md-5 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="100">
-                    <img src="landing/img/features-1.jpg" class="img-fluid" alt="">
+                    <img src="{{ asset('landing/img/lukisan.jpg') }}" class="img-fluid" alt="">
                 </div>
                 <div class="col-md-7" data-aos="fade-up" data-aos-delay="100">
-                    <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
+                    <h3>Lukisan Senja.</h3>
                     <p class="fst-italic">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore
-                        magna aliqua.
+                        Melukis adalah kegiatan mengungkapkan ide, perasaan, atau ekspresi melalui goresan garis, warna,
+                        dan
+                        bentuk pada suatu media, seperti kanvas, kertas, atau dinding. Seni lukis merupakan bagian dari
+                        seni
+                        rupa yang menggunakan unsur visual sebagai sarana komunikasi dan ekspresi.
                     </p>
                     <ul>
-                        <li><i class="bi bi-check"></i><span> Ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat.</span></li>
-                        <li><i class="bi bi-check"></i> <span>Duis aute irure dolor in reprehenderit in voluptate
-                                velit.</span></li>
-                        <li><i class="bi bi-check"></i> <span>Ullam est qui quos consequatur eos accusamus.</span>
+                        <li><i class="bi bi-check"></i><span> Gunakan Media yang Tepat Pilih media yang sesuai, seperti
+                                cat air, cat minyak, atau pensil warna, agar hasil lebih maksimal</span></li>
+                        <li><i class="bi bi-check"></i> <span>Eksplorasi Teknik Cobalah berbagai teknik seperti gradasi
+                                warna, layering, atau tekstur untuk memperkaya karya.</span></li>
+                        <li><i class="bi bi-check"></i> <span>Latihan Rutin Semakin sering melukis, semakin terasah
+                                keterampilan dan kreativitas dalam berkarya.</span>
                         </li>
                     </ul>
                 </div>
@@ -363,62 +363,83 @@
             <div class="row gy-4 align-items-center features-item">
                 <div class="col-md-5 order-1 order-md-2 d-flex align-items-center" data-aos="zoom-out"
                     data-aos-delay="200">
-                    <img src="landing/img/features-2.jpg" class="img-fluid" alt="">
+                    <img src="{{ asset('landing/img/batik.jpg') }}" class="img-fluid" alt="">
                 </div>
                 <div class="col-md-7 order-2 order-md-1" data-aos="fade-up" data-aos-delay="200">
-                    <h3>Corporis temporibus maiores provident</h3>
+                    <h3>Batik Tulis</h3>
                     <p class="fst-italic">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore
-                        magna aliqua.
+                        Batik adalah seni menghias kain dengan pola atau motif tertentu menggunakan malam (lilin)
+                        sebagai
+                        perintang warna, yang kemudian melalui proses pewarnaan dan pelorodan (penghilangan malam).
+                        Batik
+                        merupakan salah satu warisan budaya Indonesia yang diakui oleh UNESCO sebagai Warisan Budaya
+                        Takbenda sejak 2 Oktober 2009
                     </p>
-                    <p>
-                        Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate
-                        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in
-                        culpa qui officia deserunt mollit anim id est laborum
-                    </p>
+                    <ul>
+                        <li><i class="bi bi-check"></i> <span>UPilih Bahan yang Sesuai Gunakan kain yang menyerap warna
+                                dengan baik, seperti katun atau sutra, agar hasil lebih optimal.</span></li>
+                        <li><i class="bi bi-check"></i><span> Gunakan Canting dengan Tepat Latih tangan agar stabil
+                                saat
+                                menggambar motif menggunakan canting untuk mendapatkan garis yang rapi.</span></li>
+                        <li><i class="bi bi-check"></i> <span>Eksplorasi Motif Pelajari berbagai motif batik
+                                tradisional
+                                maupun modern untuk memperluas kreativitas dalam berkarya.</span>.</li>
+                    </ul>
                 </div>
             </div><!-- Features Item -->
 
             <div class="row gy-4 align-items-center features-item">
                 <div class="col-md-5 d-flex align-items-center" data-aos="zoom-out">
-                    <img src="landing/img/features-3.jpg" class="img-fluid" alt="">
+                    <img src="{{ asset('landing/img/patung.jpg') }}" class="img-fluid" alt="">
                 </div>
                 <div class="col-md-7" data-aos="fade-up">
-                    <h3>Sunt consequatur ad ut est nulla consectetur reiciendis animi voluptas</h3>
-                    <p>Cupiditate placeat cupiditate placeat est ipsam culpa. Delectus quia minima quod. Sunt saepe
-                        odit aut quia voluptatem hic voluptas dolor doloremque.</p>
+                    <h3>Patung</h3>
+                    <p>Patung adalah karya seni tiga dimensi yang dibuat dengan teknik memahat, membentuk, atau mencetak
+                        bahan seperti kayu, batu, tanah liat, logam, atau fiberglass untuk menghasilkan bentuk yang
+                        memiliki
+                        nilai estetika atau simbolik. Patung sering digunakan sebagai media ekspresi seni, penghormatan
+                        terhadap tokoh, atau elemen dekoratif dalam berbagai budaya.</p>
                     <ul>
-                        <li><i class="bi bi-check"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat.</span></li>
-                        <li><i class="bi bi-check"></i><span> Duis aute irure dolor in reprehenderit in voluptate
-                                velit.</span></li>
-                        <li><i class="bi bi-check"></i> <span>Facilis ut et voluptatem aperiam. Autem soluta ad
-                                fugiat</span>.</li>
+                        <li><i class="bi bi-check"></i> <span>Pilih Bahan yang Tepat Gunakan bahan yang sesuai dengan
+                                teknik yang dikuasai, seperti tanah liat untuk pemula atau batu dan logam untuk yang
+                                lebih
+                                mahir.</span></li>
+                        <li><i class="bi bi-check"></i><span>Gunakan Alat yang Sesuai Pastikan alat seperti pahat,
+                                cetakan, atau alat pemotong digunakan dengan benar untuk mempermudah proses
+                                pembentukan.</span></li>
+                        <li><i class="bi bi-check"></i> <span>Buat Sketsa atau Model Awal Sebelum mulai membuat patung,
+                                buat sketsa atau model kecil sebagai panduan agar hasil akhir lebih sesuai dengan konsep
+                                yang diinginkan.</span>.</li>
                     </ul>
                 </div>
             </div><!-- Features Item -->
 
             <div class="row gy-4 align-items-center features-item">
                 <div class="col-md-5 order-1 order-md-2 d-flex align-items-center" data-aos="zoom-out">
-                    <img src="landing/img/features-4.jpg" class="img-fluid" alt="">
+                    <img src="{{ asset('landing/img/ukiran.jpg') }}" class="img-fluid" alt="">
                 </div>
                 <div class="col-md-7 order-2 order-md-1" data-aos="fade-up">
-                    <h3>Quas et necessitatibus eaque impedit ipsum animi consequatur incidunt in</h3>
+                    <h3>Ukiran</h3>
                     <p class="fst-italic">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore
-                        magna aliqua.
+                        Ukiran adalah seni mengukir atau memahat permukaan suatu bahan, seperti kayu, batu, logam, atau
+                        tulang, untuk menciptakan motif, pola, atau bentuk yang memiliki nilai estetika dan makna
+                        tertentu.
+                        Seni ukir banyak ditemukan dalam berbagai budaya sebagai hiasan pada rumah, perabot, senjata,
+                        dan
+                        benda seni lainnya.
                     </p>
-                    <p>
-                        Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate
-                        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in
-                        culpa qui officia deserunt mollit anim id est laborum
-                    </p>
+                    <ul>
+                        <li><i class="bi bi-check"></i> <span>Pilih Bahan yang Sesuai Gunakan bahan yang cocok dengan
+                                teknik ukiran, seperti kayu jati untuk ukiran kayu atau batu andesit untuk ukiran
+                                batu.</span></li>
+                        <li><i class="bi bi-check">
+                            </i><span>Gunakan Alat yang Tepat Pastikan menggunakan pahat, tatah, atau pisau
+                                ukir yang tajam agar hasil lebih rapi dan detail.</span></li>
+                        <li><i class="bi bi-check">.</i>
+                            <span>Buat Pola atau Sketsa Terlebih Dahulu Membuat sketsa pada bahan
+                                sebelum mulai mengukir akan membantu menghasilkan ukiran yang lebih presisi</span>.
+                        </li>
+                    </ul>
                 </div>
             </div><!-- Features Item -->
 
@@ -431,9 +452,13 @@
 
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
-            <span>Pricing</span>
-            <h2>Pricing</h2>
-            <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+            <span>Perpustakaan Digital</span>
+            <h2>Perpustakaan Digital</h2>
+            <p>Perpustakaan digital adalah sistem perpustakaan berbasis teknologi yang menyediakan koleksi buku, jurnal,
+                artikel, dan berbagai sumber informasi dalam format digital. Pengguna dapat mengakses bahan bacaan
+                melalui
+                perangkat elektronik seperti komputer, tablet, atau smartphone tanpa harus datang ke perpustakaan fisik.
+            </p>
         </div><!-- End Section Title -->
 
         <div class="container">
@@ -442,25 +467,31 @@
 
                 <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
                     <div class="pricing-item">
-                        <h3>Free Plan</h3>
-                        <h4><sup>$</sup>0<span> / month</span></h4>
+                        <h3>Modul pembelajaran</h3>
+                        <h4><sup></sup>100<span> / Modul</span></h4>
                         <ul>
-                            <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>
-                            <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>
-                            <li><i class="bi bi-check"></i> <span>Nulla at volutpat diam uteera</span></li>
-                            <li class="na"><i class="bi bi-x"></i> <span>Pharetra massa massa ultricies</span>
+                            <li><i class="bi bi-check"></i> <span>Modul pembelajaran terpercaya</span></li>
+                            <li><i class="bi bi-check"></i> <span>Cocok untuk pengajar Sekolah Dasar </span></li>
+                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span>
+                            </li>
+                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span>
+                            </li>
+                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span>
+                            </li>
+                            {{-- <li class="na"><i class="bi bi-x"></i> <span>Tidak mencakup seluruh pembelajaran</span>
                             </li>
                             <li class="na"><i class="bi bi-x"></i> <span>Massa ultricies mi quis
-                                    hendrerit</span></li>
+                                    hendrerit</span></li> --}}
                         </ul>
-                        <a href="#" class="buy-btn">Buy Now</a>
+                        <a href="#" class="buy-btn">Click Now</a>
                     </div>
                 </div><!-- End Pricing Item -->
 
                 <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
-                    <div class="pricing-item featured">
-                        <h3>Business Plan</h3>
-                        <h4><sup>$</sup>29<span> / month</span></h4>
+                    <div class="pricing-item ">
+                        {{-- <div class="pricing-item featured"> --}}
+                        <h3>Jurnal</h3>
+                        <h4><sup></sup>100<span> / Artikel</span></h4>
                         <ul>
                             <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>
                             <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>
@@ -468,14 +499,14 @@
                             <li><i class="bi bi-check"></i> <span>Pharetra massa massa ultricies</span></li>
                             <li><i class="bi bi-check"></i> <span>Massa ultricies mi quis hendrerit</span></li>
                         </ul>
-                        <a href="#" class="buy-btn">Buy Now</a>
+                        <a href="#" class="buy-btn">Click Now</a>
                     </div>
                 </div><!-- End Pricing Item -->
 
                 <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="300">
                     <div class="pricing-item">
-                        <h3>Developer Plan</h3>
-                        <h4><sup>$</sup>49<span> / month</span></h4>
+                        <h3>Buku</h3>
+                        <h4><sup></sup>100<span> / Buku</span></h4>
                         <ul>
                             <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>
                             <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>
@@ -483,7 +514,7 @@
                             <li><i class="bi bi-check"></i> <span>Pharetra massa massa ultricies</span></li>
                             <li><i class="bi bi-check"></i> <span>Massa ultricies mi quis hendrerit</span></li>
                         </ul>
-                        <a href="#" class="buy-btn">Buy Now</a>
+                        <a href="#" class="buy-btn">Click Now</a>
                     </div>
                 </div><!-- End Pricing Item -->
 
@@ -496,7 +527,7 @@
     <!-- Testimonials Section -->
     <section id="testimonials" class="testimonials section dark-background">
 
-        <img src="landing/img/testimonials-bg.jpg" class="testimonials-bg" alt="">
+        <img src="{{ asset('landing/img/testimonials-bg.jpg') }}" class="testimonials-bg" alt="">
 
         <div class="container" data-aos="fade-up" data-aos-delay="100">
 
@@ -520,8 +551,8 @@
 
                     <div class="swiper-slide">
                         <div class="testimonial-item">
-                            <img src="landing/img/testimonials/testimonials-1.jpg" class="testimonial-img"
-                                alt="">
+                            <img src="{{ asset('landing/img/testimonials/testimonials-1.jpg') }}"
+                                class="testimonial-img" alt="">
                             <h3>Saul Goodman</h3>
                             <h4>Ceo &amp; Founder</h4>
                             <div class="stars">
@@ -541,8 +572,8 @@
 
                     <div class="swiper-slide">
                         <div class="testimonial-item">
-                            <img src="landing/img/testimonials/testimonials-2.jpg" class="testimonial-img"
-                                alt="">
+                            <img src="{{ asset('landing/img/testimonials/testimonials-2.jpg') }}"
+                                class="testimonial-img" alt="">
                             <h3>Sara Wilsson</h3>
                             <h4>Designer</h4>
                             <div class="stars">
@@ -562,8 +593,8 @@
 
                     <div class="swiper-slide">
                         <div class="testimonial-item">
-                            <img src="landing/img/testimonials/testimonials-3.jpg" class="testimonial-img"
-                                alt="">
+                            <img src="{{ asset('landing/img/testimonials/testimonials-3.jpg') }}"
+                                class="testimonial-img" alt="">
                             <h3>Jena Karlis</h3>
                             <h4>Store Owner</h4>
                             <div class="stars">
@@ -583,8 +614,8 @@
 
                     <div class="swiper-slide">
                         <div class="testimonial-item">
-                            <img src="landing/img/testimonials/testimonials-4.jpg" class="testimonial-img"
-                                alt="">
+                            <img src="{{ asset('landing/img/testimonials/testimonials-4.jpg') }}"
+                                class="testimonial-img" alt="">
                             <h3>Matt Brandon</h3>
                             <h4>Freelancer</h4>
                             <div class="stars">
@@ -604,8 +635,8 @@
 
                     <div class="swiper-slide">
                         <div class="testimonial-item">
-                            <img src="landing/img/testimonials/testimonials-5.jpg" class="testimonial-img"
-                                alt="">
+                            <img src="{{ asset('landing/img/testimonials/testimonials-5.jpg') }}"
+                                class="testimonial-img" alt="">
                             <h3>John Larson</h3>
                             <h4>Entrepreneur</h4>
                             <div class="stars">
@@ -719,23 +750,22 @@
 
     </section><!-- /Faq Section -->
 
-@endsection
+    @push('js')
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let video = document.getElementById("videoPlayer");
 
-@push('js')
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let video = document.getElementById("videoPlayer");
+                // Cek apakah user sebelumnya sudah memutar video
+                if (localStorage.getItem("videoPlayed") === "true") {
+                    video.muted = true; // Pastikan suara aktif
+                    video.play();
+                }
 
-            // Cek apakah user sebelumnya sudah memutar video
-            if (localStorage.getItem("videoPlayed") === "true") {
-                video.muted = true; // Pastikan suara aktif
-                video.play();
-            }
-
-            // Simpan status jika user pertama kali menekan play
-            video.addEventListener("play", function() {
-                localStorage.setItem("videoPlayed", "true");
+                // Simpan status jika user pertama kali menekan play
+                video.addEventListener("play", function() {
+                    localStorage.setItem("videoPlayed", "true");
+                });
             });
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
+</x-user.layout.rumah>

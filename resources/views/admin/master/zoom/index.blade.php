@@ -50,7 +50,7 @@
                                         @foreach ($zoom as $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->kelas }}</td>
+                                                <td>{{ $item->kelas->nama_kelas }}</td>
                                                 <td>
                                                     <a href="{{ $item->linkZoom }}" target="_blank">Link Zoom</a>
                                                 </td>

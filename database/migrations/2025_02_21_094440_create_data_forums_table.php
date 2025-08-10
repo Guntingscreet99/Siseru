@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('data_forums', function (Blueprint $table) {
             $table->id('kdforum');
             $table->string('akun')->nullable();
-            $table->string('kelas')->nullable();
-            $table->string('semester')->nullable();
+            $table->string('id_kelas')->nullable();
+            $table->string('id_semester')->nullable();
             $table->text('topik')->nullable();
             $table->string('tahun')->nullable();
             $table->text('fileForum')->nullable();

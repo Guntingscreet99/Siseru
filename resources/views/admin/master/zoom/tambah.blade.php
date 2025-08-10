@@ -27,42 +27,61 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">Kelas</label>
-                                                <select name="kelas" id="kelas" class="form-control">
+                                                <select name="id_kelas" id="id_kelas" class="form-control" required>
                                                     <option value="">-- Pilih Kelas --</option>
-                                                    <option value="Kelaas A">Kelaas A</option>
-                                                    <option value="Kelas B">Kelas B</option>
-                                                    <option value="Kelas C">Kelas C</option>
-                                                    <option value="Kelas D">Kelas D</option>
-                                                    <option value="Kelas E">Kelas E</option>
-                                                    <option value="Kelas F">Kelas F</option>
-                                                    <option value="Kelas H">Kelas H</option>
-                                                    <option value="Kelas I">Kelas I</option>
+                                                    @if (optional($kelas)->isNotEmpty())
+                                                        @foreach ($kelas as $item)
+                                                            <option value="{{ $item->id }}"
+                                                                {{ old('id_kelas') == $item->id ? 'selected' : '' }}>
+                                                                {{ $item->nama_kelas }}
+                                                            </option>
+                                                        @endforeach
+                                                    @else
+                                                        <option value="">Tidak ada kelas tersedia</option>
+                                                    @endif
                                                 </select>
+                                                @error('id_kelas')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">Link Zoom</label>
                                                 <input type="text" name="linkZoom" id="linkZoom" class="form-control"
-                                                    placeholder="Masukkan Link Zoom">
+                                                    placeholder="Masukkan Link Zoom" value="{{ old('linkZoom') }}">
+                                                @error('linkZoom')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">Link Webinar</label>
                                                 <input type="text" name="linkWebinar" id="linkWebinar"
-                                                    class="form-control" placeholder="Masukkan Link Webinar">
+                                                    class="form-control" placeholder="Masukkan Link Webinar"
+                                                    value="{{ old('linkWebinar') }}">
+                                                @error('linkWebinar')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <input type="hidden" name="judulFileAsli">
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">Status</label>
-                                                <select name="status" id="status" class="form-control">
+                                                <select name="status" id="status" class="form-control" required>
                                                     <option value="">-- Pilih Status --</option>
-                                                    <option value="Ditampilkan">Ditampilkan</option>
-                                                    <option value="Tidak ditampilkan">Tidak Ditampilkan</option>
+                                                    <option value="Ditampilkan"
+                                                        {{ old('status') == 'Ditampilkan' ? 'selected' : '' }}>Ditampilkan
+                                                    </option>
+                                                    <option value="Tidak Ditampilkan"
+                                                        {{ old('status') == 'Tidak Ditampilkan' ? 'selected' : '' }}>Tidak
+                                                        Ditampilkan</option>
                                                 </select>
+                                                @error('status')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>

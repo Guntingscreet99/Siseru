@@ -17,4 +17,9 @@ class Semester extends Model
     {
         return $this->hasMany(DataKarya::class, 'id_semester', 'id');
     }
+
+    public function forum()
+    {
+        return $this->hasMany(DataForum::class, 'id_semester', 'id');
+    }
 }

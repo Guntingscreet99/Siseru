@@ -4,14 +4,17 @@ namespace App\Http\Controllers\Admin\Master;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataForum;
+use App\Models\Kelas;
+use App\Models\Semester;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class DataForumController extends Controller
 {
     public function index()
     {
-        $forum = DataForum::all();
+        $forum = DataForum::with('kelas', 'semester')->get();
         // dd($forum);
         return view('admin.master.forum.index', compact('forum'));
     }
@@ -40,7 +43,10 @@ class DataForumController extends Controller
     // Tampil Form Tambah
     public function tampildata()
     {
-        return view('admin.master.forum.tambah');
+        $kelas = Kelas::all();
+        $semester = Semester::all();
+
+        return view('admin.master.forum.tambah', compact('kelas', 'semester'));
     }
 
     // Tambah Data
@@ -48,15 +54,15 @@ class DataForumController extends Controller
     {
         $request->validate([
             'akun' => 'required',
-            'kelas' => 'required',
-            'semester' => 'required',
+            'id_kelas' => 'required',
+            'id_semester' => 'required',
             'topik' => 'required',
             'tahun' => 'required',
             'fileForum' => 'nullable|file|max:20480',
         ], [
             'akun.required' => 'Akun Wajib Diisi!',
-            'kelas.required' => 'Kelas Wajib Diisi!',
-            'semester.required' => 'Semester Wajib Diisi!',
+            'id_kelas.required' => 'Kelas Wajib Diisi!',
+            'id_semester.required' => 'Semester Wajib Diisi!',
             'topik.required' => 'Topik Wajib Diisi!',
             'tahun.required' => 'Tahun Wajib Diisi!',
         ]);
@@ -72,13 +78,15 @@ class DataForumController extends Controller
 
         $data = [
             'akun' => $request->input('akun'),
-            'kelas' => $request->input('kelas'),
-            'semester' => $request->input('semester'),
+            'id_kelas' => $request->id_kelas,
+            'id_semester' => $request->id_semester,
             'topik' => $request->input('topik'),
             'tahun' => $request->input('tahun'),
             'fileForum' => $mdl ?? '',
             'judulFileAsli' => $judulAsli,
         ];
+
+        // dd($data);
 
         DataForum::create($data);
 
@@ -90,21 +98,25 @@ class DataForumController extends Controller
     {
         $forum = DataForum::where('kdforum', $kdforum)->firstOrFail();
 
-        return view('admin.master.forum.edit', compact('forum'));
+        $kelas = Kelas::all();
+        $semester = Semester::all();
+
+        return view('admin.master.forum.edit', compact('forum', 'kelas', 'semester'));
     }
 
     public function editdata(Request $request, $kdforum)
     {
+        $forum = DataForum::where('kdforum', $kdforum)->firstOrFail();
+
         $request->validate([
             'akun' => 'required',
-            'kelas' => 'required',
-            'semester' => 'required',
+            'id_kelas' => 'required',
+            'id_semester' => 'required',
             'topik' => 'required',
             'tahun' => 'required',
             'fileForum' => 'nullable|file|max:20480',
         ]);
 
-        $forum = DataForum::where('kdforum', $kdforum)->firstOrFail();
 
         // Cek apakah pengguna ingin menggunakan file lama atau mengganti dengan yang baru
         if (!$request->has('gunakan_file_lama') && $request->hasFile('fileForum')) {
@@ -113,20 +125,20 @@ class DataForumController extends Controller
                 Storage::disk('public')->delete($forum->fileForum);
             }
 
-            $file = $request->file('fileForum');
-            $judulAsli = $file->getClientOriginalName();
-            $mdl = $file->store('fileForum', 'Public');
-
-            $forum->update([
-                'fileForum' => $mdl,
-                'judulFileAsli' => $judulAsli,
-            ]);
+            if ($request->hasFile('fileForum')) {
+                $file = $request->file('fileForum');
+                $data['judulAsli'] = $file->getClientOriginalName();
+                $data['fileForum'] = $file->store('fileForum', 'public');
+            } else {
+                $mdl = null;
+                $judulAsli = null;
+            }
         }
 
         $forum->update([
             'akun' => $request->input('akun'),
-            'kelas' => $request->input('kelas'),
-            'semester' => $request->input('semester'),
+            'id_kelas' => $request->id_kelas,
+            'id_semester' => $request->id_semester,
             'topik' => $request->input('topik'),
             'tahun' => $request->input('tahun'),
         ]);
@@ -137,16 +149,28 @@ class DataForumController extends Controller
     // hapus data
     public function hapus($kdforum)
     {
-        $forum = DataForum::where('kdforum', $kdforum)->firstOrFail();
+        try {
+            $forum = DataForum::where('kdforum', $kdforum)->firstOrFail();
 
-        // hapus file yang sudah ada
-        if ($forum->fileForum) {
-            Storage::disk('public')->delete($forum->fileForum);
+            if ($forum->fileForum) {
+                Log::info('File to delete: ' . $forum->fileForum);
+                if (Storage::disk('public')->exists($forum->fileForum)) {
+                    Log::info('File exists, attempting to delete');
+                    $deleted = Storage::disk('public')->delete($forum->fileForum);
+                    Log::info('Deletion result: ' . ($deleted ? 'Success' : 'Failed'));
+                } else {
+                    Log::warning('File does not exist in storage: ' . $forum->fileForum);
+                }
+            } else {
+                Log::warning('No fileForum found for kdforum: ' . $kdforum);
+            }
+
+            $forum->delete();
+
+            return redirect()->route('admin.master.forum')->with('success', 'Data Berhasil Dihapus');
+        } catch (\Exception $e) {
+            Log::error('Error deleting forum: ' . $e->getMessage());
+            return redirect()->route('admin.master.forum')->with('eror', 'Gagal menghapus data atau file. Silahkan coba lagi.');
         }
-
-        // hapus data dari database
-        $forum->delete();
-
-        return redirect()->route('admin.master.forum')->with('success', 'Data Berhasil Dihapus');
     }
 }

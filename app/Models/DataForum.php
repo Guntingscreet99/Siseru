@@ -12,5 +12,13 @@ class DataForum extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
-    // protected $fillable = ['akun', 'kelas', 'semester', 'topik', 'tahun', 'fileForum'];
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class, 'id_kelas', 'id');
+    }
+
+    public function semester()
+    {
+        return $this->belongsTo(Semester::class, 'id_semester', 'id');
+    }
 }

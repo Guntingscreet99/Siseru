@@ -17,4 +17,14 @@ class Kelas extends Model
     {
         return $this->hasMany(DataKarya::class, 'id_kelas', 'id');
     }
+
+    public function forum()
+    {
+        return $this->hasMany(DataForum::class, 'id_kelas', 'id');
+    }
+
+    public function zoom()
+    {
+        return $this->hasMany(DataZoom::class, 'id_kelas', 'id');
+    }
 }

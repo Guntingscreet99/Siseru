@@ -18,8 +18,12 @@ return new class extends Migration
             $table->string('email')->unique()->nullable(); // Ubah menjadi nullable jika diizinkan
             $table->foreignId('id_kelas')->nullable()->constrained('kelas')->onDelete('cascade');
             $table->foreignId('id_semester')->nullable()->constrained('semesters')->onDelete('cascade');
+            $table->string('tempat')->nullable();
+            $table->date('tgllahir')->nullable();
             $table->string('jenisKelamin')->nullable();
+            $table->string('foto_Mhs')->nullable();
             $table->string('alamat')->nullable();
+            $table->string('status')->default('Aktif')->nullable();
             $table->timestamps();
         });
     }

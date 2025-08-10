@@ -115,8 +115,8 @@ class DataModulController extends Controller
 
         $request->validate([
             'judul' => 'required',
-            'kelas' => 'required',
-            'semester' => 'required',
+            'id_kelas' => 'required',
+            'id_semester' => 'required',
             'tahun' => 'required',
             'topik' => 'required',
             'status' => 'required',
@@ -147,8 +147,8 @@ class DataModulController extends Controller
 
         $modul->update([
             'judul' => $request->judul,
-            'kelas' => $request->kelas,
-            'semester' => $request->semester,
+            'id_kelas' => $request->id_kelas,
+            'id_semester' => $request->id_semester,
             'tahun' => $request->tahun,
             'topik' => $request->topik,
             'status' => $request->status,

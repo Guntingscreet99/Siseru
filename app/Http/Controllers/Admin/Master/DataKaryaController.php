@@ -112,52 +112,59 @@ class DataKaryaController extends Controller
 
     public function editdata(Request $request, $kdkarya)
     {
+        $karya = DataKarya::where('kdkarya', $kdkarya)->firstOrFail();
+
         $request->validate([
             'namaMhs' => 'required',
             'namaKarya' => 'required',
-            'kelas' => 'required',
-            'semster' => 'required',
+            'id_kelas' => 'nullable',
+            'id_semester' => 'nullable',
             'deskripsi' => 'required',
             // 'status' => 'required',
             'fileKarya' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mkv,avi|max:51200',
         ]);
 
-        $karya = DataKarya::where('kdkarya', $kdkarya)->firstOrFail();
-
-        $data = [
-            'namaMhs' => $request->input('namaMhs'),
-            'namaKarya' => $request->input('namaKarya'),
-            'id_kelas' => $request->input('id_kelas'),
-            'id_semester' => $request->input('id_semester'),
-            'deskripsi' => $request->input('deskripsi'),
-            'status' => $request->input('status'),
-        ];
+        $mdl = $karya->fileKarya;
+        $judulAsli = $karya->judulFileAsli;
 
         if (!$request->has('gunakan_file_lama') && $request->hasFile('fileKarya')) {
             if ($karya->fileKarya) {
                 Storage::disk('public')->delete($karya->fileKarya);
             }
 
-            $file = $request->file('fileKarya');
-            $data['fileKarya'] = $file->store('fileKarya', 'public');
-            $data['judulFileAsli'] = $file->getClientOriginalName();
+            if ($request->hasFile('fileKarya')) {
+                $file = $request->file('fileKarya');
+                $data['judulFileAsli'] = $file->getClientOriginalName();
+                $data['fileKarya'] = $file->store('fileKarya', 'public');
+            } else {
+                $mdl = null;
+                $judulAsli = null;
+            }
         }
 
-        $karya->update($data);
+        $karya->update([
+            'namaMhs' => $request->namaMhs,
+            'namaKarya' => $request->namaKarya,
+            'id_kelas' => $request->id_kelas,
+            'id_semester' => $request->id_semester,
+            'deskripsi' => $request->deskripsi,
+            'fileKarya' => $mdl,
+            'judulFileAsli' => $judulAsli,
+        ]);
 
-        return redirect()->route('admin.master.karya')->with('success', 'Data Berhasil Diperbarui');
+        return redirect()->route('admin.master.karya')->with('success', 'Data Berhasil Diubah!');
     }
 
     // Hapus Data
     public function hapus($kdkarya)
     {
         try {
-            $karya = DataKarya::where('kdkarya', $kdkarya)->findOrFail();
+            $karya = DataKarya::where('kdkarya', $kdkarya)->firstOrFail();
 
             if ($karya->fileKarya) {
                 Log::info('File to delete: ' . $karya->fileKarya);
                 if (Storage::disk('public')->exists($karya->fileKarya)) {
-                    Log::info('File exists, attempting to deleate');
+                    Log::info('File exists, attempting to delete');
                     $deleted = Storage::disk('public')->delete($karya->fileKarya);
                     Log::info('Deletion result: ' . ($deleted ? 'Success' : 'Failed'));
                 } else {
@@ -171,7 +178,7 @@ class DataKaryaController extends Controller
 
             return redirect()->route('admin.master.karya')->with('success', 'Data Berhasil Dihapus');
         } catch (\Exception $e) {
-            Log::eror('Eror deleting karya: ' . $e->getMessage());
+            Log::error('Error deleting karya: ' . $e->getMessage());
             return redirect()->route('admin.master.karya')->with('eror', 'Gagal menghapus data atau file. Silahkan coba lagi.');
         }
     }

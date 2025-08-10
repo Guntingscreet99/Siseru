@@ -29,35 +29,14 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="">Kelas</label>
-                                                <select name="kelas" id="kelas" class="form-control">
+                                                <select name="id_kelas" id="id_kelas" class="form-control">
                                                     <option value="">-- Pilih Kelas --</option>
-                                                    <option value="Kelas A"
-                                                        {{ $zoom->kelas == 'Kelas A' ? 'selected' : '' }}>Kelas A
-                                                    </option>
-                                                    <option value="Kelas B"
-                                                        {{ $zoom->kelas == 'Kelas B' ? 'selected' : '' }}>Kelas B
-                                                    </option>
-                                                    <option value="Kelas C"
-                                                        {{ $zoom->kelas == 'Kelas C' ? 'selected' : '' }}>Kelas C
-                                                    </option>
-                                                    <option value="Kelas D"
-                                                        {{ $zoom->kelas == 'Kelas D' ? 'selected' : '' }}>Kelas D
-                                                    </option>
-                                                    <option value="Kelas E"
-                                                        {{ $zoom->kelas == 'Kelas E' ? 'selected' : '' }}>Kelas E
-                                                    </option>
-                                                    <option value="Kelas F"
-                                                        {{ $zoom->kelas == 'Kelas F' ? 'selected' : '' }}>Kelas F
-                                                    </option>
-                                                    <option value="Kelas G"
-                                                        {{ $zoom->kelas == 'Kelas G' ? 'selected' : '' }}>Kelas G
-                                                    </option>
-                                                    <option value="Kelas H"
-                                                        {{ $zoom->kelas == 'Kelas H' ? 'selected' : '' }}>Kelas H
-                                                    </option>
-                                                    <option value="Kelas I"
-                                                        {{ $zoom->kelas == 'Kelas I' ? 'selected' : '' }}>Kelas I
-                                                    </option>
+                                                    @foreach ($kelas as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ $zoom->id_kelas == $item->id ? 'selected' : '' }}>
+                                                            {{ $item->nama_kelas }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>

@@ -156,6 +156,25 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
+                    @elseif (Auth::user()->role == 'mahasiswa')
+                        <li class="nav-item {{ request()->is('mahasiswa/dashboard') ? 'active' : '' }}">
+                            <a href="{{ url('mahasiswa/dashboard') }}">
+                                <i class="fas fa-home"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-section">
+                            <span class="sidebar-mini-icon">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </span>
+                            <h4 class="text-section">Menu</h4>
+                        </li>
+                        <li class="nav-item {{ request()->is('user/menu/galeri') ? 'active' : '' }}">
+                            <a href="{{ url('user/menu/galeri') }}">
+                                <i class="fa-solid fa-image"></i>
+                                <p>Karya</p>
+                            </a>
+                        </li>
                     @endif
                 @endif
             </ul>

@@ -54,6 +54,10 @@ class LoginController extends Controller
                 case 'dosen':
                     return redirect()->route('dosen.dashboard');
                 case 'mahasiswa':
+                    // Cek kelengkapan profil
+                    if (!Auth::user()->profile_completed) {
+                        return redirect()->route('mahasiswa.data-diri')->with('info', 'Silakan lengkapi data diri Anda terlebih dahulu.');
+                    }
                     return redirect()->route('mahasiswa.dashboard');
                 default:
                     return redirect('/'); // Fallback

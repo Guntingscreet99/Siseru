@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin\Master;
 
 use App\Http\Controllers\Controller;
 use App\models\DataZoom;
+use App\Models\Kelas;
+use App\Models\Semester;
 use Illuminate\Http\Request;
 
 class DataZoomController extends Controller
@@ -36,23 +38,25 @@ class DataZoomController extends Controller
     // tambah
     public function tampildata()
     {
-        return view('admin.master.zoom.tambah');
+        $kelas = Kelas::all();
+
+        return view('admin.master.zoom.tambah', compact('kelas'));
     }
 
     public function tambahdata(Request $request)
     {
         $request->validate([
-            'kelas' => 'required',
-            'linkZoom' => 'required',
-            'linkWebinar' => 'required',
+            'id_kelas' => 'required',
+            'linkZoom' => 'nullable',
+            'linkWebinar' => 'nullable',
             'status' => 'required',
         ], [
-            'kelas.required' => 'Kelas Wajib Diisi!',
+            'id_kelas.required' => 'Kelas Wajib Diisi!',
             'status.required' => 'Status Wajib Diisi!',
         ]);
 
         DataZoom::create([
-            'kelas' => $request->input('kelas'),
+            'id_kelas' => $request->id_kelas,
             'linkZoom' => $request->input('linkZoom'),
             'linkWebinar' => $request->input('linkWebinar'),
             'status' => $request->input('status'),
@@ -65,7 +69,10 @@ class DataZoomController extends Controller
     public function tampiledit($kdzoom)
     {
         $zoom = DataZoom::where('kdzoom', $kdzoom)->firstOrFail();
-        return view('admin.master.zoom.edit', compact('zoom'));
+
+        $kelas = Kelas::all();
+
+        return view('admin.master.zoom.edit', compact('zoom', 'kelas'));
     }
 
     public function editdata(Request $request, $kdzoom)
@@ -73,14 +80,14 @@ class DataZoomController extends Controller
         $zoom = DataZoom::where('kdzoom', $kdzoom)->firstOrFail();
 
         $request->validate([
-            'kelas' => 'required',
-            'linkZoom' => 'required',
-            'linkWebinar' => 'required',
+            'id_kelas' => 'required',
+            'linkZoom' => 'nullable',
+            'linkWebinar' => 'nullable',
             'status' => 'required',
         ]);
 
         $zoom->update([
-            'kelas' => $request->kelas,
+            'id_kelas' => $request->id_kelas,
             'linkZoom' => $request->linkZoom,
             'linkWebinar' => $request->linkWebinar,
             'status' => $request->status,

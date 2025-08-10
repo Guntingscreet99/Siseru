@@ -1,7 +1,4 @@
-@extends('bagian.user.layout.rumah')
-@section('judul', 'Landing Page')
-@section('isi')
-
+<x-user.layout.rumah title="Landing Page">
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
 
@@ -11,8 +8,8 @@
         <div class="container">
             <div class="row gy-4 d-flex justify-content-between">
                 <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
-                    <h2 data-aos="fade-up">Sistem Informasi Seni Rupa </h2>
-                    <p data-aos="fade-up" data-aos-delay="100">Selamat datang di SISERU!
+                    <h2 data-aos="fade-up">Ruang Apresiasi Seni Rupa </h2>
+                    <p data-aos="fade-up" data-aos-delay="100">Selamat datang di RUPAKU!
                         Platform pembelajaran seni rupa yang dirancang untuk membantu Anda mengeksplorasi, belajar, dan
                         mengembangkan keterampilan seni dengan cara yang interaktif dan menyenangkan. Kami percaya bahwa
                         seni adalah bahasa universal yang menghubungkan setiap individu, dan melalui website ini, kami
@@ -142,7 +139,8 @@
                     <h3>Visi Kami</h3>
                     <p>
                         Menjadi platform pembelajaran seni rupa terdepan yang menyatukan teori dan praktik, memberikan
-                        wawasan mendalam tentang dunia seni, serta menciptakan ruang bagi para seniman muda untuk berkreasi,
+                        wawasan mendalam tentang dunia seni, serta menciptakan ruang bagi para seniman muda untuk
+                        berkreasi,
                         berkolaborasi, dan berkembang.
                     </p>
                     <div class="col-lg-6 content order-last  order-lg-first" data-aos="fade-up" data-aos-delay="100">
@@ -161,7 +159,8 @@
                         karya, dan mendapatkan feedback yang membangun.
                     </p>
                     <p>
-                        4. Mengintegrasikan teknologi dalam proses belajar untuk meningkatkan pengalaman belajar yang lebih
+                        4. Mengintegrasikan teknologi dalam proses belajar untuk meningkatkan pengalaman belajar yang
+                        lebih
                         efektif dan menyenangkan.
                     </p>
                     {{-- <ul>
@@ -222,7 +221,8 @@
                             object-fit: cover; /* Memastikan gambar tidak terdistorsi */
                             border-radius: 10px; /* Opsional, untuk tampilan lebih rapi */
                         }">
-                            <img src="landing/img/Modul Pembelajaran.avif" alt="" class="img-fluid">
+                            <img src="{{ asset('landing/img/Modul-Pembelajaran.avif') }}" alt=""
+                                class="img-fluid">
                         </div>
                         <h3><a href="#" class="stretched-link">Modul Pembelajaran</a></h3>
                         <p>Berisi materi seni rupa dalam bentuk teks, PDF, infografis, dan e-book.</p>
@@ -239,7 +239,7 @@
                             object-fit: cover; /* Memastikan gambar tidak terdistorsi */
                             border-radius: 10px; /* Opsional, untuk tampilan lebih rapi */
                         }">
-                            <img src="landing/img/video interaktif.jpg" alt="" class="img-fluid">
+                            <img src="{{ asset('landing/img/video-interaktif.jpg') }}" alt="" class="img-fluid">
                         </div>
                         <h3><a href="#" class="stretched-link">Video Tutorial</a></h3>
                         <p>Video demonstrasi pembuatan karya seni (misalnya menggambar, melukis, membuat kolase).
@@ -258,7 +258,7 @@
                             object-fit: cover; /* Memastikan gambar tidak terdistorsi */
                             border-radius: 10px; /* Opsional, untuk tampilan lebih rapi */
                         }">
-                            <img src="landing/img/kelas interaktif.jpg" alt="" class="img-fluid">
+                            <img src="{{ asset('landing/img/kelas-interaktif.jpg') }}" alt="" class="img-fluid">
                         </div>
                         <h3><a href="#" class="stretched-link">Kelas & Webinar</a></h3>
                         <p>ive class menggunakan Zoom atau Google Meet untuk diskusi real-time.
@@ -276,7 +276,7 @@
                             object-fit: cover; /* Memastikan gambar tidak terdistorsi */
                             border-radius: 10px; /* Opsional, untuk tampilan lebih rapi */
                         }">
-                            <img src="landing/img/Diskusi.jpg" alt="" class="img-fluid">
+                            <img src="{{ asset('landing/img/Diskusi.jpg') }}" alt="" class="img-fluid">
                         </div>
                         <h3><a href="#" class="stretched-link">Forum Diskusi & Tanya Jawab</a></h3>
                         <p>Wadah untuk mahasiswa bertanya dan berdiskusi tentang seni rupa.
@@ -294,10 +294,12 @@
                             object-fit: cover; /* Memastikan gambar tidak terdistorsi */
                             border-radius: 10px; /* Opsional, untuk tampilan lebih rapi */
                         }">
-                            <img src="landing/img/Galeri seni.jpg" alt="" class="img-fluid">
+                            <img src="{{ asset('landing/img/Galeri-seni.jpg') }}" alt="" class="img-fluid">
                         </div>
-                        <h3><a href="#" class="stretched-link">Gelar Karya Mahasiswa</a></h3>
-                        <p>Mahasiswa dapat mengunggah hasil karya seni mereka untuk dikomentari oleh dosen atau teman-teman.
+                        <h3><a href="{{ url('mahasiswa/menu-landing/galeri') }}" class="stretched-link">Gelar Karya
+                                Mahasiswa</a></h3>
+                        <p>Mahasiswa dapat mengunggah hasil karya seni mereka untuk dikomentari oleh dosen atau
+                            teman-teman.
                         </p>
                     </div>
                 </div><!-- End Card Item -->
@@ -312,7 +314,7 @@
                             object-fit: cover; /* Memastikan gambar tidak terdistorsi */
                             border-radius: 10px; /* Opsional, untuk tampilan lebih rapi */
                         }">
-                            <img src="landing/img/Gamifikasi.jpg" alt="" class="img-fluid">
+                            <img src="{{ asset('landing/img/Gamifikasi.jpg') }}" alt="" class="img-fluid">
                         </div>
                         <h3><a href="#" class="stretched-link">Sistem Gamifikasi</a></h3>
                         <p>Poin dan badge untuk mahasiswa yang aktif menyelesaikan modul atau berkontribusi di forum.
@@ -366,8 +368,10 @@
                 <div class="col-md-7" data-aos="fade-up" data-aos-delay="100">
                     <h3>Lukisan Senja.</h3>
                     <p class="fst-italic">
-                        Melukis adalah kegiatan mengungkapkan ide, perasaan, atau ekspresi melalui goresan garis, warna, dan
-                        bentuk pada suatu media, seperti kanvas, kertas, atau dinding. Seni lukis merupakan bagian dari seni
+                        Melukis adalah kegiatan mengungkapkan ide, perasaan, atau ekspresi melalui goresan garis, warna,
+                        dan
+                        bentuk pada suatu media, seperti kanvas, kertas, atau dinding. Seni lukis merupakan bagian dari
+                        seni
                         rupa yang menggunakan unsur visual sebagai sarana komunikasi dan ekspresi.
                     </p>
                     <ul>
@@ -390,17 +394,21 @@
                 <div class="col-md-7 order-2 order-md-1" data-aos="fade-up" data-aos-delay="200">
                     <h3>Batik Tulis</h3>
                     <p class="fst-italic">
-                        Batik adalah seni menghias kain dengan pola atau motif tertentu menggunakan malam (lilin) sebagai
-                        perintang warna, yang kemudian melalui proses pewarnaan dan pelorodan (penghilangan malam). Batik
+                        Batik adalah seni menghias kain dengan pola atau motif tertentu menggunakan malam (lilin)
+                        sebagai
+                        perintang warna, yang kemudian melalui proses pewarnaan dan pelorodan (penghilangan malam).
+                        Batik
                         merupakan salah satu warisan budaya Indonesia yang diakui oleh UNESCO sebagai Warisan Budaya
                         Takbenda sejak 2 Oktober 2009
                     </p>
                     <ul>
                         <li><i class="bi bi-check"></i> <span>UPilih Bahan yang Sesuai Gunakan kain yang menyerap warna
                                 dengan baik, seperti katun atau sutra, agar hasil lebih optimal.</span></li>
-                        <li><i class="bi bi-check"></i><span> Gunakan Canting dengan Tepat Latih tangan agar stabil saat
+                        <li><i class="bi bi-check"></i><span> Gunakan Canting dengan Tepat Latih tangan agar stabil
+                                saat
                                 menggambar motif menggunakan canting untuk mendapatkan garis yang rapi.</span></li>
-                        <li><i class="bi bi-check"></i> <span>Eksplorasi Motif Pelajari berbagai motif batik tradisional
+                        <li><i class="bi bi-check"></i> <span>Eksplorasi Motif Pelajari berbagai motif batik
+                                tradisional
                                 maupun modern untuk memperluas kreativitas dalam berkarya.</span>.</li>
                     </ul>
                 </div>
@@ -413,12 +421,14 @@
                 <div class="col-md-7" data-aos="fade-up">
                     <h3>Patung</h3>
                     <p>Patung adalah karya seni tiga dimensi yang dibuat dengan teknik memahat, membentuk, atau mencetak
-                        bahan seperti kayu, batu, tanah liat, logam, atau fiberglass untuk menghasilkan bentuk yang memiliki
+                        bahan seperti kayu, batu, tanah liat, logam, atau fiberglass untuk menghasilkan bentuk yang
+                        memiliki
                         nilai estetika atau simbolik. Patung sering digunakan sebagai media ekspresi seni, penghormatan
                         terhadap tokoh, atau elemen dekoratif dalam berbagai budaya.</p>
                     <ul>
                         <li><i class="bi bi-check"></i> <span>Pilih Bahan yang Tepat Gunakan bahan yang sesuai dengan
-                                teknik yang dikuasai, seperti tanah liat untuk pemula atau batu dan logam untuk yang lebih
+                                teknik yang dikuasai, seperti tanah liat untuk pemula atau batu dan logam untuk yang
+                                lebih
                                 mahir.</span></li>
                         <li><i class="bi bi-check"></i><span>Gunakan Alat yang Sesuai Pastikan alat seperti pahat,
                                 cetakan, atau alat pemotong digunakan dengan benar untuk mempermudah proses
@@ -438,8 +448,10 @@
                     <h3>Ukiran</h3>
                     <p class="fst-italic">
                         Ukiran adalah seni mengukir atau memahat permukaan suatu bahan, seperti kayu, batu, logam, atau
-                        tulang, untuk menciptakan motif, pola, atau bentuk yang memiliki nilai estetika dan makna tertentu.
-                        Seni ukir banyak ditemukan dalam berbagai budaya sebagai hiasan pada rumah, perabot, senjata, dan
+                        tulang, untuk menciptakan motif, pola, atau bentuk yang memiliki nilai estetika dan makna
+                        tertentu.
+                        Seni ukir banyak ditemukan dalam berbagai budaya sebagai hiasan pada rumah, perabot, senjata,
+                        dan
                         benda seni lainnya.
                     </p>
                     <ul>
@@ -469,8 +481,10 @@
             <span>Perpustakaan Digital</span>
             <h2>Perpustakaan Digital</h2>
             <p>Perpustakaan digital adalah sistem perpustakaan berbasis teknologi yang menyediakan koleksi buku, jurnal,
-                artikel, dan berbagai sumber informasi dalam format digital. Pengguna dapat mengakses bahan bacaan melalui
-                perangkat elektronik seperti komputer, tablet, atau smartphone tanpa harus datang ke perpustakaan fisik.</p>
+                artikel, dan berbagai sumber informasi dalam format digital. Pengguna dapat mengakses bahan bacaan
+                melalui
+                perangkat elektronik seperti komputer, tablet, atau smartphone tanpa harus datang ke perpustakaan fisik.
+            </p>
         </div><!-- End Section Title -->
 
         <div class="container">
@@ -484,9 +498,12 @@
                         <ul>
                             <li><i class="bi bi-check"></i> <span>Modul pembelajaran terpercaya</span></li>
                             <li><i class="bi bi-check"></i> <span>Cocok untuk pengajar Sekolah Dasar </span></li>
-                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span></li>
-                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span></li>
-                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span></li>
+                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span>
+                            </li>
+                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span>
+                            </li>
+                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span>
+                            </li>
                             {{-- <li class="na"><i class="bi bi-x"></i> <span>Tidak mencakup seluruh pembelajaran</span>
                             </li>
                             <li class="na"><i class="bi bi-x"></i> <span>Massa ultricies mi quis
@@ -759,23 +776,22 @@
 
     </section><!-- /Faq Section -->
 
-@endsection
+    @push('js')
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let video = document.getElementById("videoPlayer");
 
-@push('js')
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let video = document.getElementById("videoPlayer");
+                // Cek apakah user sebelumnya sudah memutar video
+                if (localStorage.getItem("videoPlayed") === "true") {
+                    video.muted = true; // Pastikan suara aktif
+                    video.play();
+                }
 
-            // Cek apakah user sebelumnya sudah memutar video
-            if (localStorage.getItem("videoPlayed") === "true") {
-                video.muted = true; // Pastikan suara aktif
-                video.play();
-            }
-
-            // Simpan status jika user pertama kali menekan play
-            video.addEventListener("play", function() {
-                localStorage.setItem("videoPlayed", "true");
+                // Simpan status jika user pertama kali menekan play
+                video.addEventListener("play", function() {
+                    localStorage.setItem("videoPlayed", "true");
+                });
             });
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
+</x-user.layout.rumah>

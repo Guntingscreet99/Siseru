@@ -14,6 +14,9 @@ use App\Http\Controllers\Admin\Master\Utama\SemesterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\Mahasiswa\IndexController;
+use App\Http\Controllers\User\Menu\DataDiri\DatadiriController;
+use App\Http\Controllers\User\Menu\GaleriController;
 use App\Models\DataPerpustakaan;
 use App\Models\DataUjian;
 use Illuminate\Support\Facades\Route;
@@ -174,6 +177,25 @@ Route::middleware(['auth', 'role:dosen'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
-    Route::get('mahasiswa/dashboard', [LandingController::class, 'index'])->name('mahasiswa.dashboard');
+    Route::get('mahasiswa/dashboard', [IndexController::class, 'index'])->name('mahasiswa.dashboard');
+
+    // DATA DIRI
+    Route::get('mahasiswa/data-diri', [DatadiriController::class, 'create'])->name('mahasiswa.data-diri');
+    Route::post('mahasiswa/data-diri/simpan', [DatadiriController::class, 'simpan'])->name('mahasiswa.data-diri.simpan');
+
+    // GALERI KARYA
+    // INDEX
+    Route::get('user/menu/galeri', [GaleriController::class, 'index'])->name('user.galeri.index');
+    // CARI
+    Route::get('user/galeri/cari', [GaleriController::class, 'tampildata'])->name('user.galeri.cari');
+    //TAMBAH
+    Route::get('user/menu/galeri-tambah', [GaleriController::class, 'tambah'])->name('user.galeri.tampil');
+    Route::post('user/menu/galeri-edit/{id}', [GaleriController::class, 'edit'])->name('user.galeri.tambah');
+    // EDIT
+    Route::get('user/galeri/ubah/{id}', [GaleriController::class, 'tampiledit'])->name('user.galeri.edit-tampil');
+    Route::put('user/galeri-edit/{id}', [GaleriController::class, 'editdata'])->name('user.galeri.edit');
+    // HAPUS
+    Route::delete('user/galeri-hapus/{id}', [GaleriController::class, 'hapus'])->name('user.galeri.hapus');
+    // UBAH STATUS
 });
 // USER
