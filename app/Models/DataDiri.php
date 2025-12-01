@@ -8,10 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 class DataDiri extends Model
 {
     protected $guarded = [];
-    protected $table = 'data_Diris';
-    protected $primaryKey = 'kdkarya';
+    protected $table = 'data_diris';
+    protected $primaryKey = 'user_id';
     public $incrementing = true;
     protected $keyType = 'int';
+
+    protected $fillable = [
+        'user_id',
+        'nim',
+        'nama_lengkap',
+        'jenisKelamin',
+        'id_kelas',
+        'id_semester',
+        'tempat',
+        'tgllahir',
+        'alamat',
+        'fotoMhs',
+        'judulFileAsli',
+        'status'
+    ];
 
     public function kelas()
     {
@@ -21,5 +36,10 @@ class DataDiri extends Model
     public function semester()
     {
         return $this->belongsTo(Semester::class, 'id_semester', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

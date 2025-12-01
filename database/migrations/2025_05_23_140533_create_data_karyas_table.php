@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('id_kelas')->constrained('kelas')->onDelete('cascade');
             $table->foreignId('id_semester')->constrained('semesters')->onDelete('cascade');
             $table->string('namaMhs')->nullable();
+            $table->string('nim')->nullable();
             $table->string('namaKarya')->nullable();
             $table->string('deskripsi')->nullable();
             $table->string('status')->nullable();

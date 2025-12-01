@@ -17,7 +17,7 @@
                                 </a>
                             </div>
                         </div>
-                        <form class="pt-3" method="POST" action="{{ url('mahasiswa/data-diri/simpan') }}"
+                        <form class="pt-3" method="POST" action="{{ url('mahasiswa/data-diri/simpan/' . $user->id) }}"
                             enctype="multipart/form-data" method="POST">
                             @csrf
                             <div class="card-body">
@@ -33,7 +33,7 @@
                                         <label class="btn btn-info mb-3 d-flex align-items-center gap-2">
                                             <i class="bi bi-upload"></i> <!-- Ikon Bootstrap Icons -->
                                             <span class="text-white">Unggah Foto</span>
-                                            <input type="file" name="foto" id="foto" class="d-none"
+                                            <input type="file" name="fotoMhs" id="fotoMhs" class="d-none"
                                                 accept="image/png, image/jpg, image/jpeg" onchange="previewFoto(event)">
                                         </label>
                                         <button type="button"
@@ -43,7 +43,7 @@
                                             Reset
                                         </button>
                                         <small class="text-muted mb-2">Format: JPEG, JPG, PNG. Maks. 2 MB</small>
-                                        @error('foto')
+                                        @error('fotoMhs')
                                             <span class="text-danger small">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -52,84 +52,133 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="">Username</label>
-                                        <input type="text" class="form-control" name="username" id="username"
-                                            placeholder="Username" value="{{ $user->username ?? '-' }}">
+                                        <label for="">NIM</label>
+                                        <input type="text" class="form-control" name="nim" id="nim"
+                                            placeholder="nim" value="{{ $user->nim ?? '' }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">Nama Lengkap</label>
                                         <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap"
-                                            placeholder="Nama Lengkap" value="{{ $user->nama_lengkap ?? '-' }}">
+                                            placeholder="Nama Lengkap" value="{{ $user->nama_lengkap ?? '' }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">Email</label>
                                         <input type="email" class="form-control" name="email" id="email"
-                                            placeholder="@gmail.com">
+                                            value="{{ $user->email ?? '' }}" placeholder="@gmail.com">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">No. Hp</label>
                                         <input type="text" class="form-control" name="no_hp" id="no_hp"
-                                            placeholder="081......">
+                                            value="{{ $user->no_hp ?? '' }}" placeholder="081......">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">Tempat</label>
                                         <input type="text" class="form-control" name="tempat" id="exampleInputTempat"
-                                            placeholder="Tempat Lahir">
+                                            value="{{ $user->datadiri->tempat ?? '' }}" placeholder="Tempat Lahir">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">Tanggal Lahir</label>
                                         <input type="date" class="form-control" name="tgllahir"
-                                            id="exampleInputTanggalLahir">
+                                            value="{{ $user->datadiri->tgllahir ?? '' }}" id="exampleInputTanggalLahir">
                                     </div>
                                 </div>
 
+                                @php
+                                    $data = $user->datadiri;
+                                    $isFirstTime =
+                                        !$data ||
+                                        is_null($data->jenisKelamin) ||
+                                        is_null($data->id_kelas) ||
+                                        is_null($data->id_semester);
+                                @endphp
+
+                                <!-- Jenis Kelamin -->
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="">Jenis Kelamin</label>
-                                        <select name="jenisKelamin" id="jenisKelamin" class="form-control">
-                                            <option value="">-- Jenis Kelamin --</option>
-                                            <option value="Laki-laki">Laki-laki</option>
-                                            <option value="Perempuan">Perempuan</option>
+                                        <label>Jenis Kelamin {!! $isFirstTime ? '<span class="text-danger">*</span>' : '' !!}</label>
+                                        <select name="jenisKelamin" id="jenisKelamin"
+                                            class="form-control @error('jenisKelamin') is-invalid @enderror" required>
+                                            <option value="">-- Pilih Jenis Kelamin --</option>
+                                            <option value="Laki-laki"
+                                                {{ old('jenisKelamin', $data?->jenisKelamin) == 'Laki-laki' ? 'selected' : '' }}>
+                                                Laki-laki</option>
+                                            <option value="Perempuan"
+                                                {{ old('jenisKelamin', $data?->jenisKelamin) == 'Perempuan' ? 'selected' : '' }}>
+                                                Perempuan</option>
                                         </select>
+                                        @error('jenisKelamin')
+                                            <div class="text-danger small">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
+
+                                <!-- Kelas -->
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="">Kelas</label>
-                                        <select name="id_kelas" id="id_kelas" class="form-control">
+                                        <label>Kelas {!! $isFirstTime ? '<span class="text-danger">*</span>' : '' !!}</label>
+                                        <select name="id_kelas" id="id_kelas"
+                                            class="form-control @error('id_kelas') is-invalid @enderror" required>
                                             <option value="">-- Pilih Kelas --</option>
                                             @foreach ($kelas as $item)
-                                                <option value="{{ $item->id }}">{{ $item->nama_kelas }}</option>
+                                                <option value="{{ $item->id }}"
+                                                    {{ old('id_kelas', $data?->id_kelas) == $item->id ? 'selected' : '' }}>
+                                                    {{ $item->nama_kelas }}
+                                                </option>
                                             @endforeach
                                         </select>
+                                        @error('id_kelas')
+                                            <div class="text-danger small">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
+
+                                <!-- Semester -->
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="">Semester</label>
-                                        <select name="id_semester" id="id_semester" class="form-control">
+                                        <label>Semester {!! $isFirstTime ? '<span class="text-danger">*</span>' : '' !!}</label>
+                                        <select name="id_semester" id="id_semester"
+                                            class="form-control @error('id_semester') is-invalid @enderror" required>
                                             <option value="">-- Pilih Semester --</option>
                                             @foreach ($semester as $item)
-                                                <option value="{{ $item->id }}">{{ $item->nama_semester }}</option>
+                                                <option value="{{ $item->id }}"
+                                                    {{ old('id_semester', $data?->id_semester) == $item->id ? 'selected' : '' }}>
+                                                    {{ $item->nama_semester }}
+                                                </option>
                                             @endforeach
                                         </select>
+                                        @error('id_semester')
+                                            <div class="text-danger small">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
+
+                                <!-- Alert khusus pertama kali isi -->
+                                @if ($isFirstTime)
+                                    <div class="col-12 mb-3">
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle"></i>
+                                            <strong>Perhatian:</strong> Harap lengkapi Jenis Kelamin, Kelas, dan Semester
+                                            terlebih dahulu.
+                                            Setelah disimpan, data ini tetap bisa diubah kapan saja.
+                                        </div>
+                                    </div>
+                                @endif
+
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="">Alamat</label>
                                         <textarea class="form-control @error('alamat') is-invalid @enderror" name="alamat" id="alamat" cols="30"
-                                            rows="5" placeholder="Masukkan Alamat"></textarea>
+                                            rows="5" placeholder="Masukkan Alamat">{{ $user->datadiri->alamat ?? '' }}</textarea>
                                     </div>
                                 </div>
                                 <div class="mt-3">

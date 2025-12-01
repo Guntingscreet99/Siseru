@@ -231,7 +231,7 @@
                     </div>
                     <span class="profile-username">
                         <span class="op-7">Hi,</span>
-                        <span class="fw-bold">Nama</span>
+                        <span class="fw-bold">{{ Auth::user()->nama_lengkap ?? '-' }}</span>
                     </span>
                 </a>
                 <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -243,21 +243,21 @@
                                         class="avatar-img rounded" />
                                 </div>
                                 <div class="u-text">
-                                    <h4>Email</h4>
-                                    <p class="text-muted">Nama Lengkap</p>
-                                    <a href="#" class="btn btn-xs btn-secondary btn-sm">View
+                                    <h4>{{ Auth::user()->username ?? '-' }}</h4>
+                                    <p class="text-muted">{{ Auth::user()->nama_lengkap ?? '-' }}</p>
+                                    {{-- <a href="#" class="btn btn-xs btn-secondary btn-sm">View
                                         Profile
-                                    </a>
+                                    </a> --}}
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">My Profile</a>
-                            <a class="dropdown-item" href="#">My Balance</a>
+                            <a class="dropdown-item" href="{{ url('mahasiswa/data-diri') }}">My Profile</a>
+                            {{-- <a class="dropdown-item" href="#">My Balance</a>
                             <a class="dropdown-item" href="#">Inbox</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Account Setting</a>
+                            <div class="dropdown-divider"></div> --}}
+                            {{-- <a class="dropdown-item" href="#">Account Setting</a> --}}
                             <div class="dropdown-divider"></div>
                             <form action="{{ url('logout') }}" method="POST">
                                 @csrf

@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('data_diris', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('id_kelas')->constrained('kelas')->onDelete('cascade');
+            $table->foreignId('id_semester')->constrained('semesters')->onDelete('cascade');
+            $table->string('nama_lengkap')->nullable();
+            $table->text('alamat')->nullable();
+            $table->string('tempat')->nullable();
+            $table->string('tgllahir')->nullable();
+            $table->string('jenisKelamin')->nullable();
+            $table->text('fotoMhs')->nullable();
+            $table->string('judulFileasli')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

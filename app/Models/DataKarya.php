@@ -4,16 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class DataKarya extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
     protected $table = 'data_Karyas';
     protected $primaryKey = 'kdkarya';
     public $incrementing = true;
     protected $keyType = 'int';
+
+    protected $fillable = [
+        'user_id',
+        'namaMhs',
+        'nim',
+        'namaKarya',
+        'id_kelas',
+        'id_semester',
+        'deskripsi',
+        'fileKarya',
+        'judulFileAsli',
+    ];
+
+    // Relasi ke User (penting banget buat cek "karya saya")
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function kelas()
     {
@@ -25,5 +43,9 @@ class DataKarya extends Model
         return $this->belongsTo(Semester::class, 'id_semester', 'id');
     }
 
-    // protected $fillable = ['nama', 'deskripsi', 'filekarya', 'status'];
+    // Optional: accessor biar lebih gampang ambil URL file
+    public function getFileUrlAttribute()
+    {
+        return $this->fileKarya ? Storage::url($this->fileKarya) : null;
+    }
 }

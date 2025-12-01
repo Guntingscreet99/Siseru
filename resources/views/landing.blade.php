@@ -296,7 +296,7 @@
                         }">
                             <img src="{{ asset('landing/img/Galeri-seni.jpg') }}" alt="" class="img-fluid">
                         </div>
-                        <h3><a href="{{ url('mahasiswa/menu-landing/galeri') }}" class="stretched-link">Gelar Karya
+                        <h3><a href="{{ url('user/menu/galeri') }}" class="stretched-link">Gelar Karya
                                 Mahasiswa</a></h3>
                         <p>Mahasiswa dapat mengunggah hasil karya seni mereka untuk dikomentari oleh dosen atau
                             teman-teman.

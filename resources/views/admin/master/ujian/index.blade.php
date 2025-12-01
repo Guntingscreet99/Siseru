@@ -34,6 +34,8 @@
                                 <thead class="table-primary">
                                     <tr>
                                         <th scope="col">No</th>
+                                        <th scope="col">Judul</th>
+                                        <th scope="col">Deskripsi</th>
                                         <th scope="col">Link</th>
                                         <th scope="col">Hasil</th>
                                         <th scope="col">File Ujian</th>
@@ -44,12 +46,14 @@
                                 <tbody id="ujian-body">
                                     @if ($ujian->isEmpty())
                                         <tr>
-                                            <td colspan="6" class="text-center">Data Masih Kosong</td>
+                                            <td colspan="8" class="text-center">Data Masih Kosong</td>
                                         </tr>
                                     @else
                                         @foreach ($ujian as $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->judul }}</td>
+                                                <td>{{ $item->deskripsi }}</td>
                                                 <td>
                                                     <a href="{{ $item->link }}" target="_blank">
                                                         {{ $item->link }}
@@ -57,6 +61,11 @@
                                                 </td>
                                                 <td>{{ $item->hasil }}</td>
                                                 <td>
+                                                    <a href="{{ asset('storage/' . $item->fileUjian) }}" target="_blank">
+                                                        {{ $item->judulFileAsli ?? basename($item->fileUjian) }}
+                                                    </a>
+                                                </td>
+                                                {{-- <td>
                                                     @if ($item->fileUjian)
                                                         @php
                                                             $ext = pathinfo($item->fileUjian, PATHINFO_EXTENSION);
@@ -88,7 +97,7 @@
                                                     @else
                                                         <p>Tidak ada file</p>
                                                     @endif
-                                                </td>
+                                                </td> --}}
                                                 <td>
                                                     <form method="POST" action="{{ url('admin/ujian/update-status') }}">
                                                         @csrf
@@ -221,6 +230,8 @@
                                     rows += `
                                     <tr>
                                         <td>${index + 1}</td>
+                                        <td>${item.judul}</td>
+                                        <td>${item.deskripsi}</td>
                                         <td>${item.link}</td>
                                         <td>${item.hasil}</td>
                                         <td>${item.status}</td>

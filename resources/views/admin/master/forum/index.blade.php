@@ -8,104 +8,146 @@
                 <div class="judul">
                     <h1>@yield('judul')</h1>
                 </div>
+
                 <div class="card">
                     <div class="card-body">
-                        <!-- Button trigger modal -->
-                        <div class="mb-3" style="display: flex; justify-content: space-between">
+
+                        <!-- Tombol Tambah + Search -->
+                        <div class="mb-3"
+                            style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
                             <div class="form-group">
                                 <a href="{{ url('admin/forum/tampil') }}" class="btn btn-primary">
-                                    <i class="fas fa-plus"></i> Tambah Data Forum
+                                    <i class="fas fa-plus"></i> Tambah Forum Diskusi
                                 </a>
-                                {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahguru">
-                                 <i class="fas fa-plus"></i> Tambah Data Agama
-                            </button> --}}
                             </div>
-                            <div class="form-group" style="display: flex; align-items: center;">
+                            <div class="form-group" style="display: flex; align-items: center; gap: 5px;">
                                 <input type="text" name="search" id="search" class="form-control"
-                                    placeholder="Cari..." style="width: 70%;">
+                                    placeholder="Cari forum..." style="width: 300px;">
                                 <button class="btn btn-info" type="button">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
                         </div>
+
+                        <!-- Tabel Forum -->
                         <div class="table-responsive">
-                            <table class="table table-responsive table-striped table-bordered text-center"
+                            <table class="table table-striped table-bordered text-center"
                                 style="white-space: nowrap; overflow-x: auto; width: 100%">
                                 <thead class="table-primary">
                                     <tr>
-                                        <th scope="col">No</th>
-                                        <th scope="col">Akun</th>
-                                        <th scope="col">Kelas</th>
-                                        <th scope="col">Semester</th>
-                                        <th scope="col">Topik</th>
-                                        <th scope="col">Tahun</th>
-                                        <th scope="col">File Forum</th>
-                                        <th scope="col">Aksi</th>
+                                        <th>No</th>
+                                        <th>Tanggal</th>
+                                        <th>Waktu</th>
+                                        <th>Topik Forum</th>
+                                        <th>Kelas</th>
+                                        <th>Semester</th>
+                                        <th>Durasi</th>
+                                        <th>Status</th>
+                                        <th>Sisa Waktu</th>
+                                        <th>Dibuat</th>
+                                        <th>File</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="forum-body">
                                     @if ($forum->isEmpty())
                                         <tr>
-                                            <td colspan="8" class="text-center">Data Masih Kosong</td>
+                                            <td colspan="10" class="text-center py-4 text-muted">
+                                                <h5>Belum ada forum diskusi</h5>
+                                            </td>
                                         </tr>
                                     @else
                                         @foreach ($forum as $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->akun }}</td>
+                                                <td>{{ $item->created_at->format('d/m/Y') }}</td>
+                                                <td>{{ $item->created_at->format('H:i') }} Wib</td>
+                                                <td class="text-start fw-bold">{{ $item->topik }}</td>
                                                 <td>{{ $item->kelas->nama_kelas ?? '-' }}</td>
                                                 <td>{{ $item->semester->nama_semester ?? '-' }}</td>
-                                                <td>{{ $item->topik }}</td>
-                                                <td>{{ $item->tahun }}</td>
-                                                {{-- <td>
-                                                    <a href="{{ $item->link }}" target="_blank">
-                                                        {{ $item->link }}
-                                                    </a>
-                                                </td> --}}
                                                 <td>
-                                                    @if ($item->fileForum)
-                                                        @php
-                                                            $ext = pathinfo($item->fileForum, PATHINFO_EXTENSION);
-                                                            $fileUrl = Storage::url($item->fileForum);
-                                                        @endphp
-
-                                                        @if (in_array($ext, ['mp4', 'mkv', 'avi']))
-                                                            <video width="250" controls>
-                                                                <source src="{{ $fileUrl }}"
-                                                                    type="video/{{ $ext }}">
-                                                                Browser Anda tidak mendukung tag video.
-                                                            </video>
-                                                        @elseif (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']))
-                                                            <img src="{{ $fileUrl }}" alt="Gambar" width="250">
-                                                        @elseif (in_array($ext, ['pdf']))
-                                                            <embed src="{{ $fileUrl }}" type="application/pdf"
-                                                                width="100%" height="250px" />
-                                                        @elseif (in_array($ext, ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt']))
-                                                            <a href="{{ $fileUrl }}" target="_blank"
-                                                                class="btn btn-sm btn-success">
-                                                                <i class="fas fa-file-alt"></i> Lihat Dokumen
-                                                            </a>
-                                                        @else
-                                                            <a href="{{ $fileUrl }}" target="_blank"
-                                                                class="btn btn-sm btn-info">
-                                                                <i class="fas fa-download"></i> Unduh File
-                                                            </a>
-                                                        @endif
+                                                    <span class="badge bg-info fs-6">
+                                                        {{ $item->durasi_menit }} menit
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    @if (!$item->waktu_selesai)
+                                                        <span class="badge bg-secondary">Tanpa Batas</span>
+                                                    @elseif(now()->greaterThan($item->waktu_selesai))
+                                                        <span class="badge bg-danger">Ditutup</span>
                                                     @else
-                                                        <p>Tidak ada file</p>
+                                                        <span class="badge bg-success">Aktif</span>
                                                     @endif
                                                 </td>
-
                                                 <td>
-                                                    <!-- Button trigger modal -->
+                                                    @if ($item->waktu_selesai && now()->lessThan($item->waktu_selesai))
+                                                        <span class="text-success fw-bold">
+                                                            {{ now()->diffForHumans($item->waktu_selesai, ['parts' => 2]) }}
+                                                        </span>
+                                                        <small class="d-block text-muted">
+                                                            ({{ now()->diffInMinutes($item->waktu_selesai) }} menit lagi)
+                                                        </small>
+                                                    @elseif($item->waktu_selesai)
+                                                        <span class="text-danger">Sudah lewat</span>
+                                                    @else
+                                                        <span class="text-muted">—</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
+                                                <td>
+                                                    @if ($item->fileForum)
+                                                        <a href="{{ asset('storage/' . $item->fileForum) }}"
+                                                            target="_blank" class="btn btn-sm btn-success">
+                                                            <i class="fas fa-file-download"></i> Unduh
+                                                        </a>
+                                                    @else
+                                                        <span class="text-muted">Tidak ada</span>
+                                                    @endif
+                                                </td>
+                                                <td>
                                                     <a href="{{ url('admin/forum/ubah/' . $item->kdforum) }}"
-                                                        class="btn btn-warning">
+                                                        class="btn btn-warning btn-sm">
                                                         <i class="fas fa-pen"></i> Edit
                                                     </a>
-                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                        data-bs-target="#Hapus{{ $item->kdforum }}">
-                                                        <i class="fas fa-trash"> </i>Hapus
+
+                                                    <button type="button" class="btn btn-danger btn-sm"
+                                                        data-bs-toggle="modal" data-bs-target="#Hapus{{ $item->kdforum }}">
+                                                        <i class="fas fa-trash"></i> Hapus
                                                     </button>
+
+                                                    <!-- Modal Hapus -->
+                                                    <div class="modal fade" id="Hapus{{ $item->kdforum }}"
+                                                        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Hapus Forum Diskusi</h5>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"></button>
+                                                                </div>
+                                                                <div class="modal-body text-center">
+                                                                    <h5 class="mt-2 mb-3">
+                                                                        Yakin ingin menghapus forum:<br>
+                                                                        <strong>"{{ $item->topik }}"</strong>?
+                                                                    </h5>
+                                                                </div>
+                                                                <div class="modal-footer justify-content-center">
+                                                                    <form
+                                                                        action="{{ url('admin/forum-hapus/' . $item->kdforum) }}"
+                                                                        method="POST" style="display:inline">
+                                                                        @csrf @method('DELETE')
+                                                                        <button type="submit" class="btn btn-danger">
+                                                                            <i class="fas fa-trash"></i> Ya, Hapus
+                                                                        </button>
+                                                                    </form>
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">
+                                                                        Batal
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -134,7 +176,7 @@
                 let query = $(this).val().trim();
 
                 if (query === "") {
-                    $('#forum-body').html(""); // Kosongkan jika tidak ada input
+                    location.reload();
                     return;
                 }
 
@@ -150,62 +192,47 @@
 
                             if (data.length === 0) {
                                 rows =
-                                    `<tr><td colspan="7" class="text-center">Data tidak ditemukan.</td></tr>`;
+                                    `<tr><td colspan="10" class="text-center py-4">Data tidak ditemukan</td></tr>`;
                             } else {
                                 $.each(data, function(index, item) {
+                                    let status = '';
+                                    if (!item.waktu_selesai) {
+                                        status =
+                                            '<span class="badge bg-secondary">Tanpa Batas</span>';
+                                    } else if (new Date() > new Date(item
+                                            .waktu_selesai)) {
+                                        status =
+                                            '<span class="badge bg-danger">Ditutup</span>';
+                                    } else {
+                                        status =
+                                            '<span class="badge bg-success">Aktif</span>';
+                                    }
+
                                     rows += `
-                                    <tr>
-                                        <td>${index + 1}</td>
-                                        <td>${item.akun}</td>
-                                        <td>${item.kelas}</td>
-                                        <td>${item.semester}</td>
-                                        <td>${item.topik}</td>
-                                        <td>${item.tahun}</td>
-                                        <td>
-                                            <!-- Button Edit -->
-                                            <a href="admin/forum/ubah/${item.kdforum}" class="btn btn-warning">
-                                                <i class="fas fa-pen"></i> Edit
-                                            </a>
-
-                                            <!-- Button Hapus -->
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Hapus${item.kdforum}">
-                                                <i class="fas fa-trash"></i> Hapus
-                                            </button>
-
-                                            <!-- Modal Hapus -->
-                                            <div class="modal fade" id="Hapus${item.kdforum}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="staticBackdropLabel">Hapus Data Forum</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <form action="admin/forum-hapus/${item.kdforum}" method="POST">
-                                                            <input type="hidden" name="_method" value="DELETE">
-                                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                            <div class="modal-body">
-                                                                <center>
-                                                                    <h5 class="mt-2 mb-3">Apakah anda ingin menghapus data ini?</h5>
-                                                                    <button type="submit" class="btn btn-danger ml-1">
-                                                                        <i class="bx bx-check d-block d-sm-none"></i>
-                                                                        <span class="d-none d-sm-block">Hapus</span>
-                                                                    </button>
-                                                                </center>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                `;
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td class="text-start fw-bold">${item.topik}</td>
+                                <td>${item.kelas?.nama_kelas || '-'}</td>
+                                <td>${item.semester?.nama_semester || '-'}</td>
+                                <td><span class="badge bg-info">${item.durasi_menit} menit</span></td>
+                                <td>${status}</td>
+                                <td class="text-muted small">${item.created_at}</td>
+                                <td>
+                                    <a href="admin/forum/ubah/${item.kdforum}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-pen"></i> Edit
+                                    </a>
+                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#Hapus${item.kdforum}">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </button>
+                                </td>
+                            </tr>`;
                                 });
                             }
-
                             $('#forum-body').html(rows);
                         },
                         error: function() {
-                            console.log("Gagal mengambil data!");
+                            alert('Gagal mencari data');
                         }
                     });
                 }, 500);

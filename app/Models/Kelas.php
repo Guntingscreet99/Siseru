@@ -27,4 +27,14 @@ class Kelas extends Model
     {
         return $this->hasMany(DataZoom::class, 'id_kelas', 'id');
     }
+
+    public function datadiri()
+    {
+        return $this->hasMany(DataDiri::class, 'id_kelas', 'id');
+    }
+
+    public function peringkat()
+    {
+        return $this->hasMany(DataPeringkat::class, 'id_kelas', 'id');
+    }
 }

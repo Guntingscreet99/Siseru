@@ -12,14 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('data_forums', function (Blueprint $table) {
-            $table->id('kdforum');
-            $table->string('akun')->nullable();
-            $table->string('id_kelas')->nullable();
-            $table->string('id_semester')->nullable();
-            $table->text('topik')->nullable();
-            $table->string('tahun')->nullable();
-            $table->text('fileForum')->nullable();
+            $table->string('kdforum')->primary(); // penting!
+            $table->string('akun');
+            $table->unsignedBigInteger('id_kelas');
+            $table->unsignedBigInteger('id_semester');
+            $table->string('topik');
+            $table->string('tahun');
+            $table->unsignedInteger('durasi_menit')->default(60);
+            $table->timestamp('waktu_selesai')->nullable();
+            $table->boolean('sudah_direkap')->default(false);
+            $table->string('fileForum')->nullable();
             $table->string('judulFileAsli')->nullable();
+
+            $table->foreign('id_kelas')->references('id')->on('kelas')->onDelete('cascade');
+            $table->foreign('id_semester')->references('id')->on('semesters')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

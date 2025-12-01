@@ -28,6 +28,13 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
+                                                <label for="">Judul</label>
+                                                <input type="text" name="judul" id="judul" class="form-control"
+                                                    value="{{ $ujian->judul }}" placeholder="Masukkan Judul Ujian" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
                                                 <label for="">Link Ujian</label>
                                                 <input type="text" name="link" id="link" class="form-control"
                                                     value="{{ $ujian->link }}" placeholder="Masukkan Link Ujian">
@@ -60,6 +67,12 @@
                                                     <label class="form-check-label" for="gunakan_file_lama">Gunakan file
                                                         lama</label>
                                                 @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="">Deskripsi Ujian</label>
+                                                <textarea name="deskripsi" id="deskripsi" class="form-control" cols="10" rows="5">{{ old('deskripsi', $ujian->deskripsi) }}</textarea>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">

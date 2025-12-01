@@ -66,4 +66,19 @@ class User extends Authenticatable
     {
         return $this->hasOne(Identitas::class, 'user_id');
     }
+
+    public function datadiri()
+    {
+        return $this->hasOne(DataDiri::class, 'user_id');
+    }
+
+    public function diskusis()
+    {
+        return $this->hasMany(Diskusi::class);
+    }
+
+    public function datakaryas()
+    {
+        return $this->hasMany(DataKarya::class);
+    }
 }

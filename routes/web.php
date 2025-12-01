@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Master\DataForumController;
 use App\Http\Controllers\Admin\Master\DataHasilController;
 use App\Http\Controllers\Admin\Master\DataKaryaController;
 use App\Http\Controllers\Admin\Master\DataModulController;
+use App\Http\Controllers\Admin\Master\DataPeringkatController;
 use App\Http\Controllers\Admin\Master\DataPerpustakaanController;
 use App\Http\Controllers\Admin\Master\DataUjianController;
 use App\Http\Controllers\Admin\Master\DataVideoController;
@@ -16,7 +17,14 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Mahasiswa\IndexController;
 use App\Http\Controllers\User\Menu\DataDiri\DatadiriController;
-use App\Http\Controllers\User\Menu\GaleriController;
+use App\Http\Controllers\User\Menu\Forum\DiskusiController;
+use App\Http\Controllers\User\Menu\Galeri\GaleriController;
+use App\Http\Controllers\User\Menu\Modul\ModulController;
+use App\Http\Controllers\User\Menu\Forum\ForumController;
+use App\Http\Controllers\User\Menu\Ujian\UjianController;
+use App\Http\Controllers\User\Menu\Video\VideoController;
+use App\Http\Controllers\User\Perpustakaan\PerpusController;
+use App\Http\Controllers\User\Menu\Peringkat\PeringkatController;
 use App\Models\DataPerpustakaan;
 use App\Models\DataUjian;
 use Illuminate\Support\Facades\Route;
@@ -170,6 +178,26 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('admin/ujian-hapus/{kdujian}', [DataUjianController::class, 'hapus'])->name('admin.ujian.hapus');
     // STATUS
     Route::post('admin/ujian/update-status', [DataUjianController::class, 'updateStatus'])->name('ujian.status');
+
+    // MASTER PERINGKAT
+    // INDEX
+    Route::get('admin/master/dataperingkat', [DataPeringkatController::class, 'index'])->name('admin.master.peringkat');
+    // TAMBAH
+    Route::get('admin/peringkat/tampil', [DataPeringkatController::class, 'tampildata'])->name('admin.peringkat.tampil');
+    Route::post('admin/peringkat/tambah', [DataPeringkatController::class, 'tambahdata'])->name('admin.peringkat.tambah');
+    // CARI
+    Route::get('admin/peringkat/cari', [DataPeringkatController::class, 'caridata'])->name('admin.peringkat.cari');
+    // EDIT
+    Route::get('admin/peringkat/ubah/{kdperingkat}', [DataPeringkatController::class, 'tampiledit'])->name('admin.peringkat.edit-tampil');
+    Route::put('admin/peringkat-edit/{kdperingkat}', [DataPeringkatController::class, 'editdata'])->name('admin.peringkat.edit');
+    // HAPUS
+    Route::delete('admin/peringkat-hapus/{kdperingkat}', [DataPeringkatController::class, 'hapus'])->name('admin.peringkat.hapus');
+    // STATUS
+    Route::post('admin/peringkat/update-status', [DataPeringkatController::class, 'updateStatus'])->name('peringkat.status');
+
+    // REKAP FORUM
+    Route::get('admin/forum/rekap/{kdforum}', [ForumController::class, 'lihatRekap'])->name('admin.forum.rekap');
+    Route::get('admin/forum/rekap-download/{kdforum}', [ForumController::class, 'downloadRekap'])->name('admin.forum.rekap.download');
 });
 
 Route::middleware(['auth', 'role:dosen'])->group(function () {
@@ -181,21 +209,144 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
 
     // DATA DIRI
     Route::get('mahasiswa/data-diri', [DatadiriController::class, 'create'])->name('mahasiswa.data-diri');
-    Route::post('mahasiswa/data-diri/simpan', [DatadiriController::class, 'simpan'])->name('mahasiswa.data-diri.simpan');
+    Route::post('mahasiswa/data-diri/simpan/{id}', [DatadiriController::class, 'simpan'])->name('mahasiswa.data-diri.simpan');
 
-    // GALERI KARYA
+    // GALERI KARYA (User)
+    Route::middleware('auth')->group(function () {
+
+        Route::get('user/menu/galeri', [GaleriController::class, 'index'])
+            ->name('user.galeri.index');
+
+        Route::get('user/galeri/cari', [GaleriController::class, 'cariData'])
+            ->name('user.galeri.cari');
+
+        // Tambah
+        Route::get('user/menu/galeri/tampil', [GaleriController::class, 'tampildata'])
+            ->name('user.galeri.tampil');
+        Route::post('user/menu/galeri/tambah', [GaleriController::class, 'tambahdata'])
+            ->name('user.galeri.tambah');
+
+        // Edit
+        Route::get('user/galeri/ubah/{kdkarya}', [GaleriController::class, 'tampiledit'])
+            ->name('user.galeri.edit-tampil');
+        Route::put('user/galeri-edit/{kdkarya}', [GaleriController::class, 'editdata'])
+            ->name('user.galeri.edit');
+
+        // Hapus
+        Route::delete('user/galeri-hapus/{kdkarya}', [GaleriController::class, 'hapus'])
+            ->name('user.galeri.hapus');
+    });
+
+
+    // Modul
     // INDEX
-    Route::get('user/menu/galeri', [GaleriController::class, 'index'])->name('user.galeri.index');
+    Route::get('user/menu/modul', [ModulController::class, 'index'])->name('user.modul.index');
     // CARI
-    Route::get('user/galeri/cari', [GaleriController::class, 'tampildata'])->name('user.galeri.cari');
-    //TAMBAH
-    Route::get('user/menu/galeri-tambah', [GaleriController::class, 'tambah'])->name('user.galeri.tampil');
-    Route::post('user/menu/galeri-edit/{id}', [GaleriController::class, 'edit'])->name('user.galeri.tambah');
+    Route::get('user/modul/cari', [ModulController::class, 'cariData'])->name('user.modul.cari');
+    // TAMBAH
+    Route::get('user/menu/modul/tampil', [ModulController::class, 'tampildata'])->name('user.modul.tampil');
+    Route::post('user/menu/modul/tambah', [ModulController::class, 'tambahdata'])->name('user.modul.tambah');
     // EDIT
-    Route::get('user/galeri/ubah/{id}', [GaleriController::class, 'tampiledit'])->name('user.galeri.edit-tampil');
-    Route::put('user/galeri-edit/{id}', [GaleriController::class, 'editdata'])->name('user.galeri.edit');
+    Route::get('user/modul/ubah/{id}', [ModulController::class, 'tampiledit'])->name('user.modul.edit-tampil');
+    Route::put('user/modul-edit/{id}', [ModulController::class, 'editdata'])->name('user.modul.edit');
     // HAPUS
-    Route::delete('user/galeri-hapus/{id}', [GaleriController::class, 'hapus'])->name('user.galeri.hapus');
-    // UBAH STATUS
+    Route::delete('user/modul-hapus/{id}', [ModulController::class, 'hapus'])->name('user.modul.hapus');
+
+    // FORUM
+    // INDEX
+    Route::get('user/menu/forum', [ForumController::class, 'index'])->name('user.forum.index');
+    // CARI
+    Route::get('user/forum/cari', [ForumController::class, 'cariData'])->name('user.forum.cari');
+    // TAMBAH
+    Route::get('user/menu/forum/tampil', [ForumController::class, 'tampildata'])->name('user.forum.tampil');
+    Route::post('user/menu/forum/tambah', [ForumController::class, 'tambahdata'])->name('user.forum.tambah');
+    // EDIT
+    Route::get('user/forum/ubah/{id}', [ForumController::class, 'tampiledit'])->name('user.forum.edit-tampil');
+    Route::put('user/forum-edit/{id}', [ForumController::class, 'editdata'])->name('user.forum.edit');
+    // HAPUS
+    Route::delete('user/forum-hapus/{id}', [ForumController::class, 'hapus'])->name('user.forum.hapus');
+
+    // DISKUSI
+    Route::middleware('auth')->group(function () {
+
+        // Halaman utama diskusi (yang pakai Blade kita tadi)
+        Route::get('/diskusi', [DiskusiController::class, 'index'])
+            ->name('diskusi.index');                     // http://localhost/diskusi
+
+        // AJAX: Load semua pesan
+        Route::get('/diskusi/{kdforum}/pesan', [DiskusiController::class, 'pesan'])
+            ->name('diskusi.pesan');                     // /diskusi/ABC123/pesan
+
+        // AJAX: Kirim pesan baru
+        Route::post('/diskusi/kirim', [DiskusiController::class, 'kirim'])
+            ->name('diskusi.kirim');                     // /diskusi/kirim
+
+        // AJAX: Lihat rekap diskusi (text)
+        // Route::get('/diskusi/rekap/{kdforum}', function ($kdforum) {
+        //     $rekap = \App\Models\RekapForum::where('kdforum', $kdforum)->first();
+        //     if (!$rekap) {
+        //         return 'Rekap belum tersedia. Diskusi mungkin belum ditutup otomatis.';
+        //     }
+        //     return response($rekap->isi_rekap, 200, [
+        //         'Content-Type' => 'text/plain; charset=utf-8'
+        //     ]);
+        // })->name('diskusi.rekap');                       // /diskusi/rekap/ABC123
+    });
+
+    // Video
+    // INDEX
+    Route::get('user/menu/video', [VideoController::class, 'index'])->name('user.video.index');
+    // CARI
+    Route::get('user/video/cari', [VideoController::class, 'cariData'])->name('user.video.cari');
+    // TAMBAH
+    Route::get('user/video/tampil', [VideoController::class, 'tampildata'])->name('user.video.tampil');
+    Route::post('user/video/tambah', [VideoController::class, 'tambahdata'])->name('user.video.tambah');
+    // EDIT
+    Route::get('user/video/ubah/{id}', [VideoController::class, 'tampiledit'])->name('user.video.edit-tampil');
+    Route::put('user/video/-edit/{id}', [VideoController::class, 'editdata'])->name('user.video.edit');
+    // HAPUS
+    Route::delete('user/video-hapus/{id}', [VideoController::class, 'hapus'])->name('user.video.hapus');
+
+    // UJIAN
+    // INDEX
+    Route::get('user/menu/ujian', [UjianController::class, 'index'])->name('user.ujian.index');
+    // CARI
+    Route::get('user/ujian/cari', [UjianController::class, 'cariData'])->name('user.ujian.cari');
+    // TAMBAH
+    Route::get('user/ujian/tampil', [UjianController::class, 'tampildata'])->name('user.ujian.tampil');
+    Route::post('user/ujian/tambah', [UjianController::class, 'tambahdata'])->name('user.ujian.tambah');
+    // EDIT
+    Route::get('user/ujian/ubah/{id}', [UjianController::class, 'tampiledit'])->name('user.ujian.edit-tampil');
+    Route::put('user/ujian-edit/{id}', [UjianController::class, 'editdata'])->name('user.ujian.edit');
+    // HAPUS
+    Route::delete('user/ujian-hapus/{id}', [UjianController::class, 'hapus'])->name('user.ujian.hapus');
+
+    // PERPUSTAKAAN
+    // INDEX
+    Route::get('user/menu/perpus', [PerpusController::class, 'index'])->name('user.perpus.index');
+    // CARI
+    Route::get('user/perpus/cari', [PerpusController::class, 'cariData'])->name('user.perpus.cari');
+    // TAMBAH
+    Route::get('user/perpus/tampil', [PerpusController::class, 'tampildata'])->name('user.perpus.tampil');
+    Route::post('user/perpus/tambah', [PerpusController::class, 'tambahdata'])->name('user.perpus.tambah');
+    // EDIT
+    Route::get('user/perpus/ubah/{id}', [PerpusController::class, 'tampiledit'])->name('user.perpus.edit-tampil');
+    Route::put('user/perpus-edit/{id}', [PerpusController::class, 'editdata'])->name('user.perpus.edit');
+    // HAPUS
+    Route::delete('user/perpus-hapus/{id}', [PerpusController::class, 'hapus'])->name('user.perpus.hapus');
+
+    // PERINGKAT
+    // INDEX
+    Route::get('user/menu/peringkat', [PeringkatController::class, 'index'])->name('user.peringkat.index');
+    // CARI
+    Route::get('user/peringkat/cari', [PeringkatController::class, 'cariData'])->name('user.peringkat.cari');
+    // TAMBAH
+    Route::get('user/peringkat/tampil', [PeringkatController::class, 'tampildata'])->name('user.peringkat.tampil');
+    Route::post('user/peringkat/tambah', [PeringkatController::class, 'tambahdata'])->name('user.peringkat.tambah');
+    // EDIT
+    Route::get('user/peringkat/ubah/{id}', [PeringkatController::class, 'tampiledit'])->name('user.peringkat.edit-tampil');
+    Route::put('user/peringkat-edit/{id}', [PeringkatController::class, 'editdata'])->name('user.peringkat.edit');
+    // HAPUS
+    Route::delete('user/peringkat-hapus/{id}', [PeringkatController::class, 'hapus'])->name('user.peringkat.hapus');
 });
 // USER

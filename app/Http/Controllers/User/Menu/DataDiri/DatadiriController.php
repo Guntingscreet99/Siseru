@@ -22,7 +22,8 @@ class DatadiriController extends Controller
 
     public function create()
     {
-        $user = User::where('id', Auth::user()->id)->first();
+        $user = User::where('id', Auth::user()->id)
+            ->with('datadiri.kelas', 'datadiri.semester')->first();
 
         $kelas = Kelas::all();
         $semester = Semester::all();
@@ -32,82 +33,99 @@ class DatadiriController extends Controller
         return view('user.menu.data_diri.index', compact('kelas', 'semester', 'user'));
     }
 
-    // public function index()
-    // {
-    //     $user = Auth::id();
-
-    //     $dataDiri = Identitas::with('user')->where('user_id', $user)->first();
-
-    //     // dd($dataDiri);
-
-    //     $kelas = Kelas::all();
-    //     $semester = Semester::all();
-
-    //     return view('user.menu.data_diri.index', compact('kelas', 'semester', 'user', 'dataDiri'));
-    // }
-
     public function simpan(Request $request)
     {
-        // dd($request->all());
+        $userId = Auth::id();
 
-        $request->validate(
-            [
-                'nama_lengkap' => 'required|string',
-                'id_kelas' => 'required|exists:kelas,id',
-                'id_semester' => 'required|exists:semesters,id',
-                'fotoMhs' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mkv,avi|max:51200',
-                'alamat' => 'required|string',
-                'jenisKelamin' => 'required|string',
-            ],
-            [
-                'nama_lengkap.required' => 'Nama Lengkap Wajib Diisi!',
-                'id_kelas.required' => 'Kelas Wajib Diisi!',
-                'id_kelas.exists' => 'Kelas yang dipilih tidak valid!',
-                'id_semester.required' => 'Semester Wajib Diisi!',
-                'id_semester.exists' => 'Semester yang dipilih tidak valid!',
-                'fotoMhs.mimes' => 'Format file harus jpg, jpeg, png, mp4, mkv, atau avi!',
-                'fotoMhs.max' => 'Ukuran file maksimal 50MB!',
-                'alamat.required' => 'Alamat Wajib Diisi!',
-                'jenisKelamin.required' => 'Jenis Kelamin Wajib Diisi!',
-            ]
-        );
+        // Ambil user + relasi datadiri untuk validasi kondisional
+        $user = User::with('datadiri')->findOrFail($userId);
 
-        $userId = Auth::id(); // Ambil ID pengguna yang sedang login
-        $fotoMhsPath = null;
+        // Validasi
+        $request->validate([
+            'nama_lengkap' => 'required|string|max:255',
+            'nim'          => 'required|string|max:20|unique:users,nim,' . $userId,
+            'email'        => 'required|email|max:255',
+            'no_hp'        => 'nullable|string|max:15',
+            'tempat'       => 'nullable|string|max:100',
+            'tgllahir'     => 'nullable|date',
+            'alamat'       => 'required|string',
+
+            // Wajib hanya saat pertama kali isi (setelah itu tetap bisa diubah)
+            'jenisKelamin' => ($user->datadiri && $user->datadiri->jenisKelamin) ? 'required|in:Laki-laki,Perempuan' : 'required|in:Laki-laki,Perempuan',
+            'id_kelas'     => ($user->datadiri && $user->datadiri->id_kelas)     ? 'required|exists:kelas,id'       : 'required|exists:kelas,id',
+            'id_semester'  => ($user->datadiri && $user->datadiri->id_semester)  ? 'required|exists:semesters,id'   : 'required|exists:semesters,id',
+
+            'fotoMhs'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // 2MB
+        ], [
+            'nama_lengkap.required' => 'Nama Lengkap wajib diisi!',
+            'nim.required'           => 'NIM wajib diisi!',
+            'nim.unique'             => 'NIM sudah digunakan oleh mahasiswa lain!',
+            'email.required'         => 'Email wajib diisi!',
+            'alamat.required'        => 'Alamat wajib diisi!',
+            'jenisKelamin.required'  => 'Jenis Kelamin wajib dipilih!',
+            'id_kelas.required'      => 'Kelas wajib dipilih!',
+            'id_semester.required'   => 'Semester wajib dipilih!',
+            'fotoMhs.image'          => 'File harus berupa gambar!',
+            'fotoMhs.max'            => 'Ukuran foto maksimal 2MB!',
+        ]);
+
+        // ========================================
+        // 1. Update tabel users (NIM, email, nama, dll)
+        // ========================================
+        User::where('id', $userId)->update([
+            'nim'          => $request->nim,
+            'nama_lengkap' => $request->nama_lengkap,
+            'email'        => $request->email,
+            'no_hp'        => $request->no_hp,
+            // 'username'  => $request->username ?? null, // kalau ada field username
+        ]);
+
+        // ========================================
+        // 2. Upload foto (jika ada)
+        // ========================================
+        $fotoMhsPath   = null;
         $judulFileAsli = null;
 
-        // Proses unggahan file jika ada
         if ($request->hasFile('fotoMhs')) {
-            $file = $request->file('fotoMhs');
+            $file          = $request->file('fotoMhs');
             $judulFileAsli = $file->getClientOriginalName();
-            $fotoMhsPath = $file->store('fotoMhs', 'public');
+            $fotoMhsPath   = $file->store('fotoMhs', 'public');
         }
 
-        // Cek apakah data diri sudah ada untuk pengguna ini
-        $dataDiri = DataDiri::where('user_id', $userId)->first();
-
-        $data = [
-            'user_id' => $userId,
-            'nama_lengkap' => $request->input('nama_lengkap'),
-            'id_kelas' => $request->input('id_kelas'),
-            'id_semester' => $request->input('id_semester'),
-            'alamat' => $request->input('alamat'),
-            'tempat' => $request->input('tempat'),
-            'tgllahir' => $request->input('tgllahir'),
-            'jenisKelamin' => $request->input('jenisKelamin'),
-            'fotoMhs' => $fotoMhsPath ?? null, // Gunakan null jika tidak ada file
-            'judulFileAsli' => $judulFileAsli ?? null,
-            'status' => $request->input('status'),
+        // ========================================
+        // 3. Simpan / Update tabel data_diris
+        //    (TANPA kolom nim → karena nim sudah di tabel users)
+        // ========================================
+        $dataDiriPayload = [
+            'user_id'      => $userId,
+            'nama_lengkap' => $request->nama_lengkap,
+            'id_kelas'     => $request->id_kelas,
+            'id_semester'  => $request->id_semester,
+            'alamat'       => $request->alamat,
+            'tempat'       => $request->tempat,
+            'tgllahir'     => $request->tgllahir,
+            'jenisKelamin' => $request->jenisKelamin,
+            'fotoMhs'      => $fotoMhsPath,
+            'judulFileAsli' => $judulFileAsli,
+            'status'       => $request->status ?? null,
         ];
 
+        $dataDiri = DataDiri::where('user_id', $userId)->first();
+
         if ($dataDiri) {
-            $dataDiri->update($data);
-            $message = 'Data Berhasil Diperbarui';
+            $dataDiri->update($dataDiriPayload);
+            $message = 'Data diri berhasil diperbarui!';
         } else {
-            DataDiri::create($data);
-            $message = 'Data Berhasil Disimpan';
+            DataDiri::create($dataDiriPayload);
+            $message = 'Data diri berhasil disimpan!';
         }
 
-        return redirect()->route('mahasiswa.data-diri')->with('success', $message);
+        return redirect()
+            ->route('mahasiswa.data-diri')
+            ->with('success', $message);
     }
+
+    // public function edit(Request $reqeust, $id) {
+
+    // }
 }

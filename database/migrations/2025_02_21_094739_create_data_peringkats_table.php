@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('data_peringkats', function (Blueprint $table) {
             $table->id('kdperingkat');
-            $table->string('skor')->nullable();
+            $table->string('namaMhs')->nullable();
+            $table->string('nim')->nullable();
+            $table->foreignId('id_kelas')->constrained('kelas')->onDelete('cascade');
+            $table->foreignId('id_semester')->constrained('semesters')->onDelete('cascade');
+            $table->string('skorKarya')->nullable();
+            $table->string('skorUjian')->nullable();
             $table->string('ranking')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();

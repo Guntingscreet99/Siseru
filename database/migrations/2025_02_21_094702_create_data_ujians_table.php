@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('data_ujians', function (Blueprint $table) {
             $table->id('kdujian');
+            $table->string('judul')->nullable();
+            $table->string('deskripsi')->nullable();
             $table->string('link')->nullable();
             $table->string('hasil')->nullable();
             $table->string('status')->nullable();

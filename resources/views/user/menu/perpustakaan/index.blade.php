@@ -1,198 +1,287 @@
-<x-user.menu.perpustakaan.index title="Perpustakaan Digital">
+@extends('bagian.user.rumah.home')
+@section('judul', 'User | Perpustakaan')
+@section('isi')
+
     <div class="container">
         <div class="page-inner">
-            <div class="judul">
-                <h1>@yield('judul')</h1>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div>
-                        <link href="./c_desktop1.css" rel="stylesheet" />
-                        <div class="c_desktop1-frame">
-                            <img src="assets/373.svg" alt="vector" width="200" height="66"
-                                class="c_desktop1-vector1" />
-                            <img src="assets/4331.svg" alt="vector" width="83" height="66"
-                                class="c_desktop1-vector2" />
-                            <img src="assets/374.svg" alt="rectangle" width="159" height="66"
-                                class="c_desktop1-rectangle10" />
-                            <img src="assets/375.svg" alt="rectangle" width="203" height="66"
-                                class="c_desktop1-rectangle11" />
-                            <img src="assets/376.svg" alt="rectangle" width="158" height="66"
-                                class="c_desktop1-rectangle12" />
-                            <img src="assets/377.svg" alt="rectangle" width="203" height="66"
-                                class="c_desktop1-rectangle13" />
-                            <img src="assets/378.svg" alt="instance" width="0" height="15"
-                                class="c_desktop1-instance" />
-                            <img src="assets/379.svg" alt="rectangle" width="110" height="66"
-                                class="c_desktop1-rectangle14" />
-                            <img src="assets/3725.svg" alt="rectangle" width="1374" height="568"
-                                class="c_desktop1-rectangle15" />
-                            <img src="assets/3730.svg" alt="rectangle" width="100" height="59"
-                                class="c_desktop1-rectangle16" />
-                            <div class="c_desktop1-text10">
-                                <p class="c_desktop1-text11">Cari</p>
+            <div class="guru">
+                <div class="judul">
+                    <h1>@yield('judul')</h1>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Button trigger modal -->
+                        <div class="mb-3" style="display: flex; justify-content: space-between">
+                            <div class="form-group">
+                                <a href="{{ url('user/perpus/tampil') }}" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Tambah Data Perpustakaan
+                                </a>
+                                {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahguru">
+                                 <i class="fas fa-plus"></i> Tambah Data Agama
+                            </button> --}}
                             </div>
-                            <div class="c_desktop1-text12">
-                                <p class="c_desktop1-text13">Hasil Karya</p>
+                            <div class="form-group" style="display: flex; align-items: center;">
+                                <input type="text" name="search" id="search" class="form-control"
+                                    placeholder="Cari..." style="width: 70%;">
+                                <button class="btn btn-info" type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
                             </div>
-                            <div class="c_desktop1-text14">
-                                <p class="c_desktop1-text15">Hasil Karya</p>
-                            </div>
-                            <div class="c_desktop1-text16">
-                                <p class="c_desktop1-text17">Dasboard / Landing</p>
-                            </div>
-                            <div class="c_desktop1-text18">
-                                <p class="c_desktop1-text19">Interaktif</p>
-                            </div>
-                            <img src="assets/3713.svg" alt="rectangle" width="1836" height="148"
-                                class="c_desktop1-rectangle17" />
-                            <div class="c_desktop1-text20">
-                                <p class="c_desktop1-text21">Nama Aplikasi</p>
-                            </div>
-                            <div class="c_desktop1-text22">
-                                <p class="c_desktop1-text23">logo</p>
-                            </div>
-                            <div class="c_desktop1-text24">
-                                <p class="c_desktop1-text25">Login</p>
-                            </div>
-                            <div class="c_desktop1-text26">
-                                <p class="c_desktop1-text27">Footer</p>
-                            </div>
-                            <div class="c_desktop1-text28">
-                                <p class="c_desktop1-text29">Beranda</p>
-                            </div>
-                            <img src="assets/3718.svg" alt="rectangle" width="167" height="74"
-                                class="c_desktop1-rectangle18" />
-                            <div class="c_desktop1-text30">
-                                <p class="c_desktop1-text31">Beranda</p>
-                            </div>
-                            <div class="c_desktop1-text32">
-                                <p class="c_desktop1-text33">Materi</p>
-                            </div>
-                            <div class="c_desktop1-text34">
-                                <p class="c_desktop1-text35">Perpustakaan</p>
-                            </div>
-                            <img src="assets/3722.svg" alt="rectangle" width="159" height="64"
-                                class="c_desktop1-rectangle19" />
-                            <div class="c_desktop1-text36">
-                                <p class="c_desktop1-text37">Kontak</p>
-                            </div>
-                            <img src="assets/3710.svg" alt="rectangle" width="416" height="571"
-                                class="c_desktop1-rectangle20" />
-                            <img src="assets/3757.svg" alt="rectangle" width="169" height="115"
-                                class="c_desktop1-rectangle21" />
-                            <img src="assets/3735.svg" alt="rectangle" width="229" height="59"
-                                class="c_desktop1-rectangle22" />
-                            <div class="c_desktop1-text38">
-                                <p class="c_desktop1-text39">Kategori</p>
-                            </div>
-                            <img src="assets/3742.svg" alt="rectangle" width="153" height="183"
-                                class="c_desktop1-rectangle23" />
-                            <img src="assets/3743.svg" alt="rectangle" width="169" height="115"
-                                class="c_desktop1-rectangle24" />
-                            <img src="assets/3750.svg" alt="rectangle" width="169" height="115"
-                                class="c_desktop1-rectangle25" />
-                            <img src="assets/3752.svg" alt="rectangle" width="169" height="115"
-                                class="c_desktop1-rectangle26" />
-                            <img src="assets/3748.svg" alt="rectangle" width="169" height="115"
-                                class="c_desktop1-rectangle27" />
-                            <img src="assets/3746.svg" alt="rectangle" width="169" height="115"
-                                class="c_desktop1-rectangle28" />
-                            <img src="assets/3755.svg" alt="rectangle" width="169" height="115"
-                                class="c_desktop1-rectangle29" />
-                            <img src="assets/3744.svg" alt="rectangle" width="169" height="115"
-                                class="c_desktop1-rectangle30" />
-                            <img src="assets/3754.svg" alt="rectangle" width="416" height="144"
-                                class="c_desktop1-rectangle31" />
-                            <img src="assets/3768.svg" alt="rectangle" width="573" height="75"
-                                class="c_desktop1-rectangle32" />
-                            <div class="c_desktop1-text40">
-                                <p class="c_desktop1-text41">Nama Mahasiswa</p>
-                            </div>
-                            <img src="assets/3786.svg" alt="rectangle" width="160" height="75"
-                                class="c_desktop1-rectangle33" />
-                            <img src="assets/3790.svg" alt="rectangle" width="160" height="75"
-                                class="c_desktop1-rectangle34" />
-                            <div class="c_desktop1-text42">
-                                <p class="c_desktop1-text43">Simpan</p>
-                            </div>
-                            <div class="c_desktop1-text44">
-                                <p class="c_desktop1-text45">Hapus</p>
-                            </div>
-                            <img src="assets/3775.svg" alt="rectangle" width="573" height="75"
-                                class="c_desktop1-rectangle35" />
-                            <div class="c_desktop1-text46">
-                                <p class="c_desktop1-text47">Kelas</p>
-                            </div>
-                            <img src="assets/3777.svg" alt="rectangle" width="573" height="75"
-                                class="c_desktop1-rectangle36" />
-                            <div class="c_desktop1-text48">
-                                <p class="c_desktop1-text49">Semester</p>
-                            </div>
-                            <img src="assets/3779.svg" alt="rectangle" width="573" height="75"
-                                class="c_desktop1-rectangle37" />
-                            <img src="assets/3781.svg" alt="rectangle" width="573" height="75"
-                                class="c_desktop1-rectangle38" />
-                            <div class="c_desktop1-text50">
-                                <p class="c_desktop1-text51">Nama Mahasiswa</p>
-                            </div>
-                            <div class="c_desktop1-text52">
-                                <p class="c_desktop1-text53">Deskripsi Karya</p>
-                            </div>
-                            <img src="assets/3783.svg" alt="rectangle" width="573" height="75"
-                                class="c_desktop1-rectangle39" />
-                            <div class="c_desktop1-text54">
-                                <p class="c_desktop1-text55">File Karya</p>
-                            </div>
-                            <div class="c_desktop1-text56">
-                                <p class="c_desktop1-text57">Nama Karya</p>
-                            </div>
-                            <div class="c_desktop1-text58">
-                                <p class="c_desktop1-text59">Berita</p>
-                            </div>
-                            <img src="assets/3759.svg" alt="rectangle" width="169" height="115"
-                                class="c_desktop1-rectangle40" />
-                            <div class="c_desktop1-text60">
-                                <p class="c_desktop1-text61">Berita</p>
-                            </div>
-                            <div class="c_desktop1-text62">
-                                <p class="c_desktop1-text63">Berita</p>
-                            </div>
-                            <div class="c_desktop1-text64">
-                                <p class="c_desktop1-text65">Berita</p>
-                            </div>
-                            <div class="c_desktop1-text66">
-                                <p class="c_desktop1-text67">Berita</p>
-                            </div>
-                            <div class="c_desktop1-text68">
-                                <p class="c_desktop1-text69">Berita</p>
-                            </div>
-                            <img src="assets/3761.svg" alt="rectangle" width="169" height="115"
-                                class="c_desktop1-rectangle41" />
-                            <div class="c_desktop1-text70">
-                                <p class="c_desktop1-text71">Acara</p>
-                            </div>
-                            <div class="c_desktop1-text72">
-                                <p class="c_desktop1-text73">Acara</p>
-                            </div>
-                            <div class="c_desktop1-text74">
-                                <p class="c_desktop1-text75">Acara</p>
-                            </div>
-                            <div class="c_desktop1-text76">
-                                <p class="c_desktop1-text77">Acara</p>
-                            </div>
-                            <div class="c_desktop1-text78">
-                                <p class="c_desktop1-text79">Acara</p>
-                            </div>
-                            <img src="assets/3766.svg" alt="rectangle" width="651" height="423"
-                                class="c_desktop1-rectangle42" />
-                            <div class="c_desktop1-text80">
-                                <p class="c_desktop1-text81">Gambar/Video Karya</p>
-                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-responsive table-striped table-bordered text-center"
+                                style="white-space: nowrap; overflow-x: auto; width: 100%">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Judul</th>
+                                        <th scope="col">Deskripsi</th>
+                                        <th scope="col">Kategori</th>
+                                        <th scope="col">Topik</th>
+                                        <th scope="col">Tahun</th>
+                                        <th scope="col">File Perpustakaan</th>
+                                        <th scope="col">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="perpus-body">
+                                    @if ($perpus->isEmpty())
+                                        <tr>
+                                            <td colspan="8" class="text-center">Data Masih Kosong</td>
+                                        </tr>
+                                    @else
+                                        @foreach ($perpus as $item)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->judul }}</td>
+                                                <td>{{ $item->deskripsi }}</td>
+                                                <td>{{ $item->kategori }}</td>
+                                                <td>{{ $item->topik }}</td>
+                                                <td>{{ $item->tahun }}</td>
+                                                {{-- <td>
+                                                    <a href="{{ $item->link }}" target="_blank">
+                                                        {{ $item->link }}
+                                                    </a>
+                                                </td> --}}
+                                                <td>
+                                                    @if ($item->filePerpus)
+                                                        @php
+                                                            $ext = pathinfo($item->filePerpus, PATHINFO_EXTENSION);
+                                                            $fileUrl = Storage::url($item->filePerpus);
+                                                        @endphp
+
+                                                        @if (in_array($ext, ['mp4', 'mkv', 'avi']))
+                                                            <video width="250" controls>
+                                                                <source src="{{ $fileUrl }}"
+                                                                    type="video/{{ $ext }}">
+                                                                Browser Anda tidak mendukung tag video.
+                                                            </video>
+                                                        @elseif (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']))
+                                                            <img src="{{ $fileUrl }}" alt="Gambar" width="250">
+                                                        @elseif (in_array($ext, ['pdf']))
+                                                            <embed src="{{ $fileUrl }}" type="application/pdf"
+                                                                width="100%" height="250px" />
+                                                        @elseif (in_array($ext, ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt']))
+                                                            <a href="{{ $fileUrl }}" target="_blank"
+                                                                class="btn btn-sm btn-success">
+                                                                <i class="fas fa-file-alt"></i> Lihat Dokumen
+                                                            </a>
+                                                        @else
+                                                            <a href="{{ $fileUrl }}" target="_blank"
+                                                                class="btn btn-sm btn-info">
+                                                                <i class="fas fa-download"></i> Unduh File
+                                                            </a>
+                                                        @endif
+                                                    @else
+                                                        <p>Tidak ada file</p>
+                                                    @endif
+                                                </td>
+                                                {{-- <td>
+                                                    <form method="POST" action="{{ url('admin/perpus/update-status') }}">
+                                                        @csrf
+                                                        <input type="hidden" name="kdperpus"
+                                                            value="{{ $item->kdperpus }}">
+                                                        <div class="status-wrapper">
+                                                            <input type="checkbox" name="status"
+                                                                id="status_{{ $item->kdperpus }}" value="Ditampilkan"
+                                                                onchange="this.form.submit()"
+                                                                {{ $item->status === 'Ditampilkan' ? 'checked' : '' }}>
+                                                            <label for="status_{{ $item->kdperpus }}"
+                                                                class="status-button"></label>
+                                                            <div class="status-text">
+                                                                <span>{{ $item->status }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </td> --}}
+                                                <td>
+                                                    <!-- Button trigger modal -->
+                                                    <a href="{{ url('user/perpus/ubah/' . $item->kdperpus) }}"
+                                                        class="btn btn-warning">
+                                                        <i class="fas fa-pen"></i> Edit
+                                                    </a>
+                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                        data-bs-target="#Hapus{{ $item->kdperpus }}">
+                                                        <i class="fas fa-trash"> </i>Hapus
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</x-user.menu.perpustakaan.index>
+
+    @include('user.menu.perpustakaan.hapus')
+
+@endsection
+
+@push('css')
+    <style>
+        .status-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Hide the default checkbox */
+        .status-wrapper input[type="checkbox"] {
+            display: none;
+        }
+
+        /* Custom switch style */
+        .status-button {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+            background-color: #ccc;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .status-button::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        /* Checked state */
+        .status-wrapper input[type="checkbox"]:checked+.status-button {
+            background-color: #3314fe;
+        }
+
+        .status-wrapper input[type="checkbox"]:checked+.status-button::after {
+            transform: translateX(24px);
+        }
+
+        .status-text span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+    </style>
+@endpush
+
+@push('js')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            let timer;
+
+            $('#search').on('input', function() {
+                clearTimeout(timer);
+                let query = $(this).val().trim();
+
+                if (query === "") {
+                    $('#perpus-body').html(""); // Kosongkan jika tidak ada input
+                    return;
+                }
+
+                timer = setTimeout(function() {
+                    $.ajax({
+                        url: "{{ route('user.perpus.cari') }}",
+                        method: "GET",
+                        data: {
+                            query: query
+                        },
+                        success: function(data) {
+                            let rows = "";
+
+                            if (data.length === 0) {
+                                rows =
+                                    `<tr><td colspan="7" class="text-center">Data tidak ditemukan.</td></tr>`;
+                            } else {
+                                $.each(data, function(index, item) {
+                                    rows += `
+                                    <tr>
+                                        <td>${index + 1}</td>
+                                        <td>${item.judul}</td>
+                                        <td>${item.deskripsi}</td>
+                                        <td>${item.kategori}</td>
+                                        <td>${item.topik}</td>
+                                        <td>${item.tahun}</td>
+                                        <td>
+                                            <!-- Button Edit -->
+                                            <a href="user/perpus/tampil${item.kdperpus}" class="btn btn-warning">
+                                                <i class="fas fa-pen"></i> Edit
+                                            </a>
+
+                                            <!-- Button Hapus -->
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Hapus${item.kdperpus}">
+                                                <i class="fas fa-trash"></i> Hapus
+                                            </button>
+
+                                            <!-- Modal Hapus -->
+                                            <div class="modal fade" id="Hapus${item.kdperpus}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="staticBackdropLabel">Hapus Data Perpustakaan</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <form action="user/perpus-hapus/${item.kdperpus}" method="POST">
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                            <div class="modal-body">
+                                                                <center>
+                                                                    <h5 class="mt-2 mb-3">Apakah anda ingin menghapus data ini?</h5>
+                                                                    <button type="submit" class="btn btn-danger ml-1">
+                                                                        <i class="bx bx-check d-block d-sm-none"></i>
+                                                                        <span class="d-none d-sm-block">Hapus</span>
+                                                                    </button>
+                                                                </center>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `;
+                                });
+                            }
+
+                            $('#perpus-body').html(rows);
+                        },
+                        error: function() {
+                            console.log("Gagal mengambil data!");
+                        }
+                    });
+                }, 500);
+            });
+        });
+    </script>
+@endpush

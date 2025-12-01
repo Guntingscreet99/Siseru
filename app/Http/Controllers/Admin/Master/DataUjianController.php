@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin\Master;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataUjian;
+use App\Models\Kelas;
+use App\Models\Semester;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,7 +15,7 @@ class DataUjianController extends Controller
     public function index()
     {
         $ujian = DataUjian::all();
-
+        // dd($ujian);
         return view('admin.master.ujian.index', compact('ujian'));
     }
 
@@ -23,6 +26,8 @@ class DataUjianController extends Controller
             $query = $request->input('query');
 
             $ujian = DataUjian::where('kdujian', 'like', "%$query%")
+                ->orwhere('judul', 'like', "%$query%")
+                ->orwhere('deskripsi', 'like', "%$query%")
                 ->orwhere('link', 'like', "%$query%")
                 ->orwhere('hasil', 'like', "%$query%")
                 ->orwhere('status', 'like', "%$query%")
@@ -43,6 +48,8 @@ class DataUjianController extends Controller
     public function tambahdata(Request $request)
     {
         $request->validate([
+            'judul' => 'required',
+            'deskripsi' => 'required',
             'link' => 'required',
             'hasil' => 'required',
             'status' => 'required',
@@ -62,6 +69,8 @@ class DataUjianController extends Controller
         }
 
         $data = [
+            'judul' => $request->input('judul'),
+            'deskripsi' => $request->input('deskripsi'),
             'link' => $request->input('link'),
             'hasil' => $request->input('hasil'),
             'status' => $request->input('status'),
@@ -84,6 +93,8 @@ class DataUjianController extends Controller
     public function editdata(Request $request, $kdujian)
     {
         $request->validate([
+            'judul' => 'required',
+            'deskripsi' => 'required',
             'link' => 'required',
             'hasil' => 'required',
             'status' => 'required',
@@ -93,6 +104,8 @@ class DataUjianController extends Controller
         $ujian = DataUjian::where('kdujian', $kdujian)->firstOrFail();
 
         $data = [
+            'judul' => $request->input('judul'),
+            'deskripsi' => $request->input('deskripsi'),
             'link' => $request->input('link'),
             'hasil' => $request->input('hasil'),
             'status' => $request->input('status'),
@@ -116,15 +129,29 @@ class DataUjianController extends Controller
     // Hapus
     public function hapus($kdujian)
     {
-        $ujian = DataUjian::where('kdujian', $kdujian)->firstOrFail();
+        try {
+            $ujian = DataUjian::where('kdujian', $kdujian)->firstOrFail();
 
-        if ($ujian->fileUjian) {
-            Storage::disk('public')->delete($ujian->fileUjian);
+            if ($ujian->fileUjian) {
+                Log::info('File to be deleted: ' . $ujian->fileUjian);
+                if (Storage::disk('public')->delete($ujian->fileUjian)) {
+                    Log::info('File exits, attempting to delete');
+                    $deleted = Storage::disk('public')->delete($ujian->fileUjian);
+                    Log::info('Deletion result: ' . ($deleted ? 'Success' : 'Failed'));
+                } else {
+                    Log::warning('File does not exist in storage: ' . $ujian->fileUjian);
+                }
+            } else {
+                Log::warning('No fileUjian found for kdujian: ' . $kdujian);
+            }
+
+            $ujian->delete();
+
+            return redirect()->route('user.ujian.index')->with('success', 'Data Berhasil Dihapus');
+        } catch (\Exception $e) {
+            Log::error('Error deleting ujian: ' . $e->getMessage());
+            return redirect()->route('admin.master.ujian')->with('error', 'Gagal menghapus data atau file. Silahkan coba lagi.');
         }
-
-        $ujian->delete();
-
-        return redirect()->route('admin.master.ujian')->with('success', 'Data Berhasil Dihapus!');
     }
 
     // Status

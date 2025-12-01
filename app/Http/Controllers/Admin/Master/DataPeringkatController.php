@@ -4,75 +4,90 @@ namespace App\Http\Controllers\Admin\Master;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataPeringkat;
+use App\Models\Kelas;
+use App\Models\Semester;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class DataPeringkatController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $cari = $request->input('cari');
-        $halaman = $request->input('halaman', 10);
-        $page = $request->input('page', 1);
-
-        $query = DataPeringkat::orderBy('id', 'asc');
-
-        if ($cari) {
-            $query->where('skor', 'LIKE', "%{$cari}%")
-                ->orWhere('rangking', 'LIKE', "%{$cari}%")
-                ->orWhere('status', 'LIKE', "%{$cari}%");
-        }
-
-        $peringkat = $query->paginate($halaman, ['*'], 'page', $page);
-        $peringkat->append(['cari' => $cari, 'halaman' => $halaman]);
-
-
+        $peringkat = DataPeringkat::all();
+        // dd($peringkat);
         return view('admin.master.peringkat.index', compact('peringkat'));
     }
 
+    // Cari
+    public function cari(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = $request->input('query');
 
+            $peringkat = DataPeringkat::where('id', 'like', "%$query%")
+                ->orwhere('namaMhs', 'like', "%$query%")
+                ->orwhere('nim', 'like', "%$query%")
+                ->orwhere('kelas', 'like', "%$query%")
+                ->orwhere('semester', 'like', "%$query%")
+                ->orWhere('skorKarya', 'like', "%$query%")
+                ->orWhere('skorUjian', 'like', "%$query%")
+                ->orWhere('ranking', 'like', "%$query%")
+                ->orWhere('status', 'like', "%$query%")
+                ->get();
 
-    // public function cari(Request $request)
-    // {
-    //     if ($request->ajax()) {
-    //         $query = $request->input('query');
+            return response()->json($peringkat);
+        }
 
-    //         $peringkat = DataPeringkat::where('id', 'like', "%$query%")
-    //             ->orWhere('skor', 'like', "%$query%")
-    //             ->orWhere('ranking', 'like', "%$query%")
-    //             ->orWhere('status', 'like', "%$query%")
-    //             ->get();
-
-    //         return response()->json($peringkat);
-    //     }
-
-    //     return redirect()->route('admin.master.peringkat');
-    // }
+        return redirect()->route('admin.master.peringkat');
+    }
 
     // Tambah Data
     public function tampildata()
     {
-        return view('admin.master.peringkat.tambah');
+        $kelas = Kelas::all();
+        $semester = Semester::all();
+
+        return view('admin.master.peringkat.tambah', compact('kelas', 'semester'));
     }
 
     public function tambahdata(Request $request)
     {
-        $request->validate([
-            'skor' => 'required',
-            'ranking' => 'required',
-            'status' => 'required',
-        ], [
-            'skor.required' => 'Skor Wajib Diisi!.',
-            'ranking.required' => 'Skor Wajib Diisi!.',
-        ]);
+        $request->validate(
+            [
+                'namaMhs' => 'required',
+                'nim' => 'required',
+                'id_kelas' => 'required',
+                'id_semester' => 'required',
+                'skorKarya' => 'required',
+                'skorUjian' => 'required',
+                'ranking' => 'required',
+                'status' => 'required',
+            ],
+            [
+                'namaMhs.required' => 'Nama Mahasiswa Wajib Diisi!',
+                'nim.required' => 'NIM Wajib Diisi!',
+                'id_kelas.required' => 'Kelas Wajib Diisi!',
+                'id_semester.required' => 'Semester Wajib Diisi!',
+                'skorKarya.required' => 'Skor Karya Wajib Diisi!.',
+                'skorUjian.required' => 'Skor Ujian Wajib Diisi!.',
+                'ranking.required' => 'Rangking Wajib Diisi!.',
+            ]
+        );
 
         $data = [
-            'skor' => $request->skor,
-            'ranking' => $request->ranking,
-            'status' => $request->status,
+            'namaMhs' => $request->input('namaMhs'),
+            'nim' => $request->input('nim'),
+            'id_kelas' => $request->id_kelas,
+            'id_semester' => $request->id_semester,
+            'skorKarya' => $request->input('skorKarya'),
+            'skorUjian' => $request->input('skorUjian'),
+            'ranking' => $request->input('ranking'),
+            'status' => $request->input('status'),
         ];
 
         DataPeringkat::create($data);
+
         return redirect()->route('admin.master.peringkat')->with('success', 'Data Berhasil Ditambah');
     }
 
@@ -80,21 +95,35 @@ class DataPeringkatController extends Controller
     public function tampiledit($kdperingkat)
     {
         $peringkat = DataPeringkat::where('kdperingkat', $kdperingkat)->firstOrFail();
-        return view('admin.master.peringkat.edit', compact('peringkat'));
+
+        $kelas = Kelas::all();
+        $semester = Semester::all();
+
+        return view('admin.master.peringkat.edit', compact('peringkat', 'kelas', 'semester'));
     }
 
     public function editdata(Request $request, $kdperingkat)
     {
+        $peringkat = DataPeringkat::where('kdperingkat', $kdperingkat)->firstOrFail();
+
         $request->validate([
-            'skor' => 'required',
+            'namaMhs' => 'required',
+            'nim' => 'required',
+            'id_kelas' => 'required',
+            'id_semester' => 'required',
+            'skorKarya' => 'required',
+            'skorUjian' => 'required',
             'ranking' => 'required',
             'status' => 'required',
         ]);
 
-        $peringkat = DataPeringkat::where('kdperingkat', $kdperingkat)->firstOrFail();
-
         $data = [
-            'skor' => $request->skor,
+            'namaMhs' => $request->namaMhs,
+            'nim' => $request->nim,
+            'id_kelas' => $request->id_kelas,
+            'id_semester' => $request->id_semester,
+            'skorKarya' => $request->skorKarya,
+            'skorUjian' => $request->skorUjian,
             'ranking' => $request->ranking,
             'status' => $request->status,
         ];
@@ -115,16 +144,16 @@ class DataPeringkatController extends Controller
         return redirect()->route('admin.master.peringkat')->with('success', 'Data Berhasil Dihapus!.');
     }
 
-    // // Status
-    // public function updateStatus(Request $request)
-    // {
-    //     $perpusId = $request->input('kdperpus');
-    //     $isChecked = $request->has('status') ? 'Ditampilkan' : 'Tidak Ditampilkan';
+    // Status
+    public function updateStatus(Request $request)
+    {
+        $peringkatId = $request->input('kdperingkat');
+        $isChecked = $request->has('status') ? 'Ditampilkan' : 'Tidak Ditampilkan';
 
-    //     $perpus = DataPerpustakaan::findorFail($perpusId);
-    //     $perpus->status = $isChecked;
-    //     $perpus->save();
+        $peringkat = DataPeringkat::findorFail($peringkatId);
+        $peringkat->status = $isChecked;
+        $peringkat->save();
 
-    //     return redirect()->back()->with('status', 'Status Berhasil Diubah');
-    // }
+        return redirect()->back()->with('status', 'Status Berhasil Diubah');
+    }
 }
