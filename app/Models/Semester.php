@@ -37,4 +37,9 @@ class Semester extends Model
     {
         return $this->hasMany(DataPeringkat::class, 'id_semester', 'id');
     }
+
+    public function ujian()
+    {
+        return $this->hasMany(Ujian::class, 'id_semester', 'id');
+    }
 }

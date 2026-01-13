@@ -7,162 +7,158 @@ use App\Models\DataVideo;
 use App\Models\Kelas;
 use App\Models\Semester;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class VideoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    // Tampilkan semua video (dengan relasi user)
     public function index()
     {
-        $video = DataVideo::all();
+        $video = DataVideo::with(['user']) // penting buat badge "Video Saya"
+            ->latest()
+            ->paginate(12);
 
         return view('user.menu.video_tutorial.index', compact('video'));
     }
 
-    // Cari
+    // AJAX Search + Pagination
     public function cariData(Request $request)
     {
-        if ($request->ajax()) {
-            $query = $request->input('query');
+        if (!$request->ajax()) abort(400);
 
-            $video = DataVideo::where('kdvideo', 'like', "%$query%")
-                ->orWhere('judul', 'like', "%$query%")
-                ->orWhere('deskripsi', 'like', "%$query%")
-                ->orWhere('link', 'like', "%$query%")
-                ->orWhere('judulFileAsli', 'like', "%$query%")
-                ->get();
+        $query = $request->get('query', '');
 
-            return response()->json($video);
-        }
+        $video = DataVideo::with('user') // INI YANG WAJIB DITAMBAH!!!
+            ->when($query !== '', function ($q) use ($query) {
+                $q->where('judul', 'like', "%{$query}%")
+                    ->orWhere('deskripsi', 'like', "%{$query}%")
+                    ->orWhere('link', 'like', "%{$query}%");
+            })
+            ->latest()
+            ->paginate(12);
 
-        return redirect()->route('user.video.index');
+        $video->appends(['query' => $query]);
+
+        return view('user.menu.video_tutorial.components.grid', compact('video'));
     }
 
-    // Tambah Data
+    // Form Tambah
     public function tampildata()
     {
-        $kelas = Kelas::all();
-        $semester = Semester::all();
+        // Kalau butuh kelas/semester nanti aktifkan lagi
+        // $kelas    = Kelas::all();
+        // $semester = Semester::all();
 
-        return view('user.menu.video_tutorial.tambah', compact('kelas', 'semester'));
+        return view('user.menu.video_tutorial.tambah');
     }
 
+    // Simpan Video Baru → WAJIB simpan user_id!
     public function tambahdata(Request $request)
     {
         $request->validate([
-            'judul' => 'required',
-            'deskripsi' => 'required',
-            'link' => 'required',
-            'fileVideo' => 'file|max:51200',
-        ], [
-            'judul.required' => 'Judul Wajib Diisi!',
-            'deskripsi.required' => 'Deskripsi Wajib Diisi!',
-            'link.required' => 'link Tidak Wajib Diisi!',
-            'fileVideo.required' => 'FileVideo Wajib Diisi!',
+            'judul'     => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'link'      => 'required|url',
+            'fileVideo' => 'nullable|mimes:mp4,mov,avi,wmv,webm|max:102400', // max 100MB
         ]);
 
-        $mdl = null;
-        $judulAsli = null;
+        $filePath = null;
+        $originalName = null;
 
         if ($request->hasFile('fileVideo')) {
-            $file = $request->file('fileVideo');
-            $judulAsli = $file->getClientOriginalName();
-            $mdl = $file->store('fileVideo', 'public');
+            $filePath     = $request->file('fileVideo')->store('fileVideo', 'public');
+            $originalName = $request->file('fileVideo')->getClientOriginalName();
         }
 
-        $data = [
-            'judul' => $request->input('judul'),
-            'deskripsi' => $request->input('deskripsi'),
-            'link' => $request->input('link'),
-            'fileVideo' => $mdl ?? '',
-            'judulFileAsli' => $judulAsli,
-        ];
-
-        // dd($data);
-
-        DataVideo::create($data);
-
-        return redirect()->route('user.video.index')->with('success', 'Data Berhasil Ditambah');
-    }
-
-
-    // Edit Data
-    public function tampiledit($kdvideo)
-    {
-        $video = DataVideo::findOrFail($kdvideo);
-
-        $kelas = Kelas::all();
-        $semester = Semester::all();
-
-        return view('user.menu.video_tutorial.edit', compact('video', 'kelas', 'semester'));
-    }
-
-    public function editdata(Request $request, $kdvideo)
-    {
-        $request->validate([
-            'judul' => 'required',
-            'deskripsi' => 'required',
-            'link' => 'required',
-            'fileVideo' => 'file|max:51200',
-        ], [
-            'judul.required' => 'Judul Wajib Diisi!',
-            'deskripsi.required' => 'Deskripsi Wajib Diisi!',
-            'link.required' => 'link Tidak Wajib Diisi!',
-            'fileVideo.required' => 'FileVideo Wajib Diisi!',
+        DataVideo::create([
+            'judul'         => $request->judul,
+            'deskripsi'     => $request->deskripsi,
+            'link'          => $request->link,
+            'fileVideo'     => $filePath,
+            'judulFileAsli' => $originalName,
+            'user_id'       => Auth::id(), // INI YANG PALING PENTING!
         ]);
 
-        $video = DataVideo::findOrFail($kdvideo);
+        return redirect()
+            ->route('user.video.index')
+            ->with('success', 'Video berhasil diunggah!');
+    }
 
-        $mdl = $video->fileVideo;
-        $judulAsli = $video->judulFileAsli;
+    // Form Edit — hanya boleh edit punya sendiri
+    public function tampiledit($kdvideo)
+    {
+        $video = DataVideo::where('kdvideo', $kdvideo)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        return view('user.menu.video_tutorial.edit', compact('video'));
+    }
+
+    // Update Video — hanya pemilik yang boleh
+    public function editdata(Request $request, $kdvideo)
+    {
+        $video = DataVideo::where('kdvideo', $kdvideo)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $request->validate([
+            'judul'     => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'link'      => 'required|url',
+            'fileVideo' => 'nullable|mimes:mp4,mov,avi,wmv,webm|max:102400',
+        ]);
+
+        $filePath = $video->fileVideo;
 
         if ($request->hasFile('fileVideo')) {
-            // Hapus file lama jika ada
-            if ($mdl) {
-                Storage::disk('public')->delete($mdl);
+            // Hapus file lama
+            if ($filePath) {
+                Storage::disk('public')->delete($filePath);
             }
-
-            $file = $request->file('fileVideo');
-            $judulAsli = $file->getClientOriginalName();
-            $mdl = $file->store('fileVideo', 'public');
+            $filePath = $request->file('fileVideo')->store('fileVideo', 'public');
         }
 
         $video->update([
-            'judul' => $request->input('judul'),
-            'deskripsi' => $request->input('deskripsi'),
-            'link' => $request->input('link'),
-            'fileVideo' => $mdl,
-            'judulFileAsli' => $judulAsli,
+            'judul'         => $request->judul,
+            'deskripsi'     => $request->deskripsi,
+            'link'          => $request->link,
+            'fileVideo'     => $filePath,
+            'judulFileAsli' => $request->hasFile('fileVideo') ? $request->file('fileVideo')->getClientOriginalName() : $video->judulFileAsli,
         ]);
 
-        return redirect()->route('user.video.index')->with('success', 'Data Berhasil Diubah');
+        return redirect()
+            ->route('user.video.index')
+            ->with('success', 'Video berhasil diperbarui!');
     }
 
-    // Hapus Data
+    // Hapus Video — tambahkan pengecekan pemilik
     public function hapus($kdvideo)
     {
-        try {
-            $video = DataVideo::where('kdvideo', $kdvideo)->firstOrFail();
+        $video = DataVideo::where('kdvideo', $kdvideo)
+            ->where('user_id', Auth::id()) // HANYA BISA HAPUS PUNYA SENDIRI
+            ->firstOrFail();
 
+        try {
             if ($video->fileVideo) {
-                Log::info('File to be deleted: ' . $video->fileVideo);
-                if (Storage::disk('public')->delete($video->fileVideo)) {
-                    Log::info('File exits, attempting to delete');
-                    $deleted = Storage::disk('public')->delete($video->fileVideo);
-                    Log::info('Deletion result: ' . ($deleted ? 'Success' : 'Failed'));
-                } else {
-                    Log::warning('File does not exist in storage: ' . $video->fileVideo);
-                }
-            } else {
-                Log::warning('No fileVideo found for kdvideo: ' . $kdvideo);
+                Storage::disk('public')->delete($video->fileVideo);
             }
 
             $video->delete();
 
-            return redirect()->route('user.video.index')->with('success', 'Data Berhasil Dihapus');
+            return redirect()
+                ->route('user.video.index')
+                ->with('success', 'Video berhasil dihapus!');
         } catch (\Exception $e) {
-            Log::error('Error deleting video: ' . $e->getMessage());
-            return redirect()->route('user.video.index')->with('error', 'Gagal menghapus data atau file. Silahkan coba lagi.');
+            return redirect()
+                ->route('user.video.index')
+                ->with('error', 'Gagal menghapus video.');
         }
     }
 }

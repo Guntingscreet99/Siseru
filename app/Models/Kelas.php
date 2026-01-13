@@ -37,4 +37,11 @@ class Kelas extends Model
     {
         return $this->hasMany(DataPeringkat::class, 'id_kelas', 'id');
     }
+
+    public function ujian()
+    {
+        return $this->hasMany(Ujian::class, 'id_kelas', 'id');
+    }
+
+    
 }

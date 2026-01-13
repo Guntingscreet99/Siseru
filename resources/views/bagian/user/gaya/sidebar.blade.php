@@ -4,7 +4,7 @@
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
             <a href="{{ url('admin/dashboard') }}" class="logo">
-                <img src="{{ asset('admin/img/kaiadmin/logo_light.svg') }}" alt="navbar brand" class="navbar-brand"
+                <img src="{{ asset('landing/img/LogoRupaku.png') }}" alt="navbar brand" class="navbar-brand"
                     height="20" />
             </a>
             <div class="nav-toggle">
@@ -101,6 +101,7 @@
                                 </ul>
                             </div>
                         </li>
+                        
                         <!-- Data Menu Mahasiswa (Terpisah) -->
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#mahasiswa-collapse"

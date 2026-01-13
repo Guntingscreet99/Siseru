@@ -15,5 +15,18 @@ class DataPerpustakaan extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
+    protected $fillable = [
+        'judul',
+        'deskripsi',
+        'kategori',
+        'topik',
+        'tahun',
+        'status',
+        'filePerpus',
+        'judulFileAsli',
+        'cover',
+        'user_id',
+    ];
+
     // protected $fillable = ['judul', 'deskripsi', 'kategori', 'topik', 'tahun', 'filePerpus', 'status'];
 }

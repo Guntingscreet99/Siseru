@@ -5,13 +5,16 @@
     <div class="container">
         <div class="page-inner">
             <div class="guru">
-                <div class="judul">
-                    <h1>@yield('judul')</h1>
-                </div>
                 <div class="card">
+                    <div class="card-header bg-gradient-warning text-dark text-center">
+                        <h3 class="mb-0">
+                            <i class="fas fa-edit me-2"></i>
+                            Edit Video: {{ $video->judul }}
+                        </h3>
+                    </div>
                     <div class="card-body">
                         <!-- Button trigger modal -->
-                        <div class="mb-3" style="display: flex; justify-content: space-between">
+                        <div class="mb-4" style="display: flex; justify-content: space-between">
                             <div class="form-group">
                                 <a href="{{ url('user/menu/video') }}" class="btn btn-primary">
                                     <i class="fas fas fa-arrow-left"></i> Kembali
@@ -132,8 +135,9 @@
                                 </table>
                             </div>
                             <div class="modal-footer">
-                                {{-- <button type="button" class="btn btn-secondary" style="margin-right: 10px">Tutup</button> --}}
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
+                                    <i class="fas fa-save me-2"></i> Perbarui Video
+                                </button>
                             </div>
                         </form>
                     </div>

@@ -25,6 +25,11 @@ class DataKarya extends Model
         'deskripsi',
         'fileKarya',
         'judulFileAsli',
+        'skor_deskripsi',
+        'skor_analisis',
+        'skor_interpretasi',
+        'skor_penilaian',
+        'total_nilai'
     ];
 
     // Relasi ke User (penting banget buat cek "karya saya")

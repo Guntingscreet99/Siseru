@@ -13,9 +13,9 @@
                         <!-- Button trigger modal -->
                         <div class="mb-3" style="display: flex; justify-content: space-between">
                             <div class="form-group">
-                                <a href="{{ url('user/ujian/tampil') }}" class="btn btn-primary">
+                                {{-- <a href="{{ url('user/ujian/tampil') }}" class="btn btn-primary">
                                     <i class="fas fa-plus"></i> Tambah
-                                </a>
+                                </a> --}}
                                 {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahguru">
                                  <i class="fas fa-plus"></i> Tambah Data Agama
                             </button> --}}
@@ -39,7 +39,7 @@
                                         <th scope="col">Link</th>
                                         <th scope="col">Hasil</th>
                                         <th scope="col">File Ujian</th>
-                                        <th scope="col">Aksi</th>
+                                        {{-- <th scope="col">Aksi</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody id="ujian-body">
@@ -109,7 +109,7 @@
                                                         </div>
                                                     </form>
                                                 </td> --}}
-                                                <td>
+                                                {{-- <td>
                                                     <!-- Button trigger modal -->
                                                     <a href="{{ url('user/ujian/ubah/' . $item->kdujian) }}"
                                                         class="btn btn-warning">
@@ -119,7 +119,7 @@
                                                         data-bs-target="#Hapus{{ $item->kdujian }}">
                                                         <i class="fas fa-trash"> </i>Hapus
                                                     </button>
-                                                </td>
+                                                </td> --}}
                                             </tr>
                                         @endforeach
                                     @endif

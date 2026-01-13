@@ -4,10 +4,14 @@
 
     <div class="container">
         <div class="page-inner">
-            <div class="guru">
-                <div class="judul">
-                    <h1>@yield('judul')</h1>
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-gradient-primary text-dark text-center">
+                    <h3 class="mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Tambah Data Perpustakaan Baru
+                    </h3>
                 </div>
+
                 <div class="card">
                     <div class="card-body">
                         <!-- Button trigger modal -->
@@ -82,6 +86,15 @@
                                                 </select>
                                             </div>
                                         </div> --}}
+                                        <div class="col-lg-6 mb-4">
+                                            <label class="form-label fw-bold text-primary">
+                                                <i class="fas fa-image me-2"></i>Cover Buku <small
+                                                    class="text-muted">(Opsional, rekomendasi 1:1)</small>
+                                            </label>
+                                            <input type="file" name="cover" class="form-control form-control-lg"
+                                                accept="image/*">
+                                            <div class="form-text">Format: JPG, PNG, WebP (max 2MB)</div>
+                                        </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label for="">Deskripsi</label>
@@ -93,8 +106,9 @@
                                 </table>
                             </div>
                             <div class="modal-footer">
-                                {{-- <button type="button" class="btn btn-secondary" style="margin-right: 10px">Tutup</button> --}}
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
+                                    <i class="fas fa-save me-2"></i> Simpan Perpustakaan
+                                </button>
                             </div>
                         </form>
                     </div>

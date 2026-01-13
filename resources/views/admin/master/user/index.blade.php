@@ -27,22 +27,28 @@
                                         <th scope="col">No</th>
                                         <th scope="col">Nama</th>
                                         <th scope="col">Nim</th>
-                                        <th scope="col">Jenis Kelamin</th>
+                                        <th scope="col">No HP</th>
+                                        <th scope="col">Password</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="modul-body">
                                     @if ($mahasiswa->isEmpty())
                                         <tr>
-                                            <td colspan="4" class="text-center">Data Masih Kosong</td>
+                                            <td colspan="6" class="text-center">Data Masih Kosong</td>
                                         </tr>
                                     @else
                                         @foreach ($mahasiswa as $item)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->nama_mahasiswa }}</td>
+                                                <td>{{ $mahasiswa->firstItem() + $loop->index }}</td>
+                                                <td>{{ $item->nama_lengkap }}</td>
                                                 <td>{{ $item->nim }}</td>
-                                                <td>{{ $item->jenisKelamin }}</td>
+                                                <td>{{ $item->no_hp }}</td>
+                                                <td>
+                                                    <span class="badge bg-secondary">
+                                                        {{ $item->password_plain ?? '-' }}
+                                                    </span>
+                                                </td>
                                                 <td>
                                                     <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                                                         data-bs-target="#edit{{ $item->id }}">
@@ -58,6 +64,9 @@
                                     @endif
                                 </tbody>
                             </table>
+                            <div class="halaman mt-2">
+                                {{ $mahasiswa->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>

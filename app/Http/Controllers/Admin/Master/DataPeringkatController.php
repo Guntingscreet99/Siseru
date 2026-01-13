@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Master;
 use App\Http\Controllers\Controller;
 use App\Models\DataPeringkat;
 use App\Models\Kelas;
+use App\Models\RekapNilai;
 use App\Models\Semester;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -12,12 +13,77 @@ use Illuminate\Support\Facades\Storage;
 
 class DataPeringkatController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $peringkat = DataPeringkat::all();
-        // dd($peringkat);
-        return view('admin.master.peringkat.index', compact('peringkat'));
+        $kelasId    = $request->kelas_id;
+        $semesterId = $request->semester_id;
+        $nilaiHuruf = $request->nilai;
+
+        $kelas    = Kelas::all();
+        $semester = Semester::all();
+
+        /**
+         * ============================
+         * AMBIL DATA REKAP
+         * ============================
+         */
+        $rangking = RekapNilai::with(['kelas', 'semester'])
+            ->when($kelasId, function ($q) use ($kelasId) {
+                $q->where('id_kelas', $kelasId);
+            })
+            ->when($semesterId, function ($q) use ($semesterId) {
+                $q->where('id_semester', $semesterId);
+            })
+            // ->orderByDesc('nilai_angka') // KUNCI PERINGKAT
+            ->get();
+
+        $rangking = $rangking->sortByDesc(function ($item) {
+            return $item->nilai_angka;
+        })->values();
+
+        /**
+         * ============================
+         * FILTER NILAI HURUF (OPSIONAL)
+         * ============================
+         */
+        if ($nilaiHuruf && $nilaiHuruf !== 'semua') {
+            $rangking = $rangking->filter(function ($item) use ($nilaiHuruf) {
+                return optional($item->grade)->huruf === $nilaiHuruf;
+            })->values();
+        }
+
+        /**
+         * ============================
+         * HITUNG PERINGKAT
+         * ============================
+         */
+        $peringkat = 1;
+        $lastScore = null;
+
+        $rangking->transform(function ($item, $index) use (&$peringkat, &$lastScore) {
+            if ($lastScore !== null && $item->nilai_angka < $lastScore) {
+                $peringkat = $index + 1;
+            }
+
+            $item->peringkat = $peringkat;
+            $lastScore = $item->nilai_angka;
+
+            return $item;
+        });
+
+        return view('admin.master.peringkat.index', compact(
+            'rangking',
+            'kelas',
+            'semester'
+        ));
     }
+
+    // public function index()
+    // {
+    //     $peringkat = DataPeringkat::all();
+    //     // dd($peringkat);
+    //     return view('admin.master.peringkat.index', compact('peringkat'));
+    // }
 
     // Cari
     public function cari(Request $request)

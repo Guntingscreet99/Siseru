@@ -15,7 +15,8 @@ class UserController extends Controller
         $entries = $request->input('entries', 10);
         $page = $request->input('page', 1);
 
-        $query = User::orderBy('id', 'asc');
+        $query = User::orderBy('id', 'asc')
+            ->where('role', 'mahasiswa');
 
         if ($search) {
             $query->where('nama_mahasiswa', 'LIKE', "%{$search}%")
@@ -26,7 +27,9 @@ class UserController extends Controller
         $mahasiswa = $query->paginate($entries, ['*'], 'page', $page);
         $mahasiswa->append(['search' => $search, 'entries' => $entries]);
 
-        return view('admin.master.user.index', compact('search', 'entries', 'semester'));
+        // dd($mahasiswa);
+
+        return view('admin.master.user.index', compact('search', 'mahasiswa', 'entries'));
     }
 
     public function tambah(Request $request)

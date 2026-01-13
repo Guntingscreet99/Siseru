@@ -15,6 +15,21 @@ class DataVideo extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
+    protected $fillable = [
+        'judul',
+        'deskripsi',
+        'link',
+        'fileVideo',
+        'judulFileAsli',
+        'user_id',
+    ];
+
+    // RELASI USER – INI YANG WAJIB ADA!!!
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     // protected $fillable = ['judul', 'deskripsi', 'link', 'fileVideo', 'status']; // Pastikan field ini ada di DB
 
 

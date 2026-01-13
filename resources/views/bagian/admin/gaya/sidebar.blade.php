@@ -3,10 +3,21 @@
     <div class="sidebar-logo">
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
-            <a href="{{ url('admin/dashboard') }}" class="logo">
-                <img src="{{ asset('admin/img/kaiadmin/logo_light.svg') }}" alt="navbar brand" class="navbar-brand"
-                    height="20" />
-            </a>
+            @if (Auth::check())
+                @if (Auth::user()->role == 'admin')
+                    <a href="{{ url('admin/dashboard') }}" class="logo">
+                        <a class="navbar-brand d-flex align-items-center" href="{{ url('admin/dashboard') }}">
+                            <img src="{{ asset('landing/img/TeksRupaku.png') }}" alt="Teks Rupaku" height="200" />
+                        </a>
+                    </a>
+                @elseif (Auth::user()->role == 'mahasiswa')
+                    <a href="{{ url('mahasiswa/dashboard') }}" class="logo">
+                        <a class="navbar-brand d-flex align-items-center" href="{{ url('mahasiswa/dashboard') }}">
+                            <img src="{{ asset('landing/img/TeksRupaku.png') }}" alt="Teks Rupaku" height="200" />
+                        </a>
+                    </a>
+                @endif
+            @endif
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
                     <i class="gg-menu-right"></i>
@@ -27,7 +38,7 @@
                 @if (Auth::check())
                     @if (Auth::user()->role == 'admin')
                         <li class="nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
-                            <a href="{{ url('admin/dashboard') }}">
+                            <a href="{{ route('admin.dashboard') }}">
                                 <i class="fas fa-home"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -105,7 +116,7 @@
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#mahasiswa-collapse"
                                 class="{{ request()->is('admin/master-modul', 'admin/master/dataforum', 'admin/master/datakarya', 'admin/master/ujian') ? 'active' : '' }}">
-                                <i class="fas fa-list"></i>
+                                <i class="fa-solid fa-user"></i>
                                 <p>Data Menu Mahasiswa</p>
                                 <span class="caret"></span>
                             </a>
@@ -127,8 +138,8 @@
                                             <span class="sub-item">Data Karya Mahasiswa</span>
                                         </a>
                                     </li>
-                                    <li class="{{ request()->is('admin/master/dataujian') ? 'active' : '' }}">
-                                        <a href="{{ url('admin/master/dataujian') }}">
+                                    <li class="{{ request()->is('admin/master/ujian') ? 'active' : '' }}">
+                                        <a href="{{ url('admin/master/ujian') }}">
                                             <span class="sub-item">Data Ujian/Evaluasi</span>
                                         </a>
                                     </li>
@@ -143,43 +154,33 @@
                             <h4 class="text-section">Rekap Data User</h4>
                         </li>
                         <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#base-collapse"
-                                class="{{ request()->is('admin/master/kelas', 'admin/master/semester', 'admin/master/akun') ? 'active' : '' }}">
-                                <i class="fa-solid fa-user"></i>
-                                <p>Data User</p>
+                            <a data-bs-toggle="collapse" href="#rekap-collapse"
+                                class="{{ request()->is('admin/rekap-index/', 'admin/rekap-diskusi/', 'admin/rekap-karya') ? 'active' : '' }}">
+                                <i class="fa-solid fa-file-lines"></i>
+                                <p>Data Rekap</p>
                                 <span class="caret"></span>
                             </a>
-                            <div class="collapse {{ request()->is('admin/master/', 'admin/master/semester', 'admin/master/akun') ? 'show' : '' }}"
-                                id="base-collapse" data-bs-parent="">
+                            <div class="collapse {{ request()->is('admin/rekap-index/', 'admin/rekap-diskusi/', 'admin/rekap-karya') ? 'show' : '' }}"
+                                id="rekap-collapse" data-bs-parent="">
                                 <ul class="nav nav-collapse">
-                                    <li class="{{ request()->is('admin/forum/rekap-download/') ? 'active' : '' }}">
-                                        <a href="{{ url('admin/forum/rekap-download/') }}">
-                                            <span class="sub-item">Data Forum Diskusi</span>
+                                    <li class="{{ request()->is('admin/rekap-index/') ? 'active' : '' }}">
+                                        <a href="{{ url('admin/rekap-index/') }}">
+                                            <span class="sub-item">Rekap Data</span>
                                         </a>
                                     </li>
-                                    <li class="{{ request()->is('admin/master/semester') ? 'active' : '' }}">
-                                        <a href="{{ url('admin/master/semester') }}">
-                                            <span class="sub-item">Data Galeri Karya</span>
+                                    <li class="{{ request()->is('admin/rekap-diskusi/') ? 'active' : '' }}">
+                                        <a href="{{ url('admin/rekap-diskusi/') }}">
+                                            <span class="sub-item">Rekap Diskusi</span>
                                         </a>
                                     </li>
-                                    <li class="{{ request()->is('admin/master/akun') ? 'active' : '' }}">
-                                        <a href="{{ url('admin/master/akun') }}">
-                                            <span class="sub-item">Data Modul Belajar</span>
+                                    <li class="{{ request()->is('admin/rekap-karya') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.rekap.karya') }}">
+                                            <span class="sub-item">Rekap Karya</span>
                                         </a>
                                     </li>
-                                    <li class="{{ request()->is('admin/master/akun') ? 'active' : '' }}">
-                                        <a href="{{ url('admin/master/akun') }}">
-                                            <span class="sub-item">Ujian & Evaluasi</span>
-                                        </a>
-                                    </li>
-                                    <li class="{{ request()->is('admin/master/akun') ? 'active' : '' }}">
-                                        <a href="{{ url('admin/master/akun') }}">
-                                            <span class="sub-item">Perpustakaan Digital</span>
-                                        </a>
-                                    </li>
-                                    <li class="{{ request()->is('admin/master/akun') ? 'active' : '' }}">
-                                        <a href="{{ url('admin/master/akun') }}">
-                                            <span class="sub-item">Peringkat</span>
+                                    <li class="{{ request()->is('#') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.rekap.ujian') }}">
+                                            <span class="sub-item">Rekap Ujian</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -263,6 +264,14 @@
                             <a href="{{ url('user/menu/modul') }}">
                                 <i class="fas fa-book-open"></i>
                                 <p>Modul Belajar</p>
+                            </a>
+                        </li>
+
+                        <!-- Zoom -->
+                        <li class="nav-item {{ request()->is('user/menu/zoom') ? 'active' : '' }}">
+                            <a href="{{ url('user/menu/zoom') }}">
+                                <i class="fas fa-video"></i>
+                                <p>Kelas Interaktif</p>
                             </a>
                         </li>
 

@@ -2,14 +2,22 @@
 @section('judul', 'Update Data Diri')
 @section('isi')
 
+    @php
+        $fotoPath = $user->datadiri?->fotoMhs
+            ? asset('storage/' . $user->datadiri->fotoMhs)
+            : asset('admin/img/profile.jpg');
+    @endphp
+
     <div class="container">
         <div class="page-inner">
             <div class="guru">
                 <div class="judul">
                     <h1>@yield('judul')</h1>
                 </div>
+
                 <div class="card">
                     <div class="card-body">
+
                         <div class="mb-3" style="display: flex; justify-content: space-between">
                             <div class="form-group">
                                 <a href="{{ url('mahasiswa/dashboard') }}" class="btn btn-primary">
@@ -17,177 +25,156 @@
                                 </a>
                             </div>
                         </div>
+
                         <form class="pt-3" method="POST" action="{{ url('mahasiswa/data-diri/simpan/' . $user->id) }}"
-                            enctype="multipart/form-data" method="POST">
+                            enctype="multipart/form-data">
                             @csrf
+
                             <div class="card-body">
-                                <div class="d-flex flex-column flex-md-row align-items-center gap-4">
-                                    <!-- Area Pratinjau Foto -->
+
+                                <!-- ================= FOTO ================= -->
+                                <div class="d-flex flex-column flex-md-row align-items-center gap-4 mb-4">
+
                                     <div class="text-center">
-                                        <img src="{{ asset('admin/img/profile.jpg') }}" alt="Foto Profil"
+                                        <img src="{{ $fotoPath }}" alt="Foto Profil"
                                             class="rounded-circle shadow-sm img-fluid"
                                             style="width: 120px; height: 120px; object-fit: cover;" id="previewFoto">
                                     </div>
-                                    <!-- Area Input dan Tombol -->
+
                                     <div class="d-flex flex-column align-items-start">
                                         <label class="btn btn-info mb-3 d-flex align-items-center gap-2">
-                                            <i class="bi bi-upload"></i> <!-- Ikon Bootstrap Icons -->
+                                            <i class="bi bi-upload"></i>
                                             <span class="text-white">Unggah Foto</span>
                                             <input type="file" name="fotoMhs" id="fotoMhs" class="d-none"
                                                 accept="image/png, image/jpg, image/jpeg" onchange="previewFoto(event)">
                                         </label>
+
                                         <button type="button"
                                             class="btn btn-outline-secondary mb-3 d-flex align-items-center gap-2"
                                             onclick="resetFoto()">
-                                            <i class="bi bi-arrow-counterclockwise"></i> <!-- Ikon Reset -->
+                                            <i class="bi bi-arrow-counterclockwise"></i>
                                             Reset
                                         </button>
+
                                         <small class="text-muted mb-2">Format: JPEG, JPG, PNG. Maks. 2 MB</small>
+
                                         @error('fotoMhs')
                                             <span class="text-danger small">{{ $message }}</span>
                                         @enderror
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="">NIM</label>
-                                        <input type="text" class="form-control" name="nim" id="nim"
-                                            placeholder="nim" value="{{ $user->nim ?? '' }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="">Nama Lengkap</label>
-                                        <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap"
-                                            placeholder="Nama Lengkap" value="{{ $user->nama_lengkap ?? '' }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="">Email</label>
-                                        <input type="email" class="form-control" name="email" id="email"
-                                            value="{{ $user->email ?? '' }}" placeholder="@gmail.com">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="">No. Hp</label>
-                                        <input type="text" class="form-control" name="no_hp" id="no_hp"
-                                            value="{{ $user->no_hp ?? '' }}" placeholder="081......">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="">Tempat</label>
-                                        <input type="text" class="form-control" name="tempat" id="exampleInputTempat"
-                                            value="{{ $user->datadiri->tempat ?? '' }}" placeholder="Tempat Lahir">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="">Tanggal Lahir</label>
-                                        <input type="date" class="form-control" name="tgllahir"
-                                            value="{{ $user->datadiri->tgllahir ?? '' }}" id="exampleInputTanggalLahir">
-                                    </div>
-                                </div>
 
-                                @php
-                                    $data = $user->datadiri;
-                                    $isFirstTime =
-                                        !$data ||
-                                        is_null($data->jenisKelamin) ||
-                                        is_null($data->id_kelas) ||
-                                        is_null($data->id_semester);
-                                @endphp
-
-                                <!-- Jenis Kelamin -->
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Jenis Kelamin {!! $isFirstTime ? '<span class="text-danger">*</span>' : '' !!}</label>
-                                        <select name="jenisKelamin" id="jenisKelamin"
-                                            class="form-control @error('jenisKelamin') is-invalid @enderror" required>
-                                            <option value="">-- Pilih Jenis Kelamin --</option>
-                                            <option value="Laki-laki"
-                                                {{ old('jenisKelamin', $data?->jenisKelamin) == 'Laki-laki' ? 'selected' : '' }}>
-                                                Laki-laki</option>
-                                            <option value="Perempuan"
-                                                {{ old('jenisKelamin', $data?->jenisKelamin) == 'Perempuan' ? 'selected' : '' }}>
-                                                Perempuan</option>
-                                        </select>
-                                        @error('jenisKelamin')
-                                            <div class="text-danger small">{{ $message }}</div>
-                                        @enderror
-                                    </div>
                                 </div>
+                                <!-- ================= END FOTO ================= -->
 
-                                <!-- Kelas -->
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Kelas {!! $isFirstTime ? '<span class="text-danger">*</span>' : '' !!}</label>
-                                        <select name="id_kelas" id="id_kelas"
-                                            class="form-control @error('id_kelas') is-invalid @enderror" required>
-                                            <option value="">-- Pilih Kelas --</option>
-                                            @foreach ($kelas as $item)
-                                                <option value="{{ $item->id }}"
-                                                    {{ old('id_kelas', $data?->id_kelas) == $item->id ? 'selected' : '' }}>
-                                                    {{ $item->nama_kelas }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('id_kelas')
-                                            <div class="text-danger small">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
 
-                                <!-- Semester -->
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Semester {!! $isFirstTime ? '<span class="text-danger">*</span>' : '' !!}</label>
-                                        <select name="id_semester" id="id_semester"
-                                            class="form-control @error('id_semester') is-invalid @enderror" required>
-                                            <option value="">-- Pilih Semester --</option>
-                                            @foreach ($semester as $item)
-                                                <option value="{{ $item->id }}"
-                                                    {{ old('id_semester', $data?->id_semester) == $item->id ? 'selected' : '' }}>
-                                                    {{ $item->nama_semester }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('id_semester')
-                                            <div class="text-danger small">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-
-                                <!-- Alert khusus pertama kali isi -->
-                                @if ($isFirstTime)
-                                    <div class="col-12 mb-3">
-                                        <div class="alert alert-info">
-                                            <i class="fas fa-info-circle"></i>
-                                            <strong>Perhatian:</strong> Harap lengkapi Jenis Kelamin, Kelas, dan Semester
-                                            terlebih dahulu.
-                                            Setelah disimpan, data ini tetap bisa diubah kapan saja.
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>NIM</label>
+                                            <input type="text" class="form-control" name="nim"
+                                                value="{{ $user->nim ?? '' }}">
                                         </div>
                                     </div>
-                                @endif
 
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="">Alamat</label>
-                                        <textarea class="form-control @error('alamat') is-invalid @enderror" name="alamat" id="alamat" cols="30"
-                                            rows="5" placeholder="Masukkan Alamat">{{ $user->datadiri->alamat ?? '' }}</textarea>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Nama Lengkap</label>
+                                            <input type="text" class="form-control" name="nama_lengkap"
+                                                value="{{ $user->nama_lengkap ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="email" class="form-control" name="email"
+                                                value="{{ $user->email ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>No. Hp</label>
+                                            <input type="text" class="form-control" name="no_hp"
+                                                value="{{ $user->no_hp ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Tempat</label>
+                                            <input type="text" class="form-control" name="tempat"
+                                                value="{{ $user->datadiri->tempat ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Tanggal Lahir</label>
+                                            <input type="date" class="form-control" name="tgllahir"
+                                                value="{{ $user->datadiri->tgllahir ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    @php
+                                        $data = $user->datadiri;
+                                        $isFirstTime =
+                                            !$data ||
+                                            is_null($data->jenisKelamin) ||
+                                            is_null($data->id_kelas) ||
+                                            is_null($data->id_semester);
+                                    @endphp
+
+                                    <div class="col-md-4">
+                                        <label>Jenis Kelamin</label>
+                                        <select name="jenisKelamin" class="form-control" required>
+                                            <option value="">-- Pilih --</option>
+                                            <option value="Laki-laki"
+                                                {{ $data?->jenisKelamin == 'Laki-laki' ? 'selected' : '' }}>Laki-laki
+                                            </option>
+                                            <option value="Perempuan"
+                                                {{ $data?->jenisKelamin == 'Perempuan' ? 'selected' : '' }}>Perempuan
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label>Kelas</label>
+                                        <select name="id_kelas" class="form-control" required>
+                                            @foreach ($kelas as $k)
+                                                <option value="{{ $k->id }}"
+                                                    {{ $data?->id_kelas == $k->id ? 'selected' : '' }}>
+                                                    {{ $k->nama_kelas }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label>Semester</label>
+                                        <select name="id_semester" class="form-control" required>
+                                            @foreach ($semester as $s)
+                                                <option value="{{ $s->id }}"
+                                                    {{ $data?->id_semester == $s->id ? 'selected' : '' }}>
+                                                    {{ $s->nama_semester }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-12 mt-3">
+                                        <label>Alamat</label>
+                                        <textarea class="form-control" name="alamat">{{ $data->alamat ?? '' }}</textarea>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <button type="submit" class="btn btn-warning">Simpan</button>
                                     </div>
                                 </div>
-                                <div class="mt-3">
-                                    <button type="submit"
-                                        class="btn btn-warning btn-lg font-weight-medium auth-form-btn">Simpan
-                                    </button>
-                                </div>
+
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -196,8 +183,11 @@
 
 @endsection
 
+
 @push('js')
     <script>
+        const defaultFoto = "{{ asset('admin/img/profile.jpg') }}";
+
         function previewFoto(event) {
             const input = event.target;
             const preview = document.getElementById('previewFoto');
@@ -212,9 +202,8 @@
         }
 
         function resetFoto() {
-            const preview = document.getElementById('previewFoto');
-            preview.src = "{{ asset('admin/img/profile.jpg') }}"; // Kembalikan ke gambar default
-            document.getElementById('foto').value = ''; // Reset input file
+            document.getElementById('previewFoto').src = defaultFoto;
+            document.getElementById('fotoMhs').value = "";
         }
     </script>
 @endpush

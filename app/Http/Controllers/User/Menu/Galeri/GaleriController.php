@@ -18,36 +18,32 @@ class GaleriController extends Controller
         $this->middleware('auth');
     }
 
-    // INDEX GALERI - route: user/menu/galeri
     public function index()
     {
-        $karya = DataKarya::with(['kelas', 'semester', 'user'])->latest()->get();
-
-        // dd($karya);
-
+        $karya = DataKarya::with(['kelas', 'semester', 'user'])->latest()->paginate(12);
         return view('user.menu.galeri_karya.index', compact('karya'));
     }
 
-    // LIVE SEARCH - route: user/galeri/cari
     public function cariData(Request $request)
     {
-        if ($request->ajax()) {
-            $query = $request->query('query');
+        if (!$request->ajax()) abort(400);
 
-            $karya = DataKarya::with(['kelas', 'semester', 'user'])
-                ->when($query, function ($q) use ($query) {
-                    return $q->where('namaKarya', 'like', "%{$query}%")
-                        ->orWhere('namaMhs', 'like', "%{$query}%")
-                        ->orWhereHas('kelas', fn($sq) => $sq->where('nama_kelas', 'like', "%{$query}%"))
-                        ->orWhereHas('semester', fn($sq) => $sq->where('nama_semester', 'like', "%{$query}%"));
-                })
-                ->latest()
-                ->get();
+        $query = $request->get('query', '');
 
-            return view('user.menu.galeri_karya.components.grid', compact('karya'))->render();
-        }
+        $karya = DataKarya::with(['kelas', 'semester', 'user'])
+            ->when($query !== '', function ($q) use ($query) {
+                $q->where('namaKarya', 'like', "%{$query}%")
+                    ->orWhere('namaMhs', 'like', "%{$query}%")
+                    ->orWhereHas('kelas', fn($sq) => $sq->where('nama_kelas', 'like', "%{$query}%"))
+                    ->orWhereHas('semester', fn($sq) => $sq->where('nama_semester', 'like', "%{$query}%"));
+            })
+            ->latest()
+            ->paginate(12);
 
-        abort(400);
+        $karya->appends(['query' => $query]);
+
+        // Pakai partial biasa – tidak pakai fragment lagi
+        return view('user.menu.galeri_karya.components.grid', compact('karya'));
     }
 
     // TAMBAH DATA

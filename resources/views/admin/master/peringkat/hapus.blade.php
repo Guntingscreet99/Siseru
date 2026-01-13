@@ -1,5 +1,5 @@
 {{-- Modal hapus --}}
-@foreach ($peringkat as $item)
+@foreach ($rangking as $item)
     <div class="modal fade" id="Hapus{{ $item->kdperingkat }}" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">

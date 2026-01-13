@@ -12,6 +12,11 @@ use App\Http\Controllers\Admin\Master\DataVideoController;
 use App\Http\Controllers\Admin\Master\DataZoomController;
 use App\Http\Controllers\Admin\Master\Utama\KelasController;
 use App\Http\Controllers\Admin\Master\Utama\SemesterController;
+use App\Http\Controllers\Admin\Master\Utama\UserController;
+use App\Http\Controllers\Admin\Rekap\RekapDiskusiController;
+use App\Http\Controllers\Admin\Rekap\RekapKaryaController;
+use App\Http\Controllers\Admin\Rekap\RekapUjianController;
+use App\Http\Controllers\Admin\Rekap\RekapController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\LandingController;
@@ -21,10 +26,12 @@ use App\Http\Controllers\User\Menu\Forum\DiskusiController;
 use App\Http\Controllers\User\Menu\Galeri\GaleriController;
 use App\Http\Controllers\User\Menu\Modul\ModulController;
 use App\Http\Controllers\User\Menu\Forum\ForumController;
-use App\Http\Controllers\User\Menu\Ujian\UjianController;
 use App\Http\Controllers\User\Menu\Video\VideoController;
 use App\Http\Controllers\User\Perpustakaan\PerpusController;
 use App\Http\Controllers\User\Menu\Peringkat\PeringkatController;
+use App\Http\Controllers\User\Menu\Ujian\UjianController;
+use App\Http\Controllers\User\Menu\Zoom\ZoomController;
+use App\Http\Controllers\User\UserDasboardController;
 use App\Models\DataPerpustakaan;
 use App\Models\DataUjian;
 use Illuminate\Support\Facades\Route;
@@ -34,7 +41,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 // LANDING PAGE
-Route::get('/', [LandingController::class, 'index']);
+Route::get('/', [LandingController::class, 'index'])->name('landing.index');
 
 // LOGIN DAN REGISTER
 Route::get('login', [LoginController::class, 'login'])->name('login');
@@ -165,19 +172,20 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // MASTER UJIAN
     // INDEX
-    Route::get('admin/master/dataujian', [DataUjianController::class, 'index'])->name('admin.master.ujian');
+    Route::get('admin/master/ujian', [DataUjianController::class, 'index'])->name('admin.ujian.index');
     // TAMBAH
-    Route::get('admin/ujian/tampil', [DataUjianController::class, 'tampildata'])->name('admin.ujian.tampil');
-    Route::post('admin/ujian/tambah', [DataUjianController::class, 'tambahdata'])->name('admin.master.tambah');
+    Route::get('admin/ujian-tambah-tampil', [DataUjianController::class, 'tampildata'])->name('admin.ujian.tampil');
+    Route::post('admin/ujian-tambah', [DataUjianController::class, 'tambahdata'])->name('admin.ujian.tambah');
     // CARI
-    Route::get('admin/ujian/cari', [DataUjianController::class, 'cari'])->name('admin.ujian.cari');
+    Route::get('admin/ujian-cari', [DataUjianController::class, 'cari'])->name('admin.ujian.cari');
     // EDIT
-    Route::get('admin/ujian/ubah/{kdujian}', [DataUjianController::class, 'tampiledit'])->name('admin.ujian.edit-tampil');
-    Route::put('admin/ujian-edit/{kdujian}', [DataUjianController::class, 'editdata'])->name('admin.ujian.edit');
+    Route::get('admin/ujian/ubah/{ujian}', [DataUjianController::class, 'tampiledit'])->name('admin.ujian.edit-tampil');
+    Route::put('admin/ujian-edit/{ujian}', [DataUjianController::class, 'editdata'])->name('admin.ujian.edit');
     // HAPUS
-    Route::delete('admin/ujian-hapus/{kdujian}', [DataUjianController::class, 'hapus'])->name('admin.ujian.hapus');
+    Route::delete('admin/ujian-hapus/{ujian}', [DataUjianController::class, 'hapus'])->name('admin.ujian.hapus');
     // STATUS
     Route::post('admin/ujian/update-status', [DataUjianController::class, 'updateStatus'])->name('ujian.status');
+
 
     // MASTER PERINGKAT
     // INDEX
@@ -198,14 +206,45 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // REKAP FORUM
     Route::get('admin/forum/rekap/{kdforum}', [ForumController::class, 'lihatRekap'])->name('admin.forum.rekap');
     Route::get('admin/forum/rekap-download/{kdforum}', [ForumController::class, 'downloadRekap'])->name('admin.forum.rekap.download');
+    Route::get('admin/rekap-diskusi', [RekapDiskusiController::class, 'index'])->name('admin.rekap.diskusi');
+    Route::get('admin/rekap/forum', [RekapDiskusiController::class, 'index'])->name('admin.rekap.forum');
+
+    // REKAP DATA
+    Route::get('admin/rekap-index', [RekapController::class, 'index'])->name('admin.rekap.index');
+    Route::post('admin/rekap/generete', [RekapController::class, 'generateRekap'])->name('admin.rekap.generate');
+    Route::get('admin/rekap-export', [RekapController::class, 'export'])->name('rekap.export');
+
+
+    // REKAP KARYA
+    Route::get('/admin/rekap-karya', [App\Http\Controllers\Admin\Rekap\RekapKaryaController::class, 'index'])->name('admin.rekap.karya');
+    Route::get('/admin/rekap-karya/{kdkarya}/edit', [App\Http\Controllers\Admin\Rekap\RekapKaryaController::class, 'edit'])->name('admin.rekap.karya.edit');
+    Route::put('/admin/rekap-karya/{kdkarya}', [App\Http\Controllers\Admin\Rekap\RekapKaryaController::class, 'update'])->name('admin.rekap.karya.update');
+
+    // REKAP UJIAN
+    Route::prefix('admin')->middleware('auth')->group(function () {
+
+        Route::get('/rekap/ujian', [RekapUjianController::class, 'index'])
+            ->name('admin.rekap.ujian');
+
+        Route::post('/rekap/ujian/import', [RekapUjianController::class, 'import'])
+            ->name('admin.rekap.ujian.import');
+
+        Route::post('/rekap/ujian/format', [RekapUjianController::class, 'format'])
+            ->name('admin.rekap.format');
+
+        Route::delete('/rekap/ujian/{kdujian}', [RekapUjianController::class, 'destroy'])
+            ->name('admin.rekap.ujian.destroy');
+    });
+
+    Route::get('admin/master/akun', [UserController::class, 'index'])->name('admin.user.index');
 });
 
 Route::middleware(['auth', 'role:dosen'])->group(function () {
     Route::get('dosen/dashboard', [LandingController::class, 'dosen'])->name('dosen.dashboard');
 });
 
-Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
-    Route::get('mahasiswa/dashboard', [IndexController::class, 'index'])->name('mahasiswa.dashboard');
+Route::middleware(['auth', 'role:mahasiswa', 'mahasiswa.activity'])->group(function () {
+    Route::get('mahasiswa/dashboard', [UserDasboardController::class, 'index'])->name('mahasiswa.dashboard');
 
     // DATA DIRI
     Route::get('mahasiswa/data-diri', [DatadiriController::class, 'create'])->name('mahasiswa.data-diri');
@@ -237,7 +276,6 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
             ->name('user.galeri.hapus');
     });
 
-
     // Modul
     // INDEX
     Route::get('user/menu/modul', [ModulController::class, 'index'])->name('user.modul.index');
@@ -247,10 +285,10 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
     Route::get('user/menu/modul/tampil', [ModulController::class, 'tampildata'])->name('user.modul.tampil');
     Route::post('user/menu/modul/tambah', [ModulController::class, 'tambahdata'])->name('user.modul.tambah');
     // EDIT
-    Route::get('user/modul/ubah/{id}', [ModulController::class, 'tampiledit'])->name('user.modul.edit-tampil');
-    Route::put('user/modul-edit/{id}', [ModulController::class, 'editdata'])->name('user.modul.edit');
+    Route::get('user/modul/ubah/{kdmodul}', [ModulController::class, 'tampiledit'])->name('user.modul.edit-tampil');
+    Route::put('user/modul-edit/{kdmodul}', [ModulController::class, 'editdata'])->name('user.modul.edit');
     // HAPUS
-    Route::delete('user/modul-hapus/{id}', [ModulController::class, 'hapus'])->name('user.modul.hapus');
+    Route::delete('user/modul-hapus/{kdmodul}', [ModulController::class, 'hapus'])->name('user.modul.hapus');
 
     // FORUM
     // INDEX
@@ -312,14 +350,7 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
     Route::get('user/menu/ujian', [UjianController::class, 'index'])->name('user.ujian.index');
     // CARI
     Route::get('user/ujian/cari', [UjianController::class, 'cariData'])->name('user.ujian.cari');
-    // TAMBAH
-    Route::get('user/ujian/tampil', [UjianController::class, 'tampildata'])->name('user.ujian.tampil');
-    Route::post('user/ujian/tambah', [UjianController::class, 'tambahdata'])->name('user.ujian.tambah');
-    // EDIT
-    Route::get('user/ujian/ubah/{id}', [UjianController::class, 'tampiledit'])->name('user.ujian.edit-tampil');
-    Route::put('user/ujian-edit/{id}', [UjianController::class, 'editdata'])->name('user.ujian.edit');
-    // HAPUS
-    Route::delete('user/ujian-hapus/{id}', [UjianController::class, 'hapus'])->name('user.ujian.hapus');
+
 
     // PERPUSTAKAAN
     // INDEX
@@ -348,5 +379,21 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
     Route::put('user/peringkat-edit/{id}', [PeringkatController::class, 'editdata'])->name('user.peringkat.edit');
     // HAPUS
     Route::delete('user/peringkat-hapus/{id}', [PeringkatController::class, 'hapus'])->name('user.peringkat.hapus');
+
+    // ZOOM
+    // INDEX
+    Route::get('user/menu/zoom', [ZoomController::class, 'index'])->name('user.menu.zoom');
+    // CARI
+    Route::get('user/zoom/cari', [ZoomController::class, 'cari'])->name('user.zoom.cari');
+    // TAMBAH
+    Route::get('user/zoom/tampil', [ZoomController::class, 'tampildata'])->name('user.zoom.tampil');
+    Route::post('user/zoom/tambah', [ZoomController::class, 'tambahdata'])->name('user.zoom.tambah');
+    // EDIT
+    Route::get('user/zoom/ubah/{kdzoom}', [ZoomController::class, 'tampiledit'])->name('user.zoom.edit-tampil');
+    Route::put('user/zoom-edit/{kdzoom}', [ZoomController::class, 'editdata'])->name('user.zoom.edit');
+    // HAPUS
+    Route::delete('user/zoom-hapus/{kdzoom}', [ZoomController::class, 'hapus'])->name('user.zoom.hapus');
+    // STATUS
+    Route::post('user/zoom/update-status', [ZoomController::class, 'updateStatus'])->name('user.zoom.status');
 });
 // USER

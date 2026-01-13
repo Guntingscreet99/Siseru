@@ -44,23 +44,37 @@ class LoginController extends Controller
         ];
 
         if (Auth::attempt($credentials, $request->has('remember'))) {
-            $request->session()->regenerate();
-            $role = Auth::user()->role;
 
-            // Redirect berdasarkan peran
-            switch ($role) {
+            $request->session()->regenerate();
+
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+
+            // ✅ UPDATE STATUS HANYA UNTUK MAHASISWA
+            if ($user->role === 'mahasiswa') {
+                $user->update([
+                    'status' => 'B',
+                    'last_seen_at' => now(),
+                ]);
+            }
+
+            switch ($user->role) {
                 case 'admin':
                     return redirect()->route('admin.dashboard');
+
                 case 'dosen':
                     return redirect()->route('dosen.dashboard');
+
                 case 'mahasiswa':
-                    // Cek kelengkapan profil
-                    if (!Auth::user()->profile_completed) {
-                        return redirect()->route('mahasiswa.data-diri')->with('info', 'Silakan lengkapi data diri Anda terlebih dahulu.');
+                    if (!$user->profile_completed) {
+                        return redirect()
+                            ->route('mahasiswa.data-diri')
+                            ->with('info', 'Silakan lengkapi data diri Anda terlebih dahulu.');
                     }
                     return redirect()->route('mahasiswa.dashboard');
+
                 default:
-                    return redirect('/'); // Fallback
+                    return redirect('/');
             }
         } else {
             throw ValidationException::withMessages([
@@ -69,12 +83,21 @@ class LoginController extends Controller
         }
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if ($user && $user->role === 'mahasiswa') {
+            $user->update([
+                'status' => 'A',
+            ]);
+        }
+
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        // Tambahkan logika lain jika diperlukan, seperti menghapus sesi atau membersihkan cache.
-
-        return redirect('/'); // Ganti dengan URL yang sesuai setelah logout.
+        return redirect()->route('login');
     }
 }

@@ -19,9 +19,11 @@ return new class extends Migration
             $table->string('email')->unique()->nullable(); // Ubah menjadi nullable jika diizinkan
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('password_plain')->nullable();
             $table->string('no_hp')->unique();
             $table->string('role')->default('mahasiswa');
             $table->string('status')->default('A'); // Tambahkan default
+            $table->timestamp('last_seen_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

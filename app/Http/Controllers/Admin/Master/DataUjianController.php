@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin\Master;
 
 use App\Http\Controllers\Controller;
-use App\Models\DataUjian;
 use App\Models\Kelas;
 use App\Models\Semester;
-use Illuminate\Support\Facades\Log;
+use App\Models\Ujian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,156 +13,126 @@ class DataUjianController extends Controller
 {
     public function index()
     {
-        $ujian = DataUjian::all();
-        // dd($ujian);
-        return view('admin.master.ujian.index', compact('ujian'));
+        // dd($ujians = Ujian::all());
+
+        $ujians = Ujian::with('kelas', 'semester')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+
+        // dd($ujians);
+
+        return view('admin.master.ujian.index', compact('ujians'));
     }
 
-    // cari
-    public function cariData(Request $request)
+    public function cari(Request $request)
     {
         if ($request->ajax()) {
-            $query = $request->input('query');
+            $query = $request->get('query');
 
-            $ujian = DataUjian::where('kdujian', 'like', "%$query%")
-                ->orwhere('judul', 'like', "%$query%")
-                ->orwhere('deskripsi', 'like', "%$query%")
-                ->orwhere('link', 'like', "%$query%")
-                ->orwhere('hasil', 'like', "%$query%")
-                ->orwhere('status', 'like', "%$query%")
-                ->orwhere('judulFileAsli', 'like', "%$query%")
+            $ujians = Ujian::where(function ($q) use ($query) {
+                $q->where('ujian', 'like', "%{$query}%")
+                    ->orWhere('kelas', 'like', "%{$query}%")
+                    ->orWhere('semester', 'like', "%{$query}%")
+                    ->orWhere('status', 'like', "%{$query}%");
+            })
+                ->orderBy('created_at', 'desc')
                 ->get();
-            return response()->json($ujian);
+
+            return response()->json($ujians);
         }
 
-        return redirect()->route('admin.master.ujian');
+        return redirect()->route('admin.ujian.index');
     }
 
-    // Tambah Data
     public function tampildata()
     {
-        return view('admin.master.ujian.tambah');
+        $kelas = Kelas::all();
+        $semester = Semester::all();
+
+        return view('admin.master.ujian.tambah', compact('kelas', 'semester'));
     }
 
     public function tambahdata(Request $request)
     {
+        // dd($request->all());
+
         $request->validate([
-            'judul' => 'required',
-            'deskripsi' => 'required',
-            'link' => 'required',
-            'hasil' => 'required',
-            'status' => 'required',
-            'fileUjian' => 'nullable|file|max:20480',
-        ], [
-            'link.required' => 'link Wajib Diisi!.',
-            // 'hasil.required' => 'hasil Wajib Diisi!.',
+            'ujian'    => 'required|string|max:255',
+            'link'     => 'nullable|url',
+            'id_kelas'    => 'required',
+            'id_semester' => 'required',
+            'durasi_menit' => 'nullable|integer|min:1',
+            'waktu_mulai'  => 'nullable|date',
         ]);
 
-        $mdl = null;
-        $judulAsli = null;
-
-        if ($request->hasFile('fileUjian')) {
-            $file = $request->file('fileUjian');
-            $judulAsli = $file->getClientOriginalName();
-            $mdl = $file->store('fileUjian', 'public');
-        }
-
-        $data = [
-            'judul' => $request->input('judul'),
-            'deskripsi' => $request->input('deskripsi'),
-            'link' => $request->input('link'),
-            'hasil' => $request->input('hasil'),
-            'status' => $request->input('status'),
-            'fileUjian' => $mdl ?? '',
-            'judulFileAsli' => $judulAsli,
-        ];
-
-        DataUjian::create($data);
-
-        return redirect()->route('admin.master.ujian')->with('success', 'Data Behasil Ditambah');
-    }
-
-    // Edit Data
-    public function tampiledit($kdujian)
-    {
-        $ujian = DataUjian::where('kdujian', $kdujian)->firstOrFail();
-        return view('admin.master.ujian.edit', compact('ujian'));
-    }
-
-    public function editdata(Request $request, $kdujian)
-    {
-        $request->validate([
-            'judul' => 'required',
-            'deskripsi' => 'required',
-            'link' => 'required',
-            'hasil' => 'required',
-            'status' => 'required',
-            'fileUjian' => 'nullable|file|max:20480',
+        Ujian::create([
+            'ujian'         => $request->ujian,
+            'link'          => $request->link,
+            'id_kelas'         => $request->id_kelas,
+            'id_semester'      => $request->id_semester,
+            'durasi_menit'  => $request->durasi_menit,
+            'waktu_mulai'   => $request->waktu_mulai,
+            'status'        => 'Ditampilkan',
         ]);
 
-        $ujian = DataUjian::where('kdujian', $kdujian)->firstOrFail();
-
-        $data = [
-            'judul' => $request->input('judul'),
-            'deskripsi' => $request->input('deskripsi'),
-            'link' => $request->input('link'),
-            'hasil' => $request->input('hasil'),
-            'status' => $request->input('status'),
-        ];
-
-        if (!$request->has('gunakan_file_lama') && $request->hasFile('fileUjian')) {
-            if ($ujian->fileUjian) {
-                Storage::disk('public')->delete($ujian->fileUjian);
-            }
-
-            $file = $request->file('fileUjian');
-            $data['fileUjian'] = $file->store('fileUjian', 'public');
-            $data['judulFileAsli'] = $file->getClientOriginalName();
-        }
-
-        $ujian->update($data);
-
-        return redirect()->route('admin.master.ujian')->with('success', 'Data Berhasil Diubah!');
+        return redirect()
+            ->route('admin.ujian.index')
+            ->with('success', 'Ujian berhasil ditambahkan');
     }
 
-    // Hapus
-    public function hapus($kdujian)
+
+    public function tampiledit(Ujian $ujian)
     {
-        try {
-            $ujian = DataUjian::where('kdujian', $kdujian)->firstOrFail();
+        $kelas = Kelas::all();
+        $semester = Semester::all();
 
-            if ($ujian->fileUjian) {
-                Log::info('File to be deleted: ' . $ujian->fileUjian);
-                if (Storage::disk('public')->delete($ujian->fileUjian)) {
-                    Log::info('File exits, attempting to delete');
-                    $deleted = Storage::disk('public')->delete($ujian->fileUjian);
-                    Log::info('Deletion result: ' . ($deleted ? 'Success' : 'Failed'));
-                } else {
-                    Log::warning('File does not exist in storage: ' . $ujian->fileUjian);
-                }
-            } else {
-                Log::warning('No fileUjian found for kdujian: ' . $kdujian);
-            }
-
-            $ujian->delete();
-
-            return redirect()->route('user.ujian.index')->with('success', 'Data Berhasil Dihapus');
-        } catch (\Exception $e) {
-            Log::error('Error deleting ujian: ' . $e->getMessage());
-            return redirect()->route('admin.master.ujian')->with('error', 'Gagal menghapus data atau file. Silahkan coba lagi.');
-        }
+        return view('admin.master.ujian.edit', compact('ujian', 'kelas', 'semester'));
     }
 
-    // Status
+    public function editdata(Request $request, Ujian $ujian)
+    {
+        $request->validate([
+            'ujian'        => 'required|string|max:255',
+            'link'         => 'nullable|url',
+            'id_kelas'        => 'required|exists:kelas,id_kelas',
+            'id_semester'     => 'required|exists:semesters,id_semester',
+            'waktu_mulai'  => 'nullable|date',
+            'durasi_menit' => 'nullable|integer|min:1',
+        ]);
+
+        $ujian->update([
+            'ujian'        => $request->ujian,
+            'link'         => $request->link,
+            'id_kelas'        => $request->id_kelas,
+            'id_semester'     => $request->id_semester,
+            'waktu_mulai'  => $request->waktu_mulai,
+            'durasi_menit' => $request->durasi_menit,
+        ]);
+
+        return redirect()
+            ->route('admin.ujian.index')
+            ->with('success', 'Ujian berhasil diperbarui.');
+    }
+
+    public function hapus(Ujian $ujian)
+    {
+        if ($ujian->file_ujian && Storage::disk('public')->exists($ujian->file_ujian)) {
+            Storage::disk('public')->delete($ujian->file_ujian);
+        }
+
+        $ujian->delete();
+
+        return redirect()
+            ->route('admin.ujian.index')
+            ->with('success', 'Ujian berhasil dihapus.');
+    }
+
     public function updateStatus(Request $request)
     {
-        $ujianId = $request->input('kdujian');
-        $isChecked = $request->has('status') ? 'Ditampilkan' : 'Tidak Ditampilkan';
-
-        $ujian = DataUjian::findorFail($ujianId);
-        $ujian->status = $isChecked;
+        $ujian = Ujian::findOrFail($request->kdujian);
+        $ujian->status = $request->has('status') ? 'Ditampilkan' : 'Tidak Ditampilkan';
         $ujian->save();
 
-        return redirect()->back()->with('status', 'Status Berhasil Diubah!');
+        return redirect()->back()->with('success', 'Status berhasil diubah.');
     }
 }

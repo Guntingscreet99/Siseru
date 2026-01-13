@@ -1,28 +1,38 @@
-{{-- Modal hapus --}}
-@foreach ($video as $item)
-    <div class="modal fade" id="Hapus{{ $item->kdvideo }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Hapus Data Video</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+@if (auth()->id() === $video->user_id)
+    <div class="modal fade" id="hapusModal{{ $video->kdvideo }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Konfirmasi Hapus video
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="{{ url('user/video-hapus/' . $item->kdvideo) }}"method="POST"
-                    enctype="multipart/form-data">
+
+                <form action="{{ route('user.video.hapus', $video->kdvideo) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <div class="modal-body">
-                        <center>
-                            <h5 class="mt-2 mb-3">Apakah anda ingin menghapus data ini?</h5>
-                            <button type="submit" class="btn btn-danger ml-1">
-                                <i class="bx bx-check d-block d-sm-none"></i>
-                                <span class="d-none d-sm-block">Hapus</span>
-                            </button>
-                        </center>
+
+                    <div class="modal-body text-center py-5">
+                        <i class="fas fa-trash-alt text-danger mb-4" style="font-size: 4rem;"></i>
+                        <h5>Yakin ingin menghapus karya ini?</h5>
+                        <p class="text-muted">
+                            <strong>"{{ $video->namavideo }}"</strong><br>
+                            Tindakan ini <span class="text-danger">tidak dapat dibatalkan</span>.
+                        </p>
+                    </div>
+
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                            Batal
+                        </button>
+                        <button type="submit" class="btn btn-danger px-4">
+                            <i class="fas fa-trash me-2"></i> Ya, Hapus Permanen
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-@endforeach
+@endif

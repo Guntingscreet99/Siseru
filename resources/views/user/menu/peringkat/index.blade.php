@@ -13,9 +13,9 @@
                         <!-- Button trigger modal -->
                         <div class="mb-3" style="display: flex; justify-content: space-between">
                             <div class="form-group">
-                                <a href="{{ url('user/peringkat/tampil') }}" class="btn btn-primary">
+                                {{-- <a href="{{ url('user/peringkat/tampil') }}" class="btn btn-primary">
                                     <i class="fas fa-plus"></i> Tambah Data Peringkat
-                                </a>
+                                </a> --}}
                                 {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahguru">
                                  <i class="fas fa-plus"></i> Tambah Data Agama
                             </button> --}}
@@ -41,7 +41,7 @@
                                         <th scope="col">Skor Galeri Karya</th>
                                         <th scope="col">Skor Ujian</th>
                                         <th scope="col">Ranking</th>
-                                        <th scope="col">Aksi</th>
+                                        {{-- <th scope="col">Aksi</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody id="peringkat-body">
@@ -67,7 +67,7 @@
                                                     </a>
                                                 </td> --}}
 
-                                                <td>
+                                                {{-- <td>
                                                     <!-- Button trigger modal -->
                                                     <a href="{{ url('user/peringkat/ubah/' . $item->kdperingkat) }}"
                                                         class="btn btn-warning">
@@ -77,7 +77,7 @@
                                                         data-bs-target="#Hapus{{ $item->kdperingkat }}">
                                                         <i class="fas fa-trash"></i> Hapus
                                                     </button>
-                                                </td>
+                                                </td> --}}
                                             </tr>
                                         @endforeach
                                     @endif

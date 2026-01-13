@@ -4,180 +4,166 @@ namespace App\Http\Controllers\User\Menu\Modul;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataModul;
-use App\Models\Kelas;
-use App\Models\Semester;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ModulController extends Controller
 {
-    public function index()
+    public function __construct()
     {
-        $modul = DataModul::all();
+        $this->middleware('auth');
+    }
+
+    // ========================================
+    // INDEX + LIVE SEARCH
+    // ========================================
+    public function index(Request $request)
+    {
+
+        $query = $request->input('query');
+
+        $modul = DataModul::with(['kelas', 'semester', 'user'])
+            ->when($query, function ($q) use ($query) {
+                return $q->where('judul', 'like', "%{$query}%")
+                    ->orWhere('topik', 'like', "%{$query}%")
+                    ->orWhere('tahun', 'like', "%{$query}%")
+                    ->orWhereHas('kelas', fn($qq) => $qq->where('nama_kelas', 'like', "%{$query}%"))
+                    ->orWhereHas('semester', fn($qq) => $qq->where('nama_semester', 'like', "%{$query}%"));
+            })
+            ->latest()
+            ->paginate(20);
+
+        if ($request->ajax()) {
+            return view('user.menu.modul.components.grid', compact('modul'))->render();
+        }
 
         return view('user.menu.modul.index', compact('modul'));
     }
 
-    // Cari
-    public function cariData(Request $request)
-    {
-        if ($request->ajax()) {
-            $query = $request->input('query');
-
-            $modul = DataModul::where('id', 'like', "%$query%")
-                ->orWhere('judul', 'like', "%$query%")
-                ->orWhere('kelas', 'like', "%$query%")
-                ->orWhere('semester', 'like', "%$query%")
-                ->orWhere('topik', 'like', "%$query%")
-                ->orWhere('tahun', 'like', "%$query%")
-                ->orWhere('judulFileAsli', 'like', "%$query%")
-                ->get();
-
-            return response()->json($modul);
-        }
-
-        return redirect()->route('user.modul.index');
-    }
-
-    // Tambah Data
+    // ========================================
+    // FORM TAMBAH MODUL
+    // ========================================
     public function tampildata()
     {
-        $kelas = Kelas::all();
-        $semester = Semester::all();
-
-        return view('user.menu.modul.tambah', compact('kelas', 'semester'));
+        return view('user.menu.modul.tambah');
     }
 
     public function tambahdata(Request $request)
     {
-        $request->validate([
-            'judul' => 'required',
-            'id_kelas' => 'required',
-            'id_semester' => 'required',
-            'tahun' => 'required',
-            'topik' => 'required',
-            'fileModul' => 'file|max:20480',
 
-        ], [
-            'judul.required' => 'Judul Wajib Diisi!',
-            'id_kelas.required' => 'Kelas Wajib Diisi!',
-            'id_semester.required' => 'Semester Wajib Diisi!',
-            'tahun.required' => 'Tahun Wajib Diisi!',
-            'topik.required' => 'Topik Wajib Diisi!',
-            'fileModul.required' => 'File Modul Wajib Diisi!',
+        $user = Auth::user();
+
+        $request->validate([
+            'judul'     => 'required|string|max:255',
+            'tahun'     => 'required|digits:4|integer',
+            'topik'     => 'nullable|string',
+            'fileModul' => 'required|file|mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,mp4,jpg,jpeg,png,gif,webp|max:51200', // max 50MB
         ]);
 
-        $mdl = null;
-        $judulAsli = null;
+        $file = $request->file('fileModul');
+        $namaFile = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $path = $file->storeAs('fileModul', $namaFile, 'public');
 
-        if ($request->hasFile('fileModul')) {
-            $file = $request->file('fileModul');
-            $judulAsli = $file->getClientOriginalName(); // Ambil nama file asli
-            $mdl = $file->store('fileModul', 'public'); // Simpan file
-        }
+        $idKelas = $request->id_kelas;        // dari form (user bisa pilih beda kalau mau)
+        $idSemester = $request->id_semester;
 
-        $data = [
-            'id_kelas' => $request->id_kelas,
-            'id_semester' => $request->id_semester,
-            'judul' => $request->input('judul'),
-            'tahun' => $request->input('tahun'),
-            'topik' => $request->input('topik'),
-            'fileModul' => $mdl,
-            'judulFileAsli' => $judulAsli, // Pastikan tersimpan
-        ];
+        // dd($idKelas, $idSemester);
 
-        // dd($data);
+        DataModul::create([
+            'user_id'       => $user->id,
+            'id_kelas'      => $idKelas,     // otomatis dari profil user
+            'id_semester'   => $idSemester,    // otomatis dari profil user
+            'judul'         => $request->judul,
+            'tahun'         => $request->tahun,
+            'topik'         => $request->topik,
+            'fileModul'     => $path,
+            'judulFileAsli' => $file->getClientOriginalName(),
+        ]);
 
-        DataModul::create($data);
-
-        return redirect()->route('user.modul.index')->with('success', 'Data Berhasil Ditambah');
+        return redirect()
+            ->route('user.modul.index')
+            ->with('success', 'Modul berhasil diunggah!');
     }
 
-    // Edit Data
+    // ========================================
+    // FORM EDIT (HANYA PEMILIK SAJA)
+    // ========================================
     public function tampiledit($kdmodul)
     {
         $modul = DataModul::where('kdmodul', $kdmodul)->firstOrFail();
 
-        $kelas = Kelas::all();
-        $semester = Semester::all();
-        // dd($modul);
-        return view('user.menu.modul.edit', compact('modul', 'kelas', 'semester'));
+        if ($modul->user_id !== Auth::id()) {
+            return redirect()->route('user.modul.index')->with('error', 'Kamu tidak punya akses!');
+        }
+
+        return view('user.menu.modul.edit', compact('modul'));
     }
 
+    // ========================================
+    // UPDATE MODUL
+    // ========================================
     public function editdata(Request $request, $kdmodul)
     {
         $modul = DataModul::where('kdmodul', $kdmodul)->firstOrFail();
 
+        if ($modul->user_id !== Auth::id()) {
+            return redirect()->route('user.modul.index')->with('error', 'Akses ditolak!');
+        }
+
         $request->validate([
-            'judul' => 'required',
-            'id_kelas' => 'required',
-            'id_semester' => 'required',
-            'tahun' => 'required',
-            'topik' => 'required',
-            'fileModul' => 'nullable|file|max:20480',
+            'judul'     => 'required|string|max:255',
+            'tahun'     => 'required|digits:4',
+            'topik'     => 'nullable|string',
+            'fileModul' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,mp4,jpg,jpeg,png,gif,webp|max:51200',
         ]);
 
-        $mdl = $modul->fileModul;
-        $judulAsli = $modul->judulFileAsli;
+        $path = $modul->fileModul;
+        $namaAsli = $modul->judulFileAsli;
 
-        // Jika checkbox "gunakan_file_lama" tidak dicentang atau file baru diunggah, update file
-        if (!$request->has('gunakan_file_lama') || $request->hasFile('fileModul')) {
-            // Hapus file lama jika ada file baru
-            if ($modul->fileModul) {
-                Storage::disk('public')->delete($modul->fileModul);
+        if ($request->hasFile('fileModul')) {
+            // Hapus file lama
+            if ($path && Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
             }
 
             // Simpan file baru
-            if ($request->hasFile('fileModul')) {
-                $file = $request->file('fileModul');
-                $judulAsli = $file->getClientOriginalName();
-                $mdl = $file->store('fileModul', 'public');
-            } else {
-                // Jika checkbox tidak dicentang tapi user tidak mengunggah file baru, kosongkan file
-                $mdl = null;
-                $judulAsli = null;
-            }
+            $file = $request->file('fileModul');
+            $namaBaru = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('fileModul', $namaBaru, 'public');
+            $namaAsli = $file->getClientOriginalName();
         }
 
         $modul->update([
-            'judul' => $request->judul,
-            'id_kelas' => $request->id_kelas,
-            'id_semester' => $request->id_semester,
-            'tahun' => $request->tahun,
-            'topik' => $request->topik,
-            'fileModul' => $mdl,
-            'judulFileAsli' => $judulAsli,
+            'judul'         => $request->judul,
+            'tahun'         => $request->tahun,
+            'topik'         => $request->topik,
+            'fileModul'     => $path,
+            'judulFileAsli' => $namaAsli,
+            // id_kelas & id_semester tidak diubah karena sudah dari profil
         ]);
 
-        return redirect()->route('user.modul.index')->with('success', 'Data Berhasil Diubah');
+        return redirect()->route('user.modul.index')->with('success', 'Modul berhasil diperbarui!');
     }
 
-    // Hapus Data
+    // ========================================
+    // HAPUS MODUL (HANYA PEMILIK)
+    // ========================================
     public function hapus($kdmodul)
     {
-        try {
-            $modul = DataModul::where('kdmodul', $kdmodul)->firstOrFail();
+        $modul = DataModul::where('kdmodul', $kdmodul)->firstOrFail();
 
-            if ($modul->fileModul) {
-                Log::info('File to delete: ' . $modul->fileModul); // Log path file
-                if (Storage::disk('public')->exists($modul->fileModul)) {
-                    Log::info('File exists, attempting to delete');
-                    $deleted = Storage::disk('public')->delete($modul->fileModul);
-                    Log::info('Deletion result: ' . ($deleted ? 'Success' : 'Failed'));
-                } else {
-                    Log::warning('File does not exist in storage: ' . $modul->fileModul);
-                }
-            } else {
-                Log::warning('No fileModul found for kdmodul: ' . $kdmodul);
-            }
-
-            $modul->delete();
-
-            return redirect()->route('user.modul.index')->with('success', 'Data Berhasil Dihapus');
-        } catch (\Exception $e) {
-            Log::error('Error deleting modul: ' . $e->getMessage());
-            return redirect()->route('user.modul.index')->with('error', 'Gagal menghapus data atau file. Silahkan coba lagi.');
+        if ($modul->user_id !== Auth::id()) {
+            return redirect()->route('user.modul.index')->with('error', 'Kamu bukan pemilik modul ini!');
         }
+
+        // Hapus file fisik
+        if ($modul->fileModul && Storage::disk('public')->exists($modul->fileModul)) {
+            Storage::disk('public')->delete($modul->fileModul);
+        }
+
+        $modul->delete();
+
+        return redirect()->route('user.modul.index')->with('success', 'Modul berhasil dihapus!');
     }
 }

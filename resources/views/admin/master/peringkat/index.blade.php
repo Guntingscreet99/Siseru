@@ -38,36 +38,31 @@
                                         <th scope="col">Nim</th>
                                         <th scope="col">Kelas</th>
                                         <th scope="col">Semester</th>
-                                        <th scope="col">Skor Galeri Karya</th>
+                                        {{-- <th scope="col">Skor Galeri Karya</th> --}}
                                         <th scope="col">Skor Ujian</th>
+                                        <th scope="col">Nilai Huruf</th>
                                         <th scope="col">Ranking</th>
-                                        <th scope="col">Status</th>
+                                        {{-- <th scope="col">Status</th> --}}
                                         <th scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="peringkat-body">
-                                    @if ($peringkat->isEmpty())
+                                    @if ($rangking->isEmpty())
                                         <tr>
                                             <td colspan="10" class="text-center">Data Masih Kosong</td>
                                         </tr>
                                     @else
-                                        @foreach ($peringkat as $item)
+                                        @foreach ($rangking as $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->namaMhs }}</td>
+                                                <td>{{ $item->nama_lengkap }}</td>
                                                 <td>{{ $item->nim }}</td>
                                                 <td>{{ $item->kelas->nama_kelas }}</td>
                                                 <td>{{ $item->semester->nama_semester }}</td>
-                                                <td>{{ $item->skorKarya }}</td>
-                                                <td>{{ $item->skorUjian }}</td>
-                                                <td>{{ $item->ranking }}</td>
-
+                                                {{-- <td>{{ $item->skorKarya }}</td> --}}
+                                                <td>{{ number_format($item->nilai_angka ?? 0, 2) }}</td>
+                                                <td>{{ $item->peringkat }}</td>
                                                 {{-- <td>
-                                                    <a href="{{ asset('storage/' . $item->fileModul) }}" target="_blank">
-                                                        {{ $item->judulFileAsli ?? basename($item->fileModul) }}
-                                                    </a>
-                                                </td> --}}
-                                                <td>
                                                     <form method="POST"
                                                         action="{{ url('admin/peringkat/update-status') }}">
                                                         @csrf
@@ -85,7 +80,7 @@
                                                             </div>
                                                         </div>
                                                     </form>
-                                                </td>
+                                                </td> --}}
                                                 <td>
                                                     <!-- Button trigger modal -->
                                                     <a href="{{ url('admin/peringkat/ubah/' . $item->kdperingkat) }}"

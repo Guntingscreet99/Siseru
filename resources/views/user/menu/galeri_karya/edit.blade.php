@@ -15,7 +15,7 @@
 
                     <div class="card-body p-5">
                         <div class="mb-4">
-                            <a href="{{ route('user.galeri.index') }}" class="btn btn-outline-secondary">
+                            <a href="{{ route('user.galeri.index') }}" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Kembali
                             </a>
                         </div>
@@ -96,8 +96,8 @@
                             </div>
 
                             <div class="text-end mt-5">
-                                <button type="submit" class="btn btn-warning btn-lg px-5 shadow">
-                                    <i class="fas fa-save me-2"></i> Update Karya
+                                <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
+                                    <i class="fas fa-save me-2"></i> Perbarui Karya
                                 </button>
                             </div>
                         </form>

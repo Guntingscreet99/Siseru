@@ -13,13 +13,19 @@ return new class extends Migration
     {
         Schema::create('data_ujians', function (Blueprint $table) {
             $table->id('kdujian');
-            $table->string('judul')->nullable();
-            $table->string('deskripsi')->nullable();
-            $table->string('link')->nullable();
-            $table->string('hasil')->nullable();
+            // Rekap data
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('kelas_id')->nullable()->constrained('kelas')->onDelete('cascade');
+            $table->foreignId('semester_id')->nullable()->constrained('semesters')->onDelete('cascade');
+            $table->foreignId('ujian_id')
+                ->nullable()
+                ->constrained('ujians', 'kduji')
+                ->onDelete('cascade');
+
+            $table->integer('score')->nullable();
+            $table->date('waktu_pengerjaan')->nullable();
             $table->string('status')->nullable();
-            $table->string('fileUjian')->nullable();
-            $table->string('judulFileAsli')->nullable();
+
             $table->timestamps();
         });
     }

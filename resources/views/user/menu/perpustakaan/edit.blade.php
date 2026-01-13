@@ -4,9 +4,12 @@
 
     <div class="container">
         <div class="page-inner">
-            <div class="guru">
-                <div class="judul">
-                    <h1>@yield('judul')</h1>
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-gradient-primary text-dark text-center">
+                    <h3 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>
+                        Edit : {{ $perpus->judul }}
+                    </h3>
                 </div>
                 <div class="card">
                     <div class="card-body">
@@ -115,11 +118,38 @@
                                                 </select>
                                             </div>
                                         </div> --}}
+                                        <!-- Cover Buku -->
+                                        <div class="col-lg-6">
+                                            <label class="form-label fw-bold">Cover Buku (Gambar)</label>
+                                            <input type="file" name="cover" class="form-control" accept="image/*">
+
+                                            @if ($perpus->cover)
+                                                <div class="mt-3 text-center bg-light p-4 rounded border">
+                                                    <p class="mb-3 fw-bold text-success">Cover Saat Ini</p>
+                                                    <img src="{{ Storage::url($perpus->cover) }}"
+                                                        class="img-fluid rounded shadow"
+                                                        style="max-height: 300px; object-fit: cover;">
+                                                    <div class="mt-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="hapus_cover_lama" id="hapus_cover">
+                                                            <label class="form-check-label text-danger" for="hapus_cover">
+                                                                Centang untuk menghapus cover lama
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <small class="text-muted d-block mt-2">Belum ada cover. Upload gambar untuk
+                                                    tampilan lebih menarik.</small>
+                                            @endif
+                                        </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label for="">Deskripsi</label>
                                                 <input type="text" name="deskripsi" id="deskripsi" class="form-control"
-                                                    value="{{ $perpus->deskripsi }}" placeholder="Masukkan Deskripsi"
+                                                    rows"5" value="{{ $perpus->deskripsi }}"
+                                                    placeholder="Tulis ringkasan buku, catatan penulis, atau ulasan..."
                                                     required>
                                             </div>
                                         </div>
@@ -127,8 +157,9 @@
                                 </table>
                             </div>
                             <div class="modal-footer">
-                                {{-- <button type="button" class="btn btn-secondary" style="margin-right: 10px">Tutup</button> --}}
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
+                                    <i class="fas fa-save me-2"></i> Perbarui Perpustakaan
+                                </button>
                             </div>
                         </form>
                     </div>

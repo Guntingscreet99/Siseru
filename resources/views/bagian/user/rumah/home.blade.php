@@ -126,6 +126,57 @@
     @include('bagian.admin.gaya.js')
     @stack('js')
 
+    @push('css')
+        <style>
+            .rupaku-add-btn {
+                position: relative;
+                animation: rupakuPulse 2.8s infinite;
+                transition: all 0.35s ease;
+            }
+
+            .rupaku-add-btn:hover {
+                transform: translateY(-10px) scale(1.05);
+                box-shadow: 0 25px 50px rgba(0, 0, 0, .35) !important;
+            }
+
+            /* Lingkaran cahaya */
+            .rupaku-add-btn::after {
+                content: '';
+                position: absolute;
+                inset: -6px;
+                border-radius: inherit;
+                border: 2px solid rgba(255, 255, 255, .5);
+                opacity: 0;
+                animation: ring 2.8s infinite;
+            }
+
+            @keyframes rupakuPulse {
+                0% {
+                    box-shadow: 0 0 0 0 rgba(255, 255, 255, .6);
+                }
+
+                70% {
+                    box-shadow: 0 0 0 18px rgba(255, 255, 255, 0);
+                }
+
+                100% {
+                    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+                }
+            }
+
+            @keyframes ring {
+                0% {
+                    opacity: .8;
+                }
+
+                100% {
+                    opacity: 0;
+                }
+            }
+        </style>
+    @endpush
 </body>
+
+
 
 </html>

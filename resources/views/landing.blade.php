@@ -224,7 +224,7 @@
                             <img src="{{ asset('landing/img/Modul-Pembelajaran.avif') }}" alt=""
                                 class="img-fluid">
                         </div>
-                        <h3><a href="#" class="stretched-link">Modul Pembelajaran</a></h3>
+                        <h3><a href="{{ url('user/menu/modul') }}" class="stretched-link">Modul Pembelajaran</a></h3>
                         <p>Berisi materi seni rupa dalam bentuk teks, PDF, infografis, dan e-book.</p>
                     </div>
                 </div><!-- End Card Item -->
@@ -241,7 +241,7 @@
                         }">
                             <img src="{{ asset('landing/img/video-interaktif.jpg') }}" alt="" class="img-fluid">
                         </div>
-                        <h3><a href="#" class="stretched-link">Video Tutorial</a></h3>
+                        <h3><a href="{{ url('user/menu/video') }}" class="stretched-link">Video Tutorial</a></h3>
                         <p>Video demonstrasi pembuatan karya seni (misalnya menggambar, melukis, membuat kolase).
                             Bisa dalam bentuk streaming atau video yang dapat diunduh.
                         </p>
@@ -260,8 +260,8 @@
                         }">
                             <img src="{{ asset('landing/img/kelas-interaktif.jpg') }}" alt="" class="img-fluid">
                         </div>
-                        <h3><a href="#" class="stretched-link">Kelas & Webinar</a></h3>
-                        <p>ive class menggunakan Zoom atau Google Meet untuk diskusi real-time.
+                        <h3><a href="{{ url('user/menu/zoom') }}" class="stretched-link">Kelas Interaktif</a></h3>
+                        <p>Live class menggunakan Zoom atau Google Meet untuk diskusi real-time.
                             Webinar dengan praktisi seni atau dosen tamu untuk memperkaya wawasan mahasiswa</p>
                     </div>
                 </div><!-- End Card Item -->
@@ -278,7 +278,8 @@
                         }">
                             <img src="{{ asset('landing/img/Diskusi.jpg') }}" alt="" class="img-fluid">
                         </div>
-                        <h3><a href="#" class="stretched-link">Forum Diskusi & Tanya Jawab</a></h3>
+                        <h3><a href="{{ url('user/menu/diskusi') }}" class="stretched-link">Forum Diskusi & Tanya
+                                Jawab</a></h3>
                         <p>Wadah untuk mahasiswa bertanya dan berdiskusi tentang seni rupa.
                         </p>
                     </div>
@@ -316,7 +317,8 @@
                         }">
                             <img src="{{ asset('landing/img/Gamifikasi.jpg') }}" alt="" class="img-fluid">
                         </div>
-                        <h3><a href="#" class="stretched-link">Sistem Gamifikasi</a></h3>
+                        <h3><a href="{{ url('user/menu/peringkat') }}" class="stretched-link">Sistem Gamifikasi</a>
+                        </h3>
                         <p>Poin dan badge untuk mahasiswa yang aktif menyelesaikan modul atau berkontribusi di forum.
                         </p>
                     </div>
@@ -339,9 +341,8 @@
                     <div class="text-center">
                         <h3>Sudah Punya Akun?</h3>
                         <p>SIlahkan daftarakan diri anda untuk dapat mengakases Materi-materi yang menarik!
-                            <br> Silahkan yang merasa dirinya TOBRUT hubungi nomor ini 085.....
                         </p>
-                        <a class="cta-btn" href="#">Register</a>
+                        <a class="cta-btn" href="{{ url('register') }}">Register</a>
                     </div>
                 </div>
             </div>

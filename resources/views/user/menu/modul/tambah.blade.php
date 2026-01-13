@@ -4,95 +4,87 @@
 
     <div class="container">
         <div class="page-inner">
-            <div class="guru">
-                <div class="judul">
-                    <h1>@yield('judul')</h1>
+            <div class="card">
+                <div class="card-header bg-gradient-primary text-dark text-center">
+                    <h3 class="mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Tambah Modul Baru
+                    </h3>
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <!-- Button trigger modal -->
-                        <div class="mb-3" style="display: flex; justify-content: space-between">
-                            <div class="form-group">
-                                <a href="{{ url('user/menu/modul') }}" class="btn btn-primary">
-                                    <i class="fas fas fa-arrow-left"></i> Kembali
-                                </a>
+                <div class="card-body p-5">
+                    <div class="mb-4">
+                        <a href="{{ route('user.modul.index') }}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> Kembali ke Modul
+                        </a>
+                    </div>
+
+                    <form action="{{ route('user.modul.tambah') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label>Judul Modul</label>
+                                <input type="text" name="judul" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Kelas <span class="text-danger">*</span></label>
+                                <select name="id_kelas" class="form-select @error('id_kelas') is-invalid @enderror"
+                                    required>
+                                    <option value="">-- Pilih Kelas --</option>
+                                    @foreach (\App\Models\Kelas::all() as $k)
+                                        <option value="{{ $k->id }}"
+                                            {{ old('id_kelas', auth()->user()->datadiri?->id_kelas) == $k->id ? 'selected' : '' }}>
+                                            {{ $k->nama_kelas }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('id_kelas')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Semester <span class="text-danger">*</span></label>
+                                <select name="id_semester" class="form-select @error('id_semester') is-invalid @enderror"
+                                    required>
+                                    <option value="">-- Pilih Semester --</option>
+                                    @foreach (\App\Models\Semester::all() as $s)
+                                        <option value="{{ $s->id }}"
+                                            {{ old('id_semester', auth()->user()->datadiri?->id_semester) == $s->id ? 'selected' : '' }}>
+                                            {{ $s->nama_semester }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('id_semester')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label>Tahun</label>
+                                <input type="text" name="tahun" class="form-control" placeholder="2025" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label>File Modul (PDF, DOCX, PPTX,)</label>
+                                <input type="file" name="fileModul" class="form-control" required
+                                    accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.jpg,.jpeg,.png,.gif">
+                            </div>
+
+                            <div class="col-12">
+                                <label>Topik / Keterangan</label>
+                                <textarea name="topik" class="form-control" rows="4" placeholder="Opsional..."></textarea>
+                            </div>
+
+                            <div class="text-end mt-5">
+                                <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
+                                    <i class="fas fa-save me-2"></i> Simpan Modul
+                                </button>
                             </div>
                         </div>
-                        <form action="{{ url('user/menu/modul/tambah') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="modal-body">
-                                <table class="table table-responsive table-striped table-bordered text-center"
-                                    style="white-space: nowrap; overflow-x: auto; width: 100%">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="">Judul</label>
-                                                <input type="text" name="judul" id="judul" class="form-control"
-                                                    placeholder="Masukkan Judul Modul" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="">Kelas</label>
-                                                <select name="id_kelas" id="id_kelas" class="form-control">
-                                                    <option value="">-- Pilih Kelas --</option>
-                                                    @foreach ($kelas as $item)
-                                                        <option value="{{ $item->id }}">{{ $item->nama_kelas }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="">Semester</label>
-                                                <select name="id_semester" id="id_semester" class="form-control">
-                                                    <option value="">-- Pilih Semester --</option>
-                                                    @foreach ($semester as $sem)
-                                                        <option value="{{ $sem->id }}">{{ $sem->nama_semester }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="">Tahun</label>
-                                                <input type="text" name="tahun" id="tahun" class="form-control"
-                                                    placeholder="Masukkan Tahun">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="">File Modul</label>
-                                                <input type="file" name="fileModul" id="fileModul" class="form-control">
-                                            </div>
-                                        </div>
-                                        <input type="hidden" name="judulFileAsli">
-                                        {{-- <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="">Status Modul</label>
-                                                <select name="status" id="status" class="form-control">
-                                                    <option value="">-- Pilih Status --</option>
-                                                    <option value="Ditampilkan">Ditampilkan</option>
-                                                    <option value="Tidak ditampilkan">Tidak ditampilkan</option>
-                                                </select>
-                                            </div>
-                                        </div> --}}
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">Topik</label>
-                                                <textarea name="topik" id="topik" class="form-control" cols="10" rows="5"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                {{-- <button type="button" class="btn btn-secondary" style="margin-right: 10px">Tutup</button> --}}
-                                <button type="submit" class="btn btn-primary">Simpan</button>
-                            </div>
-                        </form>
-                    </div>
+                    </form>
+
                 </div>
             </div>
         </div>

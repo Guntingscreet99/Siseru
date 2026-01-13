@@ -88,7 +88,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="7" class="text-center py-4 text-muted">
+                                            <td colspan="9" class="text-center py-4 text-muted">
                                                 Belum ada forum diskusi untuk kelas Anda.
                                             </td>
                                         </tr>

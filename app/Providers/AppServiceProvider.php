@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\DataForum;
 use App\Models\RekapForum;
 use Carbon\Carbon;
+use Illuminate\Pagination\Paginator;  // ← Tambahkan ini
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Tambahkan baris ini untuk mengubah pagination ke Bootstrap 5
+        Paginator::useBootstrapFive();
+
         // Cek setiap request: kalau ada forum yang sudah lewat & belum direkap → buat rekap
         // DataForum::whereNotNull('waktu_selesai')
         //     ->where('waktu_selesai', '<', now())

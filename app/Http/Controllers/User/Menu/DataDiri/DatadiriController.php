@@ -87,6 +87,12 @@ class DatadiriController extends Controller
         $judulFileAsli = null;
 
         if ($request->hasFile('fotoMhs')) {
+
+            // Hapus foto lama jika ada
+            if ($user->datadiri && $user->datadiri->fotoMhs) {
+                Storage::disk('public')->delete($user->datadiri->fotoMhs);
+            }
+
             $file          = $request->file('fotoMhs');
             $judulFileAsli = $file->getClientOriginalName();
             $fotoMhsPath   = $file->store('fotoMhs', 'public');
