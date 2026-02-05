@@ -3,140 +3,75 @@
 namespace App\Http\Controllers\User\Menu\Peringkat;
 
 use App\Http\Controllers\Controller;
-use App\Models\DataPeringkat;
+use App\Models\RekapNilai;
 use App\Models\Kelas;
 use App\Models\Semester;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class PeringkatController extends Controller
 {
-    public function index()
+    /**
+     * ===============================
+     * TAMPIL PERINGKAT + FILTER
+     * ===============================
+     */
+    public function index(Request $request)
     {
-        $peringkat = DataPeringkat::all();
+        /**
+         * Ambil parameter filter
+         */
+        $kelasId    = $request->kelas_id;
+        $semesterId = $request->semester_id;
 
-        return view('user.menu.peringkat.index', compact('peringkat'));
-    }
-
-    // Cari
-    public function cariData(Request $request)
-    {
-        if ($request->ajax()) {
-            $query = $request->input('query');
-
-            $peringkat = DataPeringkat::where('kdperingkat', 'like', "%$query%")
-                ->orwhere('namaMhs', 'like', "%$query%")
-                ->orwhere('nim', 'like', "%$query%")
-                ->orwhere('kelas', 'like', "%$query%")
-                ->orwhere('semester', 'like', "%$query%")
-                ->orwhere('skorKarya', 'like', "%$query%")
-                ->orwhere('skorUjian', 'like', "%$query%")
-                ->orwhere('ranking', 'like', "%$query%")
-                // ->orwhere('status', 'like', "%$query%")
-                ->get();
-            return response()->json($peringkat);
-        }
-
-        return redirect()->route('user.peringkat.index');
-    }
-
-    // Tambah Data
-    public function tampildata()
-    {
-        $kelas = Kelas::all();
+        /**
+         * Data master untuk dropdown
+         */
+        $kelas    = Kelas::all();
         $semester = Semester::all();
 
-        return view('user.menu.peringkat.tambah', compact('kelas', 'semester'));
-    }
+        /**
+         * Query dasar rekap nilai
+         */
+        $peringkat = RekapNilai::with(['kelas', 'semester'])
+            ->when($kelasId, function ($q) use ($kelasId) {
+                $q->where('id_kelas', $kelasId);
+            })
+            ->when($semesterId, function ($q) use ($semesterId) {
+                $q->where('id_semester', $semesterId);
+            })
+            ->get();
 
-    public function tambahdata(Request $request)
-    {
-        // dd($request->all());
-        $request->validate(
-            [
-                'namaMhs' => 'required',
-                'nim' => 'required',
-                'id_kelas' => 'required',
-                'id_semester' => 'required',
-                'skorKarya' => 'required',
-                'skorUjian' => 'required',
-                'ranking' => 'required',
-            ],
-            [
-                'namaMhs.required' => 'Nama Mahasiswa Wajib Diisi!',
-                'nim.required' => 'NIM Wajib Diisi!',
-                'id_kelas.required' => 'Kelas Wajib Diisi!',
-                'id_semester.required' => 'Semester Wajib Diisi!',
-                'skorKarya.required' => 'Skor Karya Wajib Diisi!.',
-                'skorUjian.required' => 'Skor Ujian Wajib Diisi!.',
-                'ranking.required' => 'Ranking Wajib Diisi!.',
-            ]
-        );
+        /**
+         * Urutkan berdasarkan nilai akhir (ACCESSOR)
+         */
+        $peringkat = $peringkat
+            ->sortByDesc(fn($item) => $item->nilai_angka)
+            ->values();
 
-        $data = [
-            'namaMhs' => $request->namaMhs,
-            'nim' => $request->nim,
-            'id_kelas' => $request->id_kelas,
-            'id_semester' => $request->id_semester,
-            'skorKarya' => $request->skorKarya,
-            'skorUjian' => $request->skorUjian,
-            'ranking' => $request->ranking,
-        ];
+        /**
+         * Hitung ranking (aman untuk nilai sama)
+         */
+        $rank = 1;
+        $lastScore = null;
 
-        DataPeringkat::create($data);
+        $peringkat->transform(function ($item, $index) use (&$rank, &$lastScore) {
+            if ($lastScore !== null && $item->nilai_angka < $lastScore) {
+                $rank = $index + 1;
+            }
 
-        return redirect()->route('user.peringkat.index')->with('success', 'Data peringkat berhasil ditambahkan.');
-    }
+            $item->peringkat = $rank;
+            $lastScore = $item->nilai_angka;
 
-    // Edit Data
-    public function tampiledit($kdperingkat)
-    {
-        $peringkat = DataPeringkat::findOrFail($kdperingkat);
+            return $item;
+        });
 
-        $kelas = Kelas::all();
-        $semester = Semester::all();
-
-        return view('user.menu.peringkat.edit', compact('peringkat', 'kelas', 'semester'));
-    }
-
-    public function editdata(Request $request, $kdperingkat)
-    {
-        $peringkat = DataPeringkat::findOrFail($kdperingkat);
-
-        $request->validate(
-            [
-                'namaMhs' => 'required',
-                'nim' => 'required',
-                'id_kelas' => 'required',
-                'id_semester' => 'required',
-                'skorKarya' => 'required',
-                'skorUjian' => 'required',
-                'ranking' => 'required',
-            ],
-            [
-                'namaMhs.required' => 'Nama Mahasiswa Wajib Diisi!',
-                'nim.required' => 'NIM Wajib Diisi!',
-                'id_kelas.required' => 'Kelas Wajib Diisi!',
-                'id_semester.required' => 'Semester Wajib Diisi!',
-                'skorKarya.required' => 'Skor Karya Wajib Diisi!.',
-                'skorUjian.required' => 'Skor Ujian Wajib Diisi!.',
-                'ranking.required' => 'Ranking Wajib Diisi!.',
-            ]
-        );
-
-        $peringkat->update($request->all());
-
-        return redirect()->route('user.peringkat.index')->with('success', 'Data peringkat berhasil diupdate.');
-    }
-
-    // Hapus Data
-    public function hapus($kdperingkat)
-    {
-        $peringkat = DataPeringkat::where('kdperingkat', $kdperingkat)->firstOrfail();
-
-        $peringkat->delete();
-
-        return redirect()->route('user.peringkat.index')->with('success', 'Data Berhasil Dihapus!.');
+        /**
+         * Kirim ke view
+         */
+        return view('user.menu.peringkat.index', compact(
+            'peringkat',
+            'kelas',
+            'semester'
+        ));
     }
 }

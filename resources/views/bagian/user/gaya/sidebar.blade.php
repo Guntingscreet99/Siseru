@@ -101,7 +101,7 @@
                                 </ul>
                             </div>
                         </li>
-                        
+
                         <!-- Data Menu Mahasiswa (Terpisah) -->
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#mahasiswa-collapse"

@@ -52,15 +52,18 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-3 d-flex gap-2">
-                                    <button type="submit" class="btn btn-info text-white">
-                                        <i class="fas fa-search"></i> Filter
+                                <div class="col-md-3 d-flex gap-2 align-items-center">
+                                    <button type="submit" class="btn btn-outline-info">
+                                        <i class="fas fa-search me-1"></i> Filter
                                     </button>
-                                    <a href="{{ route('admin.rekap.index') }}" class="btn btn-primary">
-                                        <i class="fa-solid fa-arrow-rotate-left"></i> Reset
+
+                                    <a href="{{ route('admin.rekap.index') }}" class="btn btn-outline-secondary">
+                                        <i class="fa-solid fa-arrow-rotate-left me-1"></i> Reset
                                     </a>
-                                    <a href="{{ route('rekap.export', request()->query()) }}" class="btn btn-success">
-                                        <i class="fa-solid fa-file-excel"></i> Export Excel
+
+                                    <a href="{{ route('rekap.export', request()->query()) }}"
+                                        class="btn btn-outline-success">
+                                        <i class="fa-solid fa-file-excel me-1"></i> Excel
                                     </a>
                                 </div>
                             </div>
@@ -78,7 +81,7 @@
                                         <th>Semester</th>
                                         <th>Nilai</th>
                                         <th>Huruf</th>
-                                        <th>Bobot</th>
+                                        <th>IPK</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -185,7 +188,7 @@
                                                                             {{ number_format($item->nilai_angka, 2) }}
                                                                         </h2>
                                                                         <span class="badge bg-dark fs-6 mt-2">
-                                                                            {{ $item->grade->huruf }} | Bobot
+                                                                            {{ $item->grade->huruf }} | IPK:
                                                                             {{ $item->grade->bobot }}
                                                                         </span>
                                                                     </div>

@@ -39,8 +39,9 @@
                                         <th scope="col">Kelas</th>
                                         <th scope="col">Semester</th>
                                         {{-- <th scope="col">Skor Galeri Karya</th> --}}
-                                        <th scope="col">Skor Ujian</th>
+                                        <th scope="col">Nilai Akhir</th>
                                         <th scope="col">Nilai Huruf</th>
+                                        <th scope="col">IPK</th>
                                         <th scope="col">Ranking</th>
                                         {{-- <th scope="col">Status</th> --}}
                                         <th scope="col">Aksi</th>
@@ -49,7 +50,7 @@
                                 <tbody id="peringkat-body">
                                     @if ($rangking->isEmpty())
                                         <tr>
-                                            <td colspan="10" class="text-center">Data Masih Kosong</td>
+                                            <td colspan="9" class="text-center">Data Masih Kosong</td>
                                         </tr>
                                     @else
                                         @foreach ($rangking as $item)
@@ -61,7 +62,10 @@
                                                 <td>{{ $item->semester->nama_semester }}</td>
                                                 {{-- <td>{{ $item->skorKarya }}</td> --}}
                                                 <td>{{ number_format($item->nilai_angka ?? 0, 2) }}</td>
+                                                <td><strong>{{ $item->grade->huruf ?? '-' }}</strong></td>
+                                                <td>{{ $item->grade->bobot ?? '-' }}</td>
                                                 <td>{{ $item->peringkat }}</td>
+
                                                 {{-- <td>
                                                     <form method="POST"
                                                         action="{{ url('admin/peringkat/update-status') }}">

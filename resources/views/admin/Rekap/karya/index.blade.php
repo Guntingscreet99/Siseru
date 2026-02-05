@@ -105,12 +105,16 @@
                                             <td>{{ $item->user->datadiri->semester->nama_semester ?? '-' }}</td>
                                             <td>{{ $item->namaKarya ?? '-' }}</td>
                                             <td>{{ $item->total_nilai }}</td>
-                                            <td>
+                                            <td class="text-center">
+                                                <!-- EDIT -->
                                                 <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
                                                     data-bs-target="#editkarya{{ $item->kdkarya }}">
                                                     <i class="fas fa-edit"></i> Edit Nilai
                                                 </button>
-                                                <button type="button" class="btn btn-sm btn-danger">
+
+                                                <!-- HAPUS -->
+                                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                                    data-bs-target="#hapuskarya{{ $item->kdkarya }}">
                                                     <i class="fas fa-trash"></i> Hapus
                                                 </button>
                                             </td>
@@ -173,7 +177,10 @@
             </div>
         </div>
     </div>
-
-    {{-- @include('admin.Rekap.karya.edit') --}}
-
 @endsection
+
+@foreach ($rekap as $item)
+    @include('admin.Rekap.karya.edit')
+
+    @include('admin.Rekap.karya.hapus')
+@endforeach

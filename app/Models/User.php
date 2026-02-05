@@ -81,4 +81,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(DataKarya::class);
     }
+
+    public function testimonis()
+    {
+        return $this->hasMany(Testimoni::class);
+    }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Master\DataKaryaController;
 use App\Http\Controllers\Admin\Master\DataModulController;
 use App\Http\Controllers\Admin\Master\DataPeringkatController;
 use App\Http\Controllers\Admin\Master\DataPerpustakaanController;
+use App\Http\Controllers\Admin\Master\DataTestimoniController;
 use App\Http\Controllers\Admin\Master\DataUjianController;
 use App\Http\Controllers\Admin\Master\DataVideoController;
 use App\Http\Controllers\Admin\Master\DataZoomController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\Admin\Rekap\RekapUjianController;
 use App\Http\Controllers\Admin\Rekap\RekapController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\KomentarKaryaController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Mahasiswa\IndexController;
 use App\Http\Controllers\User\Menu\DataDiri\DatadiriController;
@@ -29,6 +31,7 @@ use App\Http\Controllers\User\Menu\Forum\ForumController;
 use App\Http\Controllers\User\Menu\Video\VideoController;
 use App\Http\Controllers\User\Perpustakaan\PerpusController;
 use App\Http\Controllers\User\Menu\Peringkat\PeringkatController;
+use App\Http\Controllers\User\Menu\Testimoni\TestimoniController;
 use App\Http\Controllers\User\Menu\Ujian\UjianController;
 use App\Http\Controllers\User\Menu\Zoom\ZoomController;
 use App\Http\Controllers\User\UserDasboardController;
@@ -74,6 +77,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('admin/master/semester-tambah', [SemesterController::class, 'tambah'])->name('admin.semester.tambah');
     Route::put('admin/master/semester-edit/{id}', [SemesterController::class, 'edit'])->name('admin.semester.edit');
     Route::delete('admin/master/semester-hapus/{id}', [SemesterController::class, 'hapus'])->name('admin.semester.hapus');
+
+    // USER MANAGEMENT
+    Route::get('admin/master/akun', [UserController::class, 'index'])->name('admin.user.index');
+    
 
 
     // MASTER MODUL
@@ -203,6 +210,31 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // STATUS
     Route::post('admin/peringkat/update-status', [DataPeringkatController::class, 'updateStatus'])->name('peringkat.status');
 
+    // Testimoni
+    // INDEX
+    Route::get(
+        'admin/master/testimoni',
+        [DataTestimoniController::class, 'index']
+    )->name('admin.testimoni.index');
+
+    // SETUJUI / TAMPILKAN
+    Route::put(
+        'admin/testimoni/approve/{id}',
+        [DataTestimoniController::class, 'approve']
+    )->name('admin.testimoni.approve');
+
+    // SEMBUNYIKAN
+    Route::put(
+        'admin/testimoni/reject/{id}',
+        [DataTestimoniController::class, 'reject']
+    )->name('admin.testimoni.reject');
+
+    // HAPUS PERMANEN
+    Route::delete(
+        'admin/testimoni/destroy/{id}',
+        [DataTestimoniController::class, 'destroy']
+    )->name('admin.testimoni.destroy');
+
     // REKAP FORUM
     Route::get('admin/forum/rekap/{kdforum}', [ForumController::class, 'lihatRekap'])->name('admin.forum.rekap');
     Route::get('admin/forum/rekap-download/{kdforum}', [ForumController::class, 'downloadRekap'])->name('admin.forum.rekap.download');
@@ -219,6 +251,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/rekap-karya', [App\Http\Controllers\Admin\Rekap\RekapKaryaController::class, 'index'])->name('admin.rekap.karya');
     Route::get('/admin/rekap-karya/{kdkarya}/edit', [App\Http\Controllers\Admin\Rekap\RekapKaryaController::class, 'edit'])->name('admin.rekap.karya.edit');
     Route::put('/admin/rekap-karya/{kdkarya}', [App\Http\Controllers\Admin\Rekap\RekapKaryaController::class, 'update'])->name('admin.rekap.karya.update');
+    Route::delete('/admin/rekap-karya/{kdkarya}', [App\Http\Controllers\Admin\Rekap\RekapKaryaController::class, 'destroy'])->name('admin.rekap.karya.destroy');
 
     // REKAP UJIAN
     Route::prefix('admin')->middleware('auth')->group(function () {
@@ -236,7 +269,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             ->name('admin.rekap.ujian.destroy');
     });
 
-    Route::get('admin/master/akun', [UserController::class, 'index'])->name('admin.user.index');
+
 });
 
 Route::middleware(['auth', 'role:dosen'])->group(function () {
@@ -371,14 +404,9 @@ Route::middleware(['auth', 'role:mahasiswa', 'mahasiswa.activity'])->group(funct
     Route::get('user/menu/peringkat', [PeringkatController::class, 'index'])->name('user.peringkat.index');
     // CARI
     Route::get('user/peringkat/cari', [PeringkatController::class, 'cariData'])->name('user.peringkat.cari');
-    // TAMBAH
-    Route::get('user/peringkat/tampil', [PeringkatController::class, 'tampildata'])->name('user.peringkat.tampil');
-    Route::post('user/peringkat/tambah', [PeringkatController::class, 'tambahdata'])->name('user.peringkat.tambah');
-    // EDIT
-    Route::get('user/peringkat/ubah/{id}', [PeringkatController::class, 'tampiledit'])->name('user.peringkat.edit-tampil');
-    Route::put('user/peringkat-edit/{id}', [PeringkatController::class, 'editdata'])->name('user.peringkat.edit');
-    // HAPUS
-    Route::delete('user/peringkat-hapus/{id}', [PeringkatController::class, 'hapus'])->name('user.peringkat.hapus');
+    // modal
+    Route::get('user/peringkat/modal/{nim}', [PeringkatController::class, 'modal'])->name('user.peringkat.modal');
+
 
     // ZOOM
     // INDEX
@@ -395,5 +423,17 @@ Route::middleware(['auth', 'role:mahasiswa', 'mahasiswa.activity'])->group(funct
     Route::delete('user/zoom-hapus/{kdzoom}', [ZoomController::class, 'hapus'])->name('user.zoom.hapus');
     // STATUS
     Route::post('user/zoom/update-status', [ZoomController::class, 'updateStatus'])->name('user.zoom.status');
+
+    //TESTIMONI
+    // INDEX
+    Route::get('user/menu/testimoni', [TestimoniController::class, 'index'])->name('user.testimoni.index');
+    // tambah
+    Route::get('user/testimoni/tampil', [TestimoniController::class, 'tampil'])->name('user.testimoni.tampil');
+    Route::post('user/testimoni/tambah', [TestimoniController::class, 'tambah'])->name('user.testimoni.tambah');
+    // edit
+    Route::get('user/testimoni/ubah/{testimoni}', [TestimoniController::class, 'edit'])->name('user.testimoni.edit-tampil');
+    Route::put('user/testimoni-edit/{testimoni}', [TestimoniController::class, 'update'])->name('user.testimoni.edit');
+    // HAPUS
+    Route::delete('user/testimoni-hapus/{testimoni}', [TestimoniController::class, 'hapus'])->name('user.testimoni.hapus');
 });
 // USER

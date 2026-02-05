@@ -7,7 +7,7 @@
             <div class="page-inner">
                 <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
                     <div>
-                        <h3 class="fw-bold mb-3">Dashboard Admin</h3>
+                        <h3 class="fw-bold mb-3">Beranda Administrator</h3>
                         <h6 class="op-7 mb-2">Pusat Kendali Sistem Akademik</h6>
                     </div>
                     <div class="ms-md-auto py-2 py-md-0">
@@ -16,7 +16,6 @@
                 </div>
 
                 <div class="row">
-
                     {{-- MAHASISWA --}}
                     <div class="col-sm-6 col-md-3">
                         <div class="card card-stats card-round">
@@ -180,7 +179,7 @@
             {{-- HEADER --}}
             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
                 <div>
-                    <h3 class="fw-bold mb-3">Dashboard User</h3>
+                    <h3 class="fw-bold mb-3">Beranda Pengguna</h3>
                     <h6 class="op-7 mb-2">Ringkasan aktivitas Anda</h6>
                 </div>
                 <div class="ms-md-auto py-2 py-md-0">

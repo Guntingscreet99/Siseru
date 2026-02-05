@@ -12,6 +12,11 @@ class LoginController extends Controller
 {
     public function login()
     {
+        // dd(
+        //     env('TWILIO_ACCOUNT_SID'),
+        //     config('services.twilio.sid')
+        // );
+
         return view('auth.login');
     }
 
@@ -78,7 +83,7 @@ class LoginController extends Controller
             }
         } else {
             throw ValidationException::withMessages([
-                'identifier' => ['NIM/Username atau password salah. Silakan coba lagi!'],
+                'identifier' => ['NIM atau password salah. Silakan coba lagi!'],
             ]);
         }
     }

@@ -27,7 +27,8 @@
                         Perpustakaan Digital
                     </h1>
                     <p class="lead mb-2 fs-4 animate__animated animate__fadeInUp opacity-90">
-                        Jelajahi koleksi buku, jurnal, artikel, dan modul pembelajaran dari civitas akademika
+                        Pusat Literasi PGSD Universitas Muria Kudus: Akses koleksi buku, jurnal, dan modul pembelajaran dari
+                        seluruh sivitas akademika.
                     </p>
 
                     @auth
@@ -48,7 +49,7 @@
                                     <i class="fas fa-search text-primary"></i>
                                 </span>
                                 <input type="text" id="search" class="form-control border-0 shadow-none fs-5"
-                                    placeholder="Cari judul, kategori, topik, tahun..." autocomplete="off">
+                                    placeholder="Cari judul, topik, kategori, tahun..." autocomplete="off">
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 @extends('bagian.admin.rumah.home')
-@section('judul', 'Update Data Diri')
+@section('judul', 'Data Diri')
 @section('isi')
 
     @php
@@ -53,7 +53,7 @@
                                             class="btn btn-outline-secondary mb-3 d-flex align-items-center gap-2"
                                             onclick="resetFoto()">
                                             <i class="bi bi-arrow-counterclockwise"></i>
-                                            Reset
+                                            <span>Kembali ke Foto Dasar</span>
                                         </button>
 
                                         <small class="text-muted mb-2">Format: JPEG, JPG, PNG. Maks. 2 MB</small>

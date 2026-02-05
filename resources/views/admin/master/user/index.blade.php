@@ -13,10 +13,10 @@
                         <!-- Button trigger modal -->
                         <div class="mb-3" style="display: flex; justify-content: space-between">
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#tambahkelas">
                                     <i class="fas fa-plus"></i> Tambah User
-                                </button>
+                                </button> --}}
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -29,13 +29,13 @@
                                         <th scope="col">Nim</th>
                                         <th scope="col">No HP</th>
                                         <th scope="col">Password</th>
-                                        <th>Aksi</th>
+                                        {{-- <th>Aksi</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody id="modul-body">
                                     @if ($mahasiswa->isEmpty())
                                         <tr>
-                                            <td colspan="6" class="text-center">Data Masih Kosong</td>
+                                            <td colspan="5" class="text-center">Data Masih Kosong</td>
                                         </tr>
                                     @else
                                         @foreach ($mahasiswa as $item)
@@ -49,7 +49,7 @@
                                                         {{ $item->password_plain ?? '-' }}
                                                     </span>
                                                 </td>
-                                                <td>
+                                                {{-- <td>
                                                     <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                                                         data-bs-target="#edit{{ $item->id }}">
                                                         <i class="fas fa-pen"></i> Edit
@@ -58,7 +58,7 @@
                                                         data-bs-target="#hapus{{ $item->id }}">
                                                         <i class="fas fa-trash"></i> Hapus
                                                     </button>
-                                                </td>
+                                                </td> --}}
                                             </tr>
                                         @endforeach
                                     @endif

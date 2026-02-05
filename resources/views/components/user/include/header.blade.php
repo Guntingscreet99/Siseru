@@ -32,7 +32,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li><a href="{{ url('admin/master/dataperpus') }}">Perpustakaan digital</a></li>
+                        <li><a href="{{ url('admin/master/dataperpus') }}">Perpustakaan Digital</a></li>
                         <li class="dropdown">
                             <a href="#">
                                 <span>Interaktif</span>
@@ -56,11 +56,11 @@
 
                             </ul>
                         </li>
-                        <li><a href="#">Kontak</a></li>
+                        <li><a href="{{ url('admin/master/datatestimoni') }}">Testimoni</a></li>
 
                         <form action="{{ url('logout') }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn-getstarted">Logout</button>
+                            <button type="submit" class="btn-getstarted">Log Keluar</button>
                         </form>
                     </ul>
                 @endif
@@ -87,7 +87,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li><a href="{{ url('user/menu/perpus') }}">Perpustakaan digital</a></li>
+                        <li><a href="{{ url('user/menu/perpus') }}">Perpustakaan Digital</a></li>
                         <li class="dropdown">
                             <a href="#">
                                 <span>Interaktif</span>
@@ -112,11 +112,11 @@
 
                             </ul>
                         </li>
-                        <li><a href="#">Kontak</a></li>
+                        <li><a href="{{ url('user/menu/testimoni') }}">Testimoni</a></li>
 
                         <form action="{{ url('logout') }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn-getstarted">Logout</button>
+                            <button type="submit" class="btn-getstarted">Keluar</button>
                         </form>
                     </ul>
                 @endif
@@ -126,7 +126,7 @@
         </nav>
 
         @guest
-            <a class="btn-getstarted" href="{{ url('login') }}">Login</a>
+            <a class="btn-getstarted" href="{{ url('login') }}">Masuk</a>
         @endguest
 
     </div>

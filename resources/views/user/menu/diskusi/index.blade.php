@@ -1,5 +1,5 @@
 @extends('bagian.user.rumah.home')
-@section('judul', 'User | Menu Forum')
+@section('judul', 'Forum Diskusi')
 @section('isi')
 
     <div class="container">

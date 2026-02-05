@@ -8,13 +8,20 @@
         <div class="container">
             <div class="row gy-4 d-flex justify-content-between">
                 <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
-                    <h2 data-aos="fade-up">Ruang Apresiasi Seni Rupa </h2>
-                    <p data-aos="fade-up" data-aos-delay="100">Selamat datang di RUPAKU!
-                        Platform pembelajaran seni rupa yang dirancang untuk membantu Anda mengeksplorasi, belajar, dan
-                        mengembangkan keterampilan seni dengan cara yang interaktif dan menyenangkan. Kami percaya bahwa
-                        seni adalah bahasa universal yang menghubungkan setiap individu, dan melalui website ini, kami
-                        bertujuan untuk memberikan akses ke materi pembelajaran seni rupa yang berkualitas dan mudah
-                        diakses oleh siapa saja, di mana saja.</p>
+                    <div class="hero-text">
+                        <h2 class="title-art" data-aos="fade-up">
+                            RUANG APRESIASI<br><strong>SENI RUPA</strong>
+                        </h2>
+
+                        <p class="desc-art" data-aos="fade-up" data-aos-delay="100">
+                            Selamat datang di <strong>RUPAKU.</strong> Sebuah ruang digital yang didedikasikan untuk
+                            mengeksplorasi dan mengembangkan potensi seni rupa Anda. Melalui pengalaman belajar
+                            interaktif, kami menjadikan seni sebagai bahasa universal yang menyatukan. Akses materi
+                            berkualitas tinggi secara mudah dan biarkan kreativitas Anda berkembang tanpa batasan ruang
+                            dan waktu.
+                        </p>
+                    </div>
+
 
                     {{-- <form action="#" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up"
                         data-aos-delay="200">
@@ -22,35 +29,44 @@
                         <button type="submit" class="btn btn-primary">Search</button>
                     </form> --}}
 
-                    <div class="row gy-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="row g-4 art-stats">
 
-                        <div class="col-lg-3 col-6">
-                            <div class="stats-item text-center w-100 h-100">
-                                <span>50</span>
-                                <p>Kelas</p>
-                            </div>
-                        </div><!-- End Stats Item -->
+                        @php
+                            $stats = [
+                                [
+                                    'icon' => 'fa-users',
+                                    'value' => $totalMahasiswa,
+                                    'label' => 'Mahasiswa',
+                                ],
+                                [
+                                    'icon' => 'fa-school',
+                                    'value' => $kelas,
+                                    'label' => 'Kelas',
+                                ],
+                                [
+                                    'icon' => 'fa-user-check',
+                                    'value' => $mahasiswaAktif,
+                                    'label' => 'User Aktif',
+                                ],
+                                [
+                                    'icon' => 'fa-user-slash',
+                                    'value' => $mahasiswaTidakAktif,
+                                    'label' => 'User Non-Aktif',
+                                ],
+                            ];
+                        @endphp
 
-                        <div class="col-lg-3 col-6">
-                            <div class="stats-item text-center w-100 h-100">
-                                <span>521</span>
-                                <p>Mahasiswa</p>
-                            </div>
-                        </div><!-- End Stats Item -->
-
-                        <div class="col-lg-3 col-6">
-                            <div class="stats-item text-center w-100 h-100">
-                                <span>1453</span>
-                                <p>Modul</p>
-                            </div>
-                        </div><!-- End Stats Item -->
-
-                        <div class="col-lg-3 col-6">
-                            <div class="stats-item text-center w-100 h-100">
-                                <span>32</span>
-                                <p>Karya</p>
-                            </div>
-                        </div><!-- End Stats Item -->
+                        <div class="row art-stats text-center">
+                            @foreach ($stats as $item)
+                                <div class="col-6 col-md-3">
+                                    <div class="art-stat-item" data-type="{{ $item['label'] }}">
+                                        <i class="fas {{ $item['icon'] }}"></i>
+                                        <div class="art-stat-value">{{ $item['value'] }}</div>
+                                        <div class="art-stat-label">{{ $item['label'] }}</div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
 
                     </div>
 
@@ -197,7 +213,7 @@
 
     </section><!-- /About Section -->
 
-    <!-- Services Section -->
+    <!-- Kelas Pembelajaran -->
     <section id="services" class="services section">
 
         <!-- Section Title -->
@@ -225,7 +241,7 @@
                                 class="img-fluid">
                         </div>
                         <h3><a href="{{ url('user/menu/modul') }}" class="stretched-link">Modul Pembelajaran</a></h3>
-                        <p>Berisi materi seni rupa dalam bentuk teks, PDF, infografis, dan e-book.</p>
+                        <p>Berisi materi seni rupa dalam bentuk teks, PDF, infografis, dan buku digital.</p>
                     </div>
                 </div><!-- End Card Item -->
 
@@ -242,8 +258,8 @@
                             <img src="{{ asset('landing/img/video-interaktif.jpg') }}" alt="" class="img-fluid">
                         </div>
                         <h3><a href="{{ url('user/menu/video') }}" class="stretched-link">Video Tutorial</a></h3>
-                        <p>Video demonstrasi pembuatan karya seni (misalnya menggambar, melukis, membuat kolase).
-                            Bisa dalam bentuk streaming atau video yang dapat diunduh.
+                        <p>Pelajari berbagai teknik menggambar, melukis, dan membuat kolase melalui video demonstrasi
+                            interaktif. Akses secara <em>streaming</em> atau unduh video untuk belajar kapan saja.
                         </p>
                     </div>
                 </div><!-- End Card Item -->
@@ -258,11 +274,16 @@
                             object-fit: cover; /* Memastikan gambar tidak terdistorsi */
                             border-radius: 10px; /* Opsional, untuk tampilan lebih rapi */
                         }">
-                            <img src="{{ asset('landing/img/kelas-interaktif.jpg') }}" alt="" class="img-fluid">
+                            <img src="{{ asset('landing/img/kelas-interaktif.jpg') }}" alt=""
+                                class="img-fluid">
                         </div>
                         <h3><a href="{{ url('user/menu/zoom') }}" class="stretched-link">Kelas Interaktif</a></h3>
-                        <p>Live class menggunakan Zoom atau Google Meet untuk diskusi real-time.
-                            Webinar dengan praktisi seni atau dosen tamu untuk memperkaya wawasan mahasiswa</p>
+                        <p>Ikuti kelas langsung <em>(live class)</em> menggunakan Zoom atau Google Meet untuk diskusi
+                            waktu nyata
+                            <em>(real-time)</em>. Selain itu, tersedia <em>webinar</em> bersama praktisi seni atau dosen
+                            tamu guna
+                            memperkaya wawasan mahasiswa.
+                        </p>
                     </div>
                 </div><!-- End Card Item -->
 
@@ -299,7 +320,7 @@
                         </div>
                         <h3><a href="{{ url('user/menu/galeri') }}" class="stretched-link">Gelar Karya
                                 Mahasiswa</a></h3>
-                        <p>Mahasiswa dapat mengunggah hasil karya seni mereka untuk dikomentari oleh dosen atau
+                        <p>Mahasiswa dapat mengunggah hasil karya seni rupa untuk dikomentari oleh dosen atau
                             teman-teman.
                         </p>
                     </div>
@@ -317,9 +338,10 @@
                         }">
                             <img src="{{ asset('landing/img/Gamifikasi.jpg') }}" alt="" class="img-fluid">
                         </div>
-                        <h3><a href="{{ url('user/menu/peringkat') }}" class="stretched-link">Sistem Gamifikasi</a>
+                        <h3><a href="{{ url('user/menu/peringkat') }}" class="stretched-link">Sistem Peringkat</a>
                         </h3>
-                        <p>Poin dan badge untuk mahasiswa yang aktif menyelesaikan modul atau berkontribusi di forum.
+                        <p>Dapatkan poin dan lencana sebagai apresiasi atas keaktifan Anda dalam menyelesaikan modul
+                            atau berkontribusi di forum diskusi.
                         </p>
                     </div>
                 </div><!-- End Card Item -->
@@ -330,7 +352,7 @@
 
     </section><!-- /Services Section -->
 
-    <!-- Call To Action Section -->
+    <!-- Register -->
     <section id="call-to-action" class="call-to-action section dark-background">
 
         <img src="{{ asset('landing/img/2.jpg') }}" alt="">
@@ -340,9 +362,9 @@
                 <div class="col-xl-10">
                     <div class="text-center">
                         <h3>Sudah Punya Akun?</h3>
-                        <p>SIlahkan daftarakan diri anda untuk dapat mengakases Materi-materi yang menarik!
+                        <p>Silahkan daftarakan diri anda untuk dapat mengakases Materi-materi yang menarik!
                         </p>
-                        <a class="cta-btn" href="{{ url('register') }}">Register</a>
+                        <a class="cta-btn" href="{{ url('register') }}">Daftar akun</a>
                     </div>
                 </div>
             </div>
@@ -350,222 +372,108 @@
 
     </section><!-- /Call To Action Section -->
 
-    <!-- Features Section -->
+    <!-- Hasil Karya -->
     <section id="features" class="features section">
 
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
             <span>Hasil Karya</span>
             <h2>Hasil Karya</h2>
-            <p>Hasil Karya terbaik milik mahasiswa akan di tampilkan dan di diskusikan bersama </p>
-        </div><!-- End Section Title -->
+            <p>Hasil Karya terbaik milik mahasiswa akan ditampilkan dan didiskusikan bersama</p>
+        </div>
 
         <div class="container">
 
-            <div class="row gy-4 align-items-center features-item">
-                <div class="col-md-5 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="100">
-                    <img src="landing/img/lukisan.jpg" class="img-fluid" alt="">
-                </div>
-                <div class="col-md-7" data-aos="fade-up" data-aos-delay="100">
-                    <h3>Lukisan Senja.</h3>
-                    <p class="fst-italic">
-                        Melukis adalah kegiatan mengungkapkan ide, perasaan, atau ekspresi melalui goresan garis, warna,
-                        dan
-                        bentuk pada suatu media, seperti kanvas, kertas, atau dinding. Seni lukis merupakan bagian dari
-                        seni
-                        rupa yang menggunakan unsur visual sebagai sarana komunikasi dan ekspresi.
-                    </p>
-                    <ul>
-                        <li><i class="bi bi-check"></i><span> Gunakan Media yang Tepat Pilih media yang sesuai, seperti
-                                cat air, cat minyak, atau pensil warna, agar hasil lebih maksimal</span></li>
-                        <li><i class="bi bi-check"></i> <span>Eksplorasi Teknik Cobalah berbagai teknik seperti gradasi
-                                warna, layering, atau tekstur untuk memperkaya karya.</span></li>
-                        <li><i class="bi bi-check"></i> <span>Latihan Rutin Semakin sering melukis, semakin terasah
-                                keterampilan dan kreativitas dalam berkarya.</span>
-                        </li>
-                    </ul>
-                </div>
-            </div><!-- Features Item -->
+            @foreach ($karya as $index => $item)
+                @php
+                    $filePath = $item->fileKarya ?? $item->judulFileAsli;
+                    $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+                    $isVideo = in_array($extension, ['mp4', 'mkv', 'avi', 'webm']);
+                    $isImage = in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                    $fileUrl = Storage::url($filePath);
+                    $reverse = $index % 2 != 0;
+                @endphp
 
-            <div class="row gy-4 align-items-center features-item">
-                <div class="col-md-5 order-1 order-md-2 d-flex align-items-center" data-aos="zoom-out"
-                    data-aos-delay="200">
-                    <img src="landing/img/batik.jpg" class="img-fluid" alt="">
-                </div>
-                <div class="col-md-7 order-2 order-md-1" data-aos="fade-up" data-aos-delay="200">
-                    <h3>Batik Tulis</h3>
-                    <p class="fst-italic">
-                        Batik adalah seni menghias kain dengan pola atau motif tertentu menggunakan malam (lilin)
-                        sebagai
-                        perintang warna, yang kemudian melalui proses pewarnaan dan pelorodan (penghilangan malam).
-                        Batik
-                        merupakan salah satu warisan budaya Indonesia yang diakui oleh UNESCO sebagai Warisan Budaya
-                        Takbenda sejak 2 Oktober 2009
-                    </p>
-                    <ul>
-                        <li><i class="bi bi-check"></i> <span>UPilih Bahan yang Sesuai Gunakan kain yang menyerap warna
-                                dengan baik, seperti katun atau sutra, agar hasil lebih optimal.</span></li>
-                        <li><i class="bi bi-check"></i><span> Gunakan Canting dengan Tepat Latih tangan agar stabil
-                                saat
-                                menggambar motif menggunakan canting untuk mendapatkan garis yang rapi.</span></li>
-                        <li><i class="bi bi-check"></i> <span>Eksplorasi Motif Pelajari berbagai motif batik
-                                tradisional
-                                maupun modern untuk memperluas kreativitas dalam berkarya.</span>.</li>
-                    </ul>
-                </div>
-            </div><!-- Features Item -->
+                <div class="row gy-2 align-items-center features-item mb-5">
 
-            <div class="row gy-4 align-items-center features-item">
-                <div class="col-md-5 d-flex align-items-center" data-aos="zoom-out">
-                    <img src="landing/img/patung.jpg" class="img-fluid" alt="">
-                </div>
-                <div class="col-md-7" data-aos="fade-up">
-                    <h3>Patung</h3>
-                    <p>Patung adalah karya seni tiga dimensi yang dibuat dengan teknik memahat, membentuk, atau mencetak
-                        bahan seperti kayu, batu, tanah liat, logam, atau fiberglass untuk menghasilkan bentuk yang
-                        memiliki
-                        nilai estetika atau simbolik. Patung sering digunakan sebagai media ekspresi seni, penghormatan
-                        terhadap tokoh, atau elemen dekoratif dalam berbagai budaya.</p>
-                    <ul>
-                        <li><i class="bi bi-check"></i> <span>Pilih Bahan yang Tepat Gunakan bahan yang sesuai dengan
-                                teknik yang dikuasai, seperti tanah liat untuk pemula atau batu dan logam untuk yang
-                                lebih
-                                mahir.</span></li>
-                        <li><i class="bi bi-check"></i><span>Gunakan Alat yang Sesuai Pastikan alat seperti pahat,
-                                cetakan, atau alat pemotong digunakan dengan benar untuk mempermudah proses
-                                pembentukan.</span></li>
-                        <li><i class="bi bi-check"></i> <span>Buat Sketsa atau Model Awal Sebelum mulai membuat patung,
-                                buat sketsa atau model kecil sebagai panduan agar hasil akhir lebih sesuai dengan konsep
-                                yang diinginkan.</span>.</li>
-                    </ul>
-                </div>
-            </div><!-- Features Item -->
+                    {{-- MEDIA --}}
+                    <div class="col-md-5 {{ $reverse ? 'order-1 order-md-2' : '' }} d-flex align-items-center justify-content-center"
+                        data-aos="zoom-out">
+                        @if ($isVideo)
+                            <video class="img-fluid rounded shadow-sm media-hover" controls
+                                style="max-height: 450px; width: auto;">
+                                <source src="{{ $fileUrl }}" type="video/{{ $extension }}">
+                                Browser tidak mendukung video.
+                            </video>
+                        @elseif ($isImage)
+                            <img src="{{ $fileUrl }}" class="img-fluid rounded shadow-sm media-hover"
+                                style="max-height: 450px; width: auto;" alt="{{ $item->namaKarya }}">
+                        @else
+                            <a href="{{ $fileUrl }}" target="_blank" class="btn btn-secondary">
+                                <i class="fas fa-file"></i> Unduh File
+                            </a>
+                        @endif
+                    </div>
 
-            <div class="row gy-4 align-items-center features-item">
-                <div class="col-md-5 order-1 order-md-2 d-flex align-items-center" data-aos="zoom-out">
-                    <img src="landing/img/ukiran.jpg" class="img-fluid" alt="">
+                    {{-- DESKRIPSI --}}
+                    <div class="col-md-7 {{ $reverse ? 'order-2 order-md-1' : '' }}" data-aos="fade-up">
+                        <div class="desc-card p-3 rounded shadow-sm">
+                            <h3 class="fw-bold text-primary">{{ $item->namaKarya }}</h3>
+
+                            <p class="fst-italic text-dark mb-2" style="font-size: 0.95rem; margin-bottom: 0.5rem;">
+                                {{ $item->deskripsi }}
+                            </p>
+
+                            <ul class="list-unstyled mb-2">
+                                <li class="mb-1">
+                                    <i class="bi bi-person-circle text-secondary me-2"></i>
+                                    <span><strong>Nama Mahasiswa:</strong> {{ $item->namaMhs }}</span>
+                                </li>
+                                <li class="mb-1">
+                                    <i class="bi bi-building text-secondary me-2"></i>
+                                    <span><strong>Kelas:</strong> {{ $item->kelas->nama_kelas }}</span>
+                                </li>
+                                <li class="mb-1">
+                                    <i class="bi bi-calendar-event text-secondary me-2"></i>
+                                    <span><strong>Semester:</strong> {{ $item->semester->nama_semester }}</span>
+                                </li>
+                            </ul>
+
+                            {{-- Badges Info Mahasiswa --}}
+                            <div class="mt-2 d-flex flex-wrap gap-1">
+                                <span class="badge bg-primary badge-hover">Mahasiswa: {{ $item->namaMhs }}</span>
+                                <span class="badge bg-info badge-hover">Kelas: {{ $item->kelas->nama_kelas }}</span>
+                                <span class="badge bg-success badge-hover">Semester:
+                                    {{ $item->semester->nama_semester }}</span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="col-md-7 order-2 order-md-1" data-aos="fade-up">
-                    <h3>Ukiran</h3>
-                    <p class="fst-italic">
-                        Ukiran adalah seni mengukir atau memahat permukaan suatu bahan, seperti kayu, batu, logam, atau
-                        tulang, untuk menciptakan motif, pola, atau bentuk yang memiliki nilai estetika dan makna
-                        tertentu.
-                        Seni ukir banyak ditemukan dalam berbagai budaya sebagai hiasan pada rumah, perabot, senjata,
-                        dan
-                        benda seni lainnya.
-                    </p>
-                    <ul>
-                        <li><i class="bi bi-check"></i> <span>Pilih Bahan yang Sesuai Gunakan bahan yang cocok dengan
-                                teknik ukiran, seperti kayu jati untuk ukiran kayu atau batu andesit untuk ukiran
-                                batu.</span></li>
-                        <li><i class="bi bi-check">
-                            </i><span>Gunakan Alat yang Tepat Pastikan menggunakan pahat, tatah, atau pisau
-                                ukir yang tajam agar hasil lebih rapi dan detail.</span></li>
-                        <li><i class="bi bi-check">.</i>
-                            <span>Buat Pola atau Sketsa Terlebih Dahulu Membuat sketsa pada bahan
-                                sebelum mulai mengukir akan membantu menghasilkan ukiran yang lebih presisi</span>.
-                        </li>
-                    </ul>
-                </div>
-            </div><!-- Features Item -->
+            @endforeach
 
         </div>
 
-    </section><!-- /Features Section -->
+    </section>
+
+    <!-- /Features Section -->
 
     <!-- Pricing Section -->
-    <section id="pricing" class="pricing section">
-
-        <!-- Section Title -->
-        <div class="container section-title" data-aos="fade-up">
-            <span>Perpustakaan Digital</span>
-            <h2>Perpustakaan Digital</h2>
-            <p>Perpustakaan digital adalah sistem perpustakaan berbasis teknologi yang menyediakan koleksi buku, jurnal,
-                artikel, dan berbagai sumber informasi dalam format digital. Pengguna dapat mengakses bahan bacaan
-                melalui
-                perangkat elektronik seperti komputer, tablet, atau smartphone tanpa harus datang ke perpustakaan fisik.
-            </p>
-        </div><!-- End Section Title -->
-
-        <div class="container">
-
-            <div class="row gy-4">
-
-                <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
-                    <div class="pricing-item">
-                        <h3>Modul pembelajaran</h3>
-                        <h4><sup></sup>100<span> / Modul</span></h4>
-                        <ul>
-                            <li><i class="bi bi-check"></i> <span>Modul pembelajaran terpercaya</span></li>
-                            <li><i class="bi bi-check"></i> <span>Cocok untuk pengajar Sekolah Dasar </span></li>
-                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span>
-                            </li>
-                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span>
-                            </li>
-                            <li><i class="bi bi-check"></i> <span>hanya modul yang berkaitan dengan seni rupa</span>
-                            </li>
-                            {{-- <li class="na"><i class="bi bi-x"></i> <span>Tidak mencakup seluruh pembelajaran</span>
-                            </li>
-                            <li class="na"><i class="bi bi-x"></i> <span>Massa ultricies mi quis
-                                    hendrerit</span></li> --}}
-                        </ul>
-                        <a href="#" class="buy-btn">Click Now</a>
-                    </div>
-                </div><!-- End Pricing Item -->
-
-                <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
-                    <div class="pricing-item ">
-                        {{-- <div class="pricing-item featured"> --}}
-                        <h3>Jurnal</h3>
-                        <h4><sup></sup>100<span> / Artikel</span></h4>
-                        <ul>
-                            <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>
-                            <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>
-                            <li><i class="bi bi-check"></i> <span>Nulla at volutpat diam uteera</span></li>
-                            <li><i class="bi bi-check"></i> <span>Pharetra massa massa ultricies</span></li>
-                            <li><i class="bi bi-check"></i> <span>Massa ultricies mi quis hendrerit</span></li>
-                        </ul>
-                        <a href="#" class="buy-btn">Click Now</a>
-                    </div>
-                </div><!-- End Pricing Item -->
-
-                <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="300">
-                    <div class="pricing-item">
-                        <h3>Buku</h3>
-                        <h4><sup></sup>100<span> / Buku</span></h4>
-                        <ul>
-                            <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>
-                            <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>
-                            <li><i class="bi bi-check"></i> <span>Nulla at volutpat diam uteera</span></li>
-                            <li><i class="bi bi-check"></i> <span>Pharetra massa massa ultricies</span></li>
-                            <li><i class="bi bi-check"></i> <span>Massa ultricies mi quis hendrerit</span></li>
-                        </ul>
-                        <a href="#" class="buy-btn">Click Now</a>
-                    </div>
-                </div><!-- End Pricing Item -->
-
-            </div>
-
-        </div>
-
-    </section><!-- /Pricing Section -->
 
     <!-- Testimonials Section -->
     <section id="testimonials" class="testimonials section dark-background">
 
-        <img src="landing/img/testimonials-bg.jpg" class="testimonials-bg" alt="">
+        <img src="{{ asset('landing/img/testimonials-bg.jpg') }}" class="testimonials-bg" alt="">
 
         <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-            <div class="swiper init-swiper">
-                <script type="application/json" class="swiper-config">
+            @if ($testimonis->count())
+                <div class="swiper init-swiper">
+                    <script type="application/json" class="swiper-config">
                 {
                     "loop": true,
                     "speed": 600,
-                    "autoplay": {
-                        "delay": 5000
-                    },
+                    "autoplay": { "delay": 5000 },
                     "slidesPerView": "auto",
                     "pagination": {
                         "el": ".swiper-pagination",
@@ -573,209 +481,58 @@
                         "clickable": true
                     }
                 }
-            </script>
-                <div class="swiper-wrapper">
+                </script>
 
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="landing/img/testimonials/testimonials-1.jpg" class="testimonial-img"
-                                alt="">
-                            <h3>Saul Goodman</h3>
-                            <h4>Ceo &amp; Founder</h4>
-                            <div class="stars">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i>
+                    <div class="swiper-wrapper">
+
+                        @foreach ($testimonis as $testi)
+                            <div class="swiper-slide">
+                                <div class="testimonial-item">
+
+                                    {{-- FOTO --}}
+                                    <img src="{{ $testi->user && $testi->user->dataDiri && $testi->user->dataDiri->fotoMhs
+                                        ? Storage::url($testi->user->dataDiri->fotoMhs)
+                                        : asset('landing/img/profil_dasar.png') }}"
+                                        class="testimonial-img"
+                                        alt="Foto {{ $testi->user->nama_lengkap ?? 'Mahasiswa' }}">
+
+                                    {{-- NAMA --}}
+                                    <h3>{{ $testi->user->nama_lengkap ?? 'Mahasiswa' }}</h3>
+                                    <h4>Mahasiswa</h4>
+
+                                    {{-- RATING --}}
+                                    <div class="stars">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <i
+                                                class="bi bi-star-fill {{ $i <= $testi->rating ? 'text-warning' : 'text-secondary' }}"></i>
+                                        @endfor
+                                    </div>
+
+                                    {{-- PESAN --}}
+                                    <p>
+                                        <i class="bi bi-quote quote-icon-left"></i>
+                                        <span>{{ $testi->pesan }}</span>
+                                        <i class="bi bi-quote quote-icon-right"></i>
+                                    </p>
+
+                                </div>
                             </div>
-                            <p>
-                                <i class="bi bi-quote quote-icon-left"></i>
-                                <span>Proin iaculis purus consequat sem cure digni ssim donec porttitora entum
-                                    suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et.
-                                    Maecen aliquam, risus at semper.</span>
-                                <i class="bi bi-quote quote-icon-right"></i>
-                            </p>
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="landing/img/testimonials/testimonials-2.jpg" class="testimonial-img"
-                                alt="">
-                            <h3>Sara Wilsson</h3>
-                            <h4>Designer</h4>
-                            <div class="stars">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i>
-                            </div>
-                            <p>
-                                <i class="bi bi-quote quote-icon-left"></i>
-                                <span>Export tempor illum tamen malis malis eram quae irure esse labore quem cillum
-                                    quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat
-                                    irure amet legam anim culpa.</span>
-                                <i class="bi bi-quote quote-icon-right"></i>
-                            </p>
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="landing/img/testimonials/testimonials-3.jpg" class="testimonial-img"
-                                alt="">
-                            <h3>Jena Karlis</h3>
-                            <h4>Store Owner</h4>
-                            <div class="stars">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i>
-                            </div>
-                            <p>
-                                <i class="bi bi-quote quote-icon-left"></i>
-                                <span>Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla
-                                    quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore
-                                    quis sint minim.</span>
-                                <i class="bi bi-quote quote-icon-right"></i>
-                            </p>
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="landing/img/testimonials/testimonials-4.jpg" class="testimonial-img"
-                                alt="">
-                            <h3>Matt Brandon</h3>
-                            <h4>Freelancer</h4>
-                            <div class="stars">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i>
-                            </div>
-                            <p>
-                                <i class="bi bi-quote quote-icon-left"></i>
-                                <span>Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim
-                                    fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore
-                                    quem dolore labore illum veniam.</span>
-                                <i class="bi bi-quote quote-icon-right"></i>
-                            </p>
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="landing/img/testimonials/testimonials-5.jpg" class="testimonial-img"
-                                alt="">
-                            <h3>John Larson</h3>
-                            <h4>Entrepreneur</h4>
-                            <div class="stars">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i>
-                            </div>
-                            <p>
-                                <i class="bi bi-quote quote-icon-left"></i>
-                                <span>Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor
-                                    noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam
-                                    esse veniam culpa fore nisi cillum quid.</span>
-                                <i class="bi bi-quote quote-icon-right"></i>
-                            </p>
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
-
-        </div>
-
-    </section><!-- /Testimonials Section -->
-
-    <!-- Faq Section -->
-    <section id="faq" class="faq section">
-
-        <!-- Section Title -->
-        <div class="container section-title" data-aos="fade-up">
-            <span>Frequently Asked Questions</span>
-            <h2>Frequently Asked Questions</h2>
-            <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-        </div><!-- End Section Title -->
-
-        <div class="container">
-
-            <div class="row justify-content-center">
-
-                <div class="col-lg-10">
-
-                    <div class="faq-container">
-
-                        <div class="faq-item faq-active" data-aos="fade-up" data-aos-delay="200">
-                            <i class="faq-icon bi bi-question-circle"></i>
-                            <h3>Non consectetur a erat nam at lectus urna duis?</h3>
-                            <div class="faq-content">
-                                <p>Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus
-                                    laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor
-                                    rhoncus dolor purus non.</p>
-                            </div>
-                            <i class="faq-toggle bi bi-chevron-right"></i>
-                        </div><!-- End Faq item-->
-
-                        <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
-                            <i class="faq-icon bi bi-question-circle"></i>
-                            <h3>Feugiat scelerisque varius morbi enim nunc faucibus a pellentesque?</h3>
-                            <div class="faq-content">
-                                <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id
-                                    interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus
-                                    scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim.
-                                    Mauris ultrices eros in cursus turpis massa tincidunt dui.</p>
-                            </div>
-                            <i class="faq-toggle bi bi-chevron-right"></i>
-                        </div><!-- End Faq item-->
-
-                        <div class="faq-item" data-aos="fade-up" data-aos-delay="400">
-                            <i class="faq-icon bi bi-question-circle"></i>
-                            <h3>Dolor sit amet consectetur adipiscing elit pellentesque?</h3>
-                            <div class="faq-content">
-                                <p>Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci.
-                                    Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl
-                                    suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis
-                                    convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis
-                                </p>
-                            </div>
-                            <i class="faq-toggle bi bi-chevron-right"></i>
-                        </div><!-- End Faq item-->
-
-                        <div class="faq-item" data-aos="fade-up" data-aos-delay="500">
-                            <i class="faq-icon bi bi-question-circle"></i>
-                            <h3>Ac odio tempor orci dapibus. Aliquam eleifend mi in nulla?</h3>
-                            <div class="faq-content">
-                                <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id
-                                    interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus
-                                    scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim.
-                                    Mauris ultrices eros in cursus turpis massa tincidunt dui.</p>
-                            </div>
-                            <i class="faq-toggle bi bi-chevron-right"></i>
-                        </div><!-- End Faq item-->
-
-                        <div class="faq-item" data-aos="fade-up" data-aos-delay="600">
-                            <i class="faq-icon bi bi-question-circle"></i>
-                            <h3>Tempus quam pellentesque nec nam aliquam sem et tortor consequat?</h3>
-                            <div class="faq-content">
-                                <p>Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse
-                                    in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl
-                                    suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in
-                                </p>
-                            </div>
-                            <i class="faq-toggle bi bi-chevron-right"></i>
-                        </div><!-- End Faq item-->
+                        @endforeach
 
                     </div>
 
+                    <div class="swiper-pagination"></div>
                 </div>
-
-            </div>
+            @else
+                {{-- JIKA BELUM ADA TESTIMONI --}}
+                <div class="text-center text-light py-5">
+                    <h4>Belum ada testimoni mahasiswa</h4>
+                    <p>Testimoni akan muncul setelah disetujui admin.</p>
+                </div>
+            @endif
 
         </div>
-
-    </section><!-- /Faq Section -->
+    </section>
 
     @push('js')
         <script>
@@ -795,4 +552,259 @@
             });
         </script>
     @endpush
+
+    @push('css')
+        <style>
+            /* ===============================
+                                                                                                                    Tipografi Estetik untuk Ruang Seni
+                                                                                                                                =============================== */
+            .title-art {
+                font-family: 'Poppins', sans-serif;
+                font-weight: 700;
+                font-size: 2.5rem;
+                color: #ffffff;
+                line-height: 1.2;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+
+            .desc-art {
+                font-family: 'Roboto', sans-serif;
+                font-size: 1.1rem;
+                color: #ffffff;
+                line-height: 1.8;
+                text-align: center;
+                max-width: 800px;
+                margin: 0 auto;
+                letter-spacing: 0.3px;
+            }
+
+            /* Tambahan subtle highlight pada nama platform */
+            .desc-art strong {
+                color: #ff1500;
+                /* warna coral aesthetic */
+                font-weight: 600;
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                .title-art {
+                    font-size: 2rem;
+                }
+
+                .desc-art {
+                    font-size: 1rem;
+                }
+            }
+
+            /* ===============================
+                                                                                                                                                                                Hover efek & scaling
+                                                                                                                                                                            =============================== */
+            .hover-scale {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .hover-scale:hover {
+                transform: translateY(-5px) scale(1.03);
+                box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+            }
+
+            .hover-scale-sm {
+                transition: transform 0.2s;
+            }
+
+            .hover-scale-sm:hover {
+                transform: scale(1.05);
+            }
+
+            /* ===============================
+                                                                                                                                                                                Media Hover (Gambar/Video)
+                                                                                                                                                                           =============================== */
+            .media-hover {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                cursor: pointer;
+            }
+
+            .media-hover:hover {
+                transform: scale(1.05);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            }
+
+            /* ===============================
+                                                                                                                                                                                Card Deskripsi Hasil Karya
+                                                                                                                                                                           =============================== */
+            .desc-card {
+                background: linear-gradient(135deg, #ffffff 0%, #f1f6ff 100%);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .desc-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            }
+
+            /* ===============================
+                                                                                                                                                                                Badge Info Mahasiswa
+                                                                                                                                                                           =============================== */
+            .badge-hover {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                cursor: default;
+            }
+
+            .badge-hover:hover {
+                transform: scale(1.1);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            }
+
+            /* ===============================
+                                                                                                                                                                                Responsive untuk mobile
+                                                                                                                                                                           =============================== */
+            @media (max-width: 768px) {
+                .desc-card h3 {
+                    font-size: 1.25rem;
+                }
+
+                .desc-card p {
+                    font-size: 0.85rem;
+                }
+
+                .media-hover {
+                    max-height: 300px;
+                }
+            }
+
+            /* =====================================================
+                                                                                                   HERO — OVERRIDE TERKONTROL (TIDAK GANGGU LAINNYA)
+                                                                                                   ===================================================== */
+
+            /* Wrapper agar judul & paragraf sejajar */
+            #hero .hero-text {
+                max-width: 540px;
+            }
+
+            /* Judul */
+            #hero .title-art {
+                font-family: 'Playfair Display', serif;
+                text-align: left;
+                margin-bottom: 1.2rem;
+            }
+
+            /* Paragraf */
+            #hero .desc-art {
+                text-align: justify;
+                text-justify: inter-word;
+                hyphens: auto;
+                margin: 0;
+            }
+
+
+            /* Highlight nama platform */
+            #hero .desc-art strong {
+                color: #ff784f;
+                font-weight: 600;
+            }
+
+            /* Responsive HERO text */
+            @media (max-width: 768px) {
+                #hero .title-art {
+                    font-size: 2.2rem;
+                    text-align: center;
+                }
+
+                #hero .desc-art {
+                    text-align: center;
+                    margin: 0 auto;
+                }
+            }
+
+            /* =====================================================
+                                                                                                   ART STATS — TYPOGRAPHY FIRST (GEN Z / ART)
+                                                                                                   ===================================================== */
+
+            #hero .art-stats {
+                margin-top: 3rem;
+            }
+
+            #hero .art-stat-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: .35rem;
+                padding: .75rem 0;
+                transition: transform .35s ease;
+            }
+
+            #hero .art-stat-item:hover {
+                transform: translateY(-6px);
+            }
+
+            /* ICON */
+            #hero .art-stat-item i {
+                font-size: 2.6rem;
+                margin-bottom: .3rem;
+                opacity: .95;
+            }
+
+            /* ANGKA = ELEMEN SENI */
+            #hero .art-stat-value {
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 2.8rem;
+                letter-spacing: .18em;
+                line-height: 1;
+                color: #ffffff;
+            }
+
+            /* LABEL */
+            #hero .art-stat-label {
+                font-family: 'Inter', sans-serif;
+                font-size: .65rem;
+                letter-spacing: .35em;
+                text-transform: uppercase;
+                color: rgba(255, 255, 255, .75);
+            }
+
+            /* =====================================================
+                                                                                                   WARNA ICON BERDASARKAN MAKNA
+                                                                                                   (TIDAK PENGARUH KE ICON LAIN)
+                                                                                                   ===================================================== */
+
+            #hero .art-stat-item[data-type="Mahasiswa"] i {
+                color: #ff784f;
+                /* human / komunitas */
+            }
+
+            #hero .art-stat-item[data-type="Kelas"] i {
+                color: #5cc8ff;
+                /* edukasi */
+            }
+
+            #hero .art-stat-item[data-type="User Aktif"] i {
+                color: #6ee7b7;
+                /* aktif / hidup */
+            }
+
+            #hero .art-stat-item[data-type="UserNon-Aktif"] i {
+                color: #a1a1aa;
+                /* redup */
+            }
+
+            /* =====================================================
+                                                                                                   MOBILE REFINEMENT
+                                                                                                   ===================================================== */
+
+            @media (max-width: 576px) {
+                #hero .art-stat-item i {
+                    font-size: 2.1rem;
+                }
+
+                #hero .art-stat-value {
+                    font-size: 2.2rem;
+                }
+            }
+        </style>
+    @endpush
+
 </x-user.layout.rumah>

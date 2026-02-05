@@ -57,10 +57,10 @@
                                                     <option value="Artikel"
                                                         {{ $perpus->kategori == 'Artikel' ? 'selected' : '' }}>Artikel
                                                     </option>
-                                                    <option value="Modul Pembelajaran"
+                                                    {{-- <option value="Modul Pembelajaran"
                                                         {{ $perpus->kategori == 'Modul Pembelajaran' ? 'selected' : '' }}>
                                                         Modul Pembelajaran
-                                                    </option>
+                                                    </option> --}}
                                                 </select>
                                             </div>
                                         </div>

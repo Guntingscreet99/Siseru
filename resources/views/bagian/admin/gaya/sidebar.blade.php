@@ -143,6 +143,11 @@
                                             <span class="sub-item">Data Ujian/Evaluasi</span>
                                         </a>
                                     </li>
+                                    <li class="{{ request()->is('admin/master/testimoni') ? 'active' : '' }}">
+                                        <a href="{{ url('admin/master/testimoni') }}">
+                                            <span class="sub-item">Data Testimoni</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
@@ -304,6 +309,14 @@
                             <a href="{{ url('user/menu/peringkat') }}">
                                 <i class="fas fa-trophy"></i>
                                 <p>Peringkat</p>
+                            </a>
+                        </li>
+
+                        <!-- Testimoni -->
+                        <li class="nav-item {{ request()->is('user/menu/testimoni*') ? 'active' : '' }}">
+                            <a href="{{ url('user/menu/testimoni') }}">
+                                <i class="fas fa-comment-dots"></i>
+                                <p>Testimoni</p>
                             </a>
                         </li>
                     @endif

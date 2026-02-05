@@ -13,7 +13,7 @@
                 <div class="bg-gradient"></div>
                 <div class="container position-relative z-10 py-5">
                     <h1 class="display-4 fw-bold mb-3 animate__animated animate__fadeInDown">
-                        Video Tutorial
+                        Video Pembelajaran
                     </h1>
                     <p class="lead mb-4 animate__animated animate__fadeInUp">
                         Koleksi video pembelajaran dari mahasiswa
@@ -60,7 +60,7 @@
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content overflow-hidden border-0 rounded-4 shadow-lg">
                 <div class="modal-header border-0">
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-black" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-0">
                     <div id="videoPreview" class="bg-black">

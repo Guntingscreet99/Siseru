@@ -35,7 +35,7 @@
                                     <i class="fas fa-search text-primary"></i>
                                 </span>
                                 <input type="text" id="search" class="form-control border-0 shadow-none fs-5"
-                                    placeholder="Cari judul, kelas, semester, topik, tahun..." autocomplete="off"
+                                    placeholder="Cari judul, topik, kelas, semester, tahun..." autocomplete="off"
                                     value="{{ request('query') }}">
                             </div>
                         </div>

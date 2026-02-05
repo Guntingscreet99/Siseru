@@ -1,88 +1,75 @@
 @extends('bagian.user.rumah.home')
-@section('judul', 'User | Data Ujian')
-@section('isi')
+@section('judul', 'Kelas Interaktif')
 
+@section('isi')
     <div class="container">
         <div class="page-inner">
-            <div class="guru">
-                <div class="judul">
-                    <h1>@yield('judul')</h1>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">@yield('judul')</h4>
                 </div>
 
-                <div class="card">
-                    <div class="card-body">
+                <div class="card-body">
 
-                        {{-- SEARCH --}}
-                        <div class="mb-3 d-flex justify-content-end">
-                            <div class="input-group" style="max-width: 400px;">
-                                <input type="text" id="search" class="form-control"
-                                    placeholder="Cari ujian / kelas / semester">
-                                <button class="btn btn-info" type="button">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered text-center">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Ujian</th>
-                                        <th>Kelas</th>
-                                        <th>Semester</th>
-                                        <th>Mulai</th>
-                                        <th>Durasi</th>
-                                        <th>Status</th>
-                                        <th>Link</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ujian-body">
-                                    @forelse ($ujians as $item)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->ujian }}</td>
-                                            <td>{{ $item->kelas }}</td>
-                                            <td>{{ $item->semester }}</td>
-                                            <td>
-                                                {{ \Carbon\Carbon::parse($item->waktu_mulai)->translatedFormat('d F Y, H:i') }}
-                                            </td>
-                                            <td>{{ $item->durasi_menit }} menit</td>
-                                            <td>
-                                                @if (now()->lt($item->waktu_mulai))
-                                                    <span class="badge bg-secondary">Belum Dimulai</span>
-                                                @elseif (now()->between($item->waktu_mulai, $item->waktu_selesai))
-                                                    <span class="badge bg-success">Sedang Berlangsung</span>
-                                                @else
-                                                    <span class="badge bg-danger">Selesai</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($item->link)
-                                                    <a href="{{ $item->link }}" target="_blank"
-                                                        class="btn btn-sm btn-info">
-                                                        Lihat
-                                                    </a>
-                                                @else
-                                                    <span class="text-muted">-</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="8">Data ujian belum tersedia</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-
+                    {{-- SEARCH --}}
+                    <div class="mb-3 d-flex justify-content-end">
+                        <input type="text" id="search" class="form-control w-25" placeholder="Cari kelas / link zoom">
                     </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped text-center align-middle">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Kelas</th>
+                                    <th>Link Zoom</th>
+                                    <th>Link Webinar</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="zoom-body">
+                                @forelse ($zooms as $item)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->kelas->nama_kelas ?? '-' }}</td>
+                                        <td>
+                                            @if ($item->linkZoom)
+                                                <a href="{{ $item->linkZoom }}" target="_blank" class="btn btn-sm btn-info">
+                                                    Buka Zoom
+                                                </a>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($item->linkWebinar)
+                                                <a href="{{ $item->linkWebinar }}" target="_blank"
+                                                    class="btn btn-sm btn-success">
+                                                    Buka Webinar
+                                                </a>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success">{{ $item->status }}</span>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5">Data Zoom belum tersedia</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
+
         </div>
     </div>
-
 @endsection
 
 @push('js')
@@ -97,56 +84,41 @@
 
                 timer = setTimeout(function() {
                     $.ajax({
-                        url: "{{ route('user.ujian.cari') }}",
+                        url: "{{ route('user.zoom.cari') }}",
                         type: "GET",
                         data: {
                             query: query
                         },
                         success: function(data) {
-
                             let rows = '';
 
                             if (data.length === 0) {
                                 rows =
-                                    `<tr><td colspan="8">Data tidak ditemukan</td></tr>`;
+                                    `<tr><td colspan="5">Data tidak ditemukan</td></tr>`;
                             } else {
                                 $.each(data, function(index, item) {
-
-                                    let statusBadge = '';
-                                    let now = new Date();
-
-                                    if (now < new Date(item.waktu_mulai)) {
-                                        statusBadge =
-                                            '<span class="badge bg-secondary">Belum Dimulai</span>';
-                                    } else if (now >= new Date(item
-                                        .waktu_mulai) && now <= new Date(item
-                                            .waktu_selesai)) {
-                                        statusBadge =
-                                            '<span class="badge bg-success">Sedang Berlangsung</span>';
-                                    } else {
-                                        statusBadge =
-                                            '<span class="badge bg-danger">Selesai</span>';
-                                    }
-
                                     rows += `
                                 <tr>
                                     <td>${index + 1}</td>
-                                    <td>${item.ujian}</td>
-                                    <td>${item.kelas}</td>
-                                    <td>${item.semester}</td>
-                                    <td>${item.waktu_mulai_format}</td>
-                                    <td>${item.durasi_menit} menit</td>
-                                    <td>${statusBadge}</td>
+                                    <td>${item.kelas ? item.kelas.nama_kelas : '-'}</td>
                                     <td>
-                                        ${item.link
-                                            ? `<a href="${item.link}" target="_blank" class="btn btn-sm btn-info">Lihat</a>`
+                                        ${item.linkZoom
+                                            ? `<a href="${item.linkZoom}" target="_blank" class="btn btn-sm btn-info">Buka Zoom</a>`
                                             : `<span class="text-muted">-</span>`}
+                                    </td>
+                                    <td>
+                                        ${item.linkWebinar
+                                            ? `<a href="${item.linkWebinar}" target="_blank" class="btn btn-sm btn-success">Buka Webinar</a>`
+                                            : `<span class="text-muted">-</span>`}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">${item.status}</span>
                                     </td>
                                 </tr>`;
                                 });
                             }
 
-                            $('#ujian-body').html(rows);
+                            $('#zoom-body').html(rows);
                         }
                     });
                 }, 400);

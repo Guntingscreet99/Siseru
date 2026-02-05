@@ -11,10 +11,10 @@
                 <div class="bg-gradient"></div>
                 <div class="container position-relative z-10 py-5">
                     <h1 class="display-4 fw-bold mb-3 animate__animated animate__fadeInDown">
-                        Galeri Karya Kreatif
+                        Galeri Karya
                     </h1>
                     <p class="lead mb-4 animate__animated animate__fadeInUp opacity-90">
-                        Temukan karya-karya luar biasa dari mahasiswa kita
+                        Jelajahi karya-karya inspiratif mahasiswa Universitas Muria Kudus.
                     </p>
 
                     @auth
@@ -62,7 +62,7 @@
             <div class="modal-content overflow-hidden border-0 rounded-4 shadow-lg"
                 style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);">
                 <div class="modal-header border-0 pb-0">
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-black" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-0">
                     <div class="row g-0">

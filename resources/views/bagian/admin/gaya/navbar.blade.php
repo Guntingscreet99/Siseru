@@ -18,7 +18,7 @@
             <!-- <img src="landing/img/logo.png" alt=""> -->
             <img src="{{ asset('landing/img/logo_UMK.png') }}" alt="RUPAKU Logo" class="me-2" height="50">
             <img src="{{ asset('landing/img/logo_PGSD.png') }}" alt="RUPAKU Logo" class="me-2" height="50">
-            <img src="{{ asset('landing/img/LogoRupaku.png') }}" alt="RUPAKU Logo" class="me-2" height="50">
+            <img src="{{ asset('landing/img/LogoRupaku.png') }}" alt="RUPAKU Logo" class="me-2" height="55">
             {{-- <h1 class="sitename">RUPAKU!</h1> --}}
         </a>
 
@@ -253,7 +253,7 @@
                                         style="object-fit: cover; width:100%; height:100%;">
                                 </div>
                                 <div class="u-text">
-                                    <h4>{{ Auth::user()->username ?? '-' }}</h4>
+                                    <h4>{{ Auth::user()->nim ?? '-' }}</h4>
                                     <p class="text-muted">{{ Auth::user()->nama_lengkap ?? '-' }}</p>
                                     {{-- <a href="#" class="btn btn-xs btn-secondary btn-sm">View
                                         Profile
@@ -263,15 +263,15 @@
                         </li>
                         <li>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ url('mahasiswa/data-diri') }}">My Profile</a>
+                            <a class="dropdown-item" href="{{ url('mahasiswa/data-diri') }}">Data Diri</a>
                             {{-- <a class="dropdown-item" href="#">My Balance</a>
                             <a class="dropdown-item" href="#">Inbox</a>
                             <div class="dropdown-divider"></div> --}}
-                            <a class="dropdown-item" href="{{ route('landing.index') }}">Landing</a>
+                            <a class="dropdown-item" href="{{ route('landing.index') }}">Beranda</a>
                             <div class="dropdown-divider"></div>
                             <form action="{{ url('logout') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-warning" style="margin-left: 5px;">Logout</button>
+                                <button type="submit" class="btn btn-warning" style="margin-left: 5px;">Keluar</button>
                             </form>
                         </li>
                     </div>

@@ -50,7 +50,7 @@
                                                     <option value="Buku">Buku</option>
                                                     <option value="Jurnal">Jurnal</option>
                                                     <option value="Artikel">Artikel</option>
-                                                    <option value="Modul Pembelajaran">Modul Pembelajaran</option>
+                                                    {{-- <option value="Modul Pembelajaran">Modul Pembelajaran</option> --}}
                                                 </select>
                                             </div>
                                         </div>

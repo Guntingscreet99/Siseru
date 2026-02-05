@@ -13,14 +13,14 @@
     <div class="login-container">
         <div class="login-header">
             <h1>Selamat Datang!</h1>
-            <p>Masukkan kredensial Anda untuk mengakses akun!</p>
+            <p>Masukkan data Anda untuk mengakses akun!</p>
         </div>
         <!-- resources/views/auth/login.blade.php -->
 
         <form action="{{ url('login') }}" method="POST">
             @csrf
             <div class="form-group">
-                <label for="identifier">NIM atau Username</label>
+                <label for="identifier">NIM</label>
                 <input type="text" id="identifier" name="identifier" placeholder="Masukkan NIM atau Username"
                     value="{{ old('identifier') }}" required />
                 @error('identifier')
@@ -30,7 +30,7 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">Sandi</label>
                 <input type="password" id="password" name="password" placeholder="••••••••" required />
                 @error('password')
                     <span class="text-light" style="color: white">
@@ -41,15 +41,15 @@
             <div class="remember-forgot">
                 <div class="remember-me">
                     <input type="checkbox" id="remember" name="remember" />
-                    <label for="remember">Remember me</label>
+                    <label for="remember">Ingat saya</label>
                 </div>
-                <a href="#" class="forgot-password">Forgot Password?</a>
+                <a href="#" class="forgot-password">Lupa sandi?</a>
             </div>
             <button type="submit" class="login-button">
-                Sign in to your account
+                Masuk ke akun Anda
             </button>
             <div class="signup-link">
-                Don't have an account? <a href="{{ url('register') }}">Create account</a>
+                Belum punya akun? <a href="{{ url('register') }}">Buat akun</a>
             </div>
         </form>
 

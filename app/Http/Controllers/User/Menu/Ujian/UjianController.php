@@ -11,27 +11,30 @@ class UjianController extends Controller
 {
     public function index()
     {
-        $ujians = Ujian::where('status', 'Ditampilkan')
+        $ujians = Ujian::with('kelas', 'semester')
+            ->where('status', 'Ditampilkan')
             ->orderBy('waktu_mulai', 'asc')
             ->get()
             ->map(function ($item) {
 
-                // Format waktu mulai untuk blade
+                // Format waktu mulai (AMAN UNTUK BLADE)
                 $item->waktu_mulai_format = $item->waktu_mulai
                     ? Carbon::parse($item->waktu_mulai)
                     ->translatedFormat('d F Y, H:i')
                     : '-';
 
-                // Hitung waktu selesai dari durasi
+                // Hitung waktu selesai
                 if ($item->waktu_mulai && $item->durasi_menit) {
                     $item->waktu_selesai = Carbon::parse($item->waktu_mulai)
                         ->addMinutes($item->durasi_menit);
+                } else {
+                    $item->waktu_selesai = null;
                 }
 
                 return $item;
             });
 
-        return view('user.menu.zoom.index', compact('ujians'));
+        return view('user.menu.ujian.index', compact('ujians'));
     }
 
     public function cariData(Request $request)
@@ -40,11 +43,16 @@ class UjianController extends Controller
 
             $query = $request->input('query');
 
-            $ujians = Ujian::where('status', 'Ditampilkan')
+            $ujians = Ujian::with('kelas', 'semester')
+                ->where('status', 'Ditampilkan')
                 ->where(function ($q) use ($query) {
                     $q->where('ujian', 'like', "%{$query}%")
-                        ->orWhere('kelas', 'like', "%{$query}%")
-                        ->orWhere('semester', 'like', "%{$query}%");
+                        ->orWhereHas('kelas', function ($k) use ($query) {
+                            $k->where('nama_kelas', 'like', "%{$query}%");
+                        })
+                        ->orWhereHas('semester', function ($s) use ($query) {
+                            $s->where('nama_semester', 'like', "%{$query}%");
+                        });
                 })
                 ->orderBy('waktu_mulai', 'asc')
                 ->get()
@@ -58,6 +66,8 @@ class UjianController extends Controller
                     if ($item->waktu_mulai && $item->durasi_menit) {
                         $item->waktu_selesai = Carbon::parse($item->waktu_mulai)
                             ->addMinutes($item->durasi_menit);
+                    } else {
+                        $item->waktu_selesai = null;
                     }
 
                     return $item;

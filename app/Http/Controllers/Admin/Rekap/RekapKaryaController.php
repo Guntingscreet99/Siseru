@@ -87,30 +87,55 @@ class RekapKaryaController extends Controller
 
     public function update(Request $request, $kdkarya)
     {
-        $karya = DataKarya::findOrFail($kdkarya);
         $request->validate([
-            'skor_deskripsi' => 'integer|min:1|max:5',
-            'skor_analisis' => 'integer|min:1|max:5',
-            'skor_interpretasi' => 'integer|min:1|max:5',
-            'skor_penilaian' => 'integer|min:1|max:5',
+            'skor_orisinalitas'       => 'required|integer|min:0|max:20',
+            'skor_teknik'             => 'required|integer|min:0|max:20',
+            'skor_komposisi_estetika' => 'required|integer|min:0|max:20',
+            'skor_ekspresi_makna'     => 'required|integer|min:0|max:20',
+            'skor_kesesuaian_tema'    => 'required|integer|min:0|max:20',
         ]);
 
-        $karya->update($request->only([
-            'skor_deskripsi',
-            'skor_analisis',
-            'skor_interpretasi',
-            'skor_penilaian'
-        ]));
+        $karya = DataKarya::findOrFail($kdkarya);
 
-        // Hitung ulang total
-        $bobot = [20, 30, 30, 20];
-        $skors = [$karya->skor_deskripsi, $karya->skor_analisis, $karya->skor_interpretasi, $karya->skor_penilaian];
-        $tertimbang = array_map(fn($s, $b) => $s * ($b / 5), $skors, $bobot);
-        $karya->total_nilai = array_sum($tertimbang);
-        $karya->save();
+        // Ambil skor per item
+        $skorItems = [
+            'skor_orisinalitas'       => $request->input('skor_orisinalitas'),
+            'skor_teknik'             => $request->input('skor_teknik'),
+            'skor_komposisi_estetika' => $request->input('skor_komposisi_estetika'),
+            'skor_ekspresi_makna'     => $request->input('skor_ekspresi_makna'),
+            'skor_kesesuaian_tema'    => $request->input('skor_kesesuaian_tema'),
+        ];
 
-        return redirect()->route('admin.rekap.karya')->with('success', 'Nilai updated');
+        // Total nilai = jumlah semua skor (maks 100)
+        $total = array_sum($skorItems);
+
+        // Update sekaligus
+        $karya->update(array_merge($skorItems, ['total_nilai' => $total]));
+
+        return redirect()
+            ->route('admin.rekap.karya')
+            ->with('success', 'Nilai karya berhasil diperbarui');
     }
+
+
+
+
+    public function destroy($kdkarya)
+    {
+        $karya = DataKarya::findOrFail($kdkarya);
+
+        // Hapus file karya jika ada
+        if ($karya->fileKarya && Storage::disk('public')->exists($karya->fileKarya)) {
+            Storage::disk('public')->delete($karya->fileKarya);
+        }
+
+        $karya->delete();
+
+        return redirect()
+            ->route('admin.rekap.karya')
+            ->with('success', 'Karya berhasil dihapus');
+    }
+
 
 
 
@@ -143,4 +168,3 @@ class RekapKaryaController extends Controller
     //     return redirect()->back()->with('success', 'Karya berhasil diupload');
     // }
 }
-    
