@@ -111,10 +111,13 @@ class DatadiriController extends Controller
             'tempat'       => $request->tempat,
             'tgllahir'     => $request->tgllahir,
             'jenisKelamin' => $request->jenisKelamin,
-            'fotoMhs'      => $fotoMhsPath,
-            'judulFileAsli' => $judulFileAsli,
             'status'       => $request->status ?? null,
         ];
+
+        if ($fotoMhsPath) {
+            $dataDiriPayload['fotoMhs'] = $fotoMhsPath;
+            $dataDiriPayload['judulFileAsli'] = $judulFileAsli;
+        }
 
         $dataDiri = DataDiri::where('user_id', $userId)->first();
 

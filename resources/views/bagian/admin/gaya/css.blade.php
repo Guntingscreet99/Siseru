@@ -32,3 +32,27 @@
 
 {{-- Icon --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+{{-- <style>
+    @media (max-width: 991.98px) {
+        .sidebar {
+            position: fixed !important;
+            z-index: 1050;
+        }
+
+        .main-panel {
+            margin-left: 0 !important;
+        }
+
+        .wrapper.sidebar_minimize .main-panel {
+            margin-left: 0 !important;
+        }
+    }
+
+    /* Pastikan offcanvas punya lebar yang pas di tablet */
+    @media (min-width: 576px) and (max-width: 991.98px) {
+        .offcanvas-lg {
+            width: 280px !important;
+        }
+    }
+</style> --}}

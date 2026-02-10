@@ -45,8 +45,8 @@
                                         <label class="btn btn-info mb-3 d-flex align-items-center gap-2">
                                             <i class="bi bi-upload"></i>
                                             <span class="text-white">Unggah Foto</span>
-                                            <input type="file" name="fotoMhs" id="fotoMhs" class="d-none"
-                                                accept="image/png, image/jpg, image/jpeg" onchange="previewFoto(event)">
+                                            <input type="file" name="fotoMhs" id="fotoMhs" class="visually-hidden"
+                                                accept="image/png, image/jpg, image/jpeg">
                                         </label>
 
                                         <button type="button"
@@ -183,27 +183,36 @@
 
 @endsection
 
-
 @push('js')
     <script>
-        const defaultFoto = "{{ asset('admin/img/profile.jpg') }}";
-
-        function previewFoto(event) {
-            const input = event.target;
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('fotoMhs');
             const preview = document.getElementById('previewFoto');
+            const defaultFoto = "{{ asset('admin/img/profile.jpg') }}";
 
-            if (input.files && input.files[0]) {
+            input.addEventListener('change', function() {
+                if (!this.files || !this.files[0]) return;
+
+                const file = this.files[0];
+
+                // validasi sederhana
+                if (!file.type.startsWith('image/')) {
+                    alert('File harus berupa gambar');
+                    this.value = '';
+                    return;
+                }
+
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     preview.src = e.target.result;
                 };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+                reader.readAsDataURL(file);
+            });
 
-        function resetFoto() {
-            document.getElementById('previewFoto').src = defaultFoto;
-            document.getElementById('fotoMhs').value = "";
-        }
+            window.resetFoto = function() {
+                preview.src = defaultFoto;
+                input.value = '';
+            }
+        });
     </script>
 @endpush
