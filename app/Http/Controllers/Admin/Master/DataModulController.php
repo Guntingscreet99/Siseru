@@ -76,8 +76,17 @@ class DataModulController extends Controller
 
         if ($request->hasFile('fileModul')) {
             $file = $request->file('fileModul');
-            $judulAsli = $file->getClientOriginalName(); // Ambil nama file asli
-            $mdl = $file->store('fileModul', 'public'); // Simpan file
+
+            $judulAsli = $file->getClientOriginalName();
+
+            $namaFile = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(
+                public_path('uploads/fileModul'),
+                $namaFile
+            );
+
+            $mdl = 'uploads/fileModul/' . $namaFile;
         }
 
         $data = [
@@ -136,8 +145,16 @@ class DataModulController extends Controller
             // Simpan file baru
             if ($request->hasFile('fileModul')) {
                 $file = $request->file('fileModul');
+
                 $judulAsli = $file->getClientOriginalName();
-                $mdl = $file->store('fileModul', 'public');
+                $namafile = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+                $file->move(
+                    public_path('uploads/fileModul'),
+                    $namafile
+                );
+
+                $mdl = 'uploads/fileModul/' . $namafile;
             } else {
                 // Jika checkbox tidak dicentang tapi user tidak mengunggah file baru, kosongkan file
                 $mdl = null;

@@ -67,8 +67,16 @@ class DataPerpustakaanController extends Controller
 
         if ($request->hasFile('filePerpus')) {
             $file = $request->file('filePerpus');
+
             $judulAsli = $file->getClientOriginalName();
-            $mdl = $file->store('filePerpus', 'public');
+            $namaFile = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(
+                public_path('uploads/filePerpus'),
+                $namaFile
+            );
+
+            $mdl = 'uploads/filePerpus/' . $namaFile;
         }
 
         $data = [
@@ -125,8 +133,16 @@ class DataPerpustakaanController extends Controller
             }
 
             $file = $request->file('filePerpus');
-            $data['filePerpus'] = $file->store('filePerpus', 'public');
+
             $data['judulFileAsli'] = $file->getClientOriginalName();
+            $namaFile = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(
+                public_path('uploads/filePerpus'),
+                $namaFile
+            );
+
+            $data['filePerpus'] = 'uploads/filePerpus/' . $namaFile;
         }
 
         $perpus->update($data);

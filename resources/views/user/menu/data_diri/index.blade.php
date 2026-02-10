@@ -4,7 +4,7 @@
 
     @php
         $fotoPath = $user->datadiri?->fotoMhs
-            ? asset('storage/' . $user->datadiri->fotoMhs)
+            ? asset($user->datadiri->fotoMhs)
             : asset('admin/img/profile.jpg');
     @endphp
 

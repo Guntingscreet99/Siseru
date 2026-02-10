@@ -44,9 +44,6 @@ class DataVideoController extends Controller
 
     public function tambahData(Request $request)
     {
-
-        // dd($request->all());
-
         $request->validate([
             'judul' => 'required',
             'deskripsi' => 'required',
@@ -67,8 +64,16 @@ class DataVideoController extends Controller
 
         if ($request->hasFile('fileVideo')) {
             $file = $request->file('fileVideo');
+
             $judulAsli = $file->getClientOriginalName();
-            $mdl = $file->store('fileVideo', 'public');
+            $namaFile = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(
+                public_path('uploads/fileVideo'),
+                $namaFile
+            );
+
+            $mdl = 'uploads/fileVideo/' . $namaFile;
         }
 
         $data = [
@@ -114,7 +119,14 @@ class DataVideoController extends Controller
 
             $file = $request->file('fileVideo');
             $judulAsli = $file->getClientOriginalName();
-            $mdl = $file->store('fileVideo', 'public');
+            $namafile = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(
+                public_path('uploads/fileVideo'),
+                $namafile
+            );
+
+            $mdl = 'uploads/fileVideo/' . $namafile;
 
             $video->update([
                 'fileVideo' => $mdl,

@@ -62,8 +62,12 @@ class ModulController extends Controller
         ]);
 
         $file = $request->file('fileModul');
+
         $namaFile = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('fileModul', $namaFile, 'public');
+
+        $path = public_path('uploads/fileModul');
+
+        $file->move($path, $namaFile);
 
         $idKelas = $request->id_kelas;        // dari form (user bisa pilih beda kalau mau)
         $idSemester = $request->id_semester;
@@ -130,7 +134,12 @@ class ModulController extends Controller
             // Simpan file baru
             $file = $request->file('fileModul');
             $namaBaru = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('fileModul', $namaBaru, 'public');
+
+            $path = public_path('uploads/fileModul');
+
+            $file->move($path, $namaBaru);
+            $path = 'uploads/fileModul/' . $namaBaru;
+
             $namaAsli = $file->getClientOriginalName();
         }
 

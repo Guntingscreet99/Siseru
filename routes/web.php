@@ -80,8 +80,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // USER MANAGEMENT
     Route::get('admin/master/akun', [UserController::class, 'index'])->name('admin.user.index');
-    
-
 
     // MASTER MODUL
     // INDEX

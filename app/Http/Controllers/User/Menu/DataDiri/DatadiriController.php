@@ -86,16 +86,39 @@ class DatadiriController extends Controller
         $fotoMhsPath   = null;
         $judulFileAsli = null;
 
+        // if ($request->hasFile('fotoMhs')) {
+
+        //     // Hapus foto lama jika ada
+        //     if ($user->datadiri && $user->datadiri->fotoMhs) {
+        //         Storage::disk('public')->delete($user->datadiri->fotoMhs);
+        //     }
+
+        //     $file          = $request->file('fotoMhs');
+        //     $judulFileAsli = $file->getClientOriginalName();
+        //     $fotoMhsPath   = $file->store('fotoMhs', 'public');
+        // }
+
         if ($request->hasFile('fotoMhs')) {
 
-            // Hapus foto lama jika ada
+            // Hapus foto lama (jika ada)
             if ($user->datadiri && $user->datadiri->fotoMhs) {
-                Storage::disk('public')->delete($user->datadiri->fotoMhs);
+                $oldPath = public_path($user->datadiri->fotoMhs);
+                if (file_exists($oldPath)) {
+                    unlink($oldPath);
+                }
             }
 
-            $file          = $request->file('fotoMhs');
+            $file = $request->file('fotoMhs');
+
             $judulFileAsli = $file->getClientOriginalName();
-            $fotoMhsPath   = $file->store('fotoMhs', 'public');
+            $namaFile = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(
+                public_path('uploads/fotoMhs'),
+                $namaFile
+            );
+
+            $fotoMhsPath = 'uploads/fotoMhs/' . $namaFile;
         }
 
         // ========================================

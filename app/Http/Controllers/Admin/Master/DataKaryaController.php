@@ -77,8 +77,16 @@ class DataKaryaController extends Controller
 
         if ($request->hasFile('fileKarya')) {
             $file = $request->file('fileKarya');
+
             $judulAsli = $file->getClientOriginalName();
-            $mdl = $file->store('fileKarya', 'public');
+            $namafile = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(
+                public_path('uploads/fileKarya'),
+                $namafile
+            );
+
+            $mdl = 'uploads/fileKarya/' . $namafile;
         }
 
         $data = [
@@ -134,8 +142,16 @@ class DataKaryaController extends Controller
 
             if ($request->hasFile('fileKarya')) {
                 $file = $request->file('fileKarya');
+
                 $data['judulFileAsli'] = $file->getClientOriginalName();
-                $data['fileKarya'] = $file->store('fileKarya', 'public');
+                $namafile = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+                $file->move(
+                    public_path('uploads/fileKarya'),
+                    $namafile
+                );
+
+                $mdl = 'uploads/fileKarya/' . $namafile;
             } else {
                 $mdl = null;
                 $judulAsli = null;

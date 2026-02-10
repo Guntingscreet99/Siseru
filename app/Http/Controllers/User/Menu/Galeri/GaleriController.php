@@ -79,7 +79,12 @@ class GaleriController extends Controller
         $idSemester = $request->id_semester;  // dari form
 
         $file = $request->file('fileKarya');
-        $path = $file->store('fileKarya', 'public');
+
+        $namaFile = time() . '_' . $file->getClientOriginalName();
+
+        $path = public_path('uploads/fileKarya');
+
+        $file->move($path, $namaFile);
 
         DataKarya::create([
             'user_id'       => $user->id,
@@ -134,8 +139,16 @@ class GaleriController extends Controller
             }
 
             $file = $request->file('fileKarya');
-            $data['fileKarya'] = $file->store('fileKarya', 'public');
+
             $data['judulFileAsli'] = $file->getClientOriginalName();
+            $namafile = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(
+                public_path('uploads/fileKarya'),
+                $namafile
+            );
+
+            $data['fileKarya'] = 'uploads/fileKarya/' . $namafile;
         }
 
         $karya->update($data);

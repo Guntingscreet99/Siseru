@@ -73,8 +73,17 @@ class VideoController extends Controller
         $originalName = null;
 
         if ($request->hasFile('fileVideo')) {
-            $filePath     = $request->file('fileVideo')->store('fileVideo', 'public');
             $originalName = $request->file('fileVideo')->getClientOriginalName();
+            $namafile = uniqid() . '_' . time() . '.' . $request->file('fileVideo')->getClientOriginalExtension();
+
+            $request->file('fileVideo')->move(
+                public_path('uploads/fileVideo'),
+                $namafile
+            );
+
+            $filePath = 'uploads/fileVideo/' . $namafile;
+
+            // $filePath     = $request->file('fileVideo')->store('fileVideo', 'public');
         }
 
         DataVideo::create([
@@ -122,7 +131,16 @@ class VideoController extends Controller
             if ($filePath) {
                 Storage::disk('public')->delete($filePath);
             }
-            $filePath = $request->file('fileVideo')->store('fileVideo', 'public');
+
+            $originalName = $request->file('fileVideo')->getClientOriginalName();
+            $namafile = uniqid() . '_' . time() . '.' . $request->file('fileVideo')->getClientOriginalExtension();
+
+            $request->file('fileVideo')->move(
+                public_path('uploads/fileVideo'),
+                $namafile
+            );
+
+            $filePath = 'uploads/fileVideo/' . $namafile;
         }
 
         $video->update([

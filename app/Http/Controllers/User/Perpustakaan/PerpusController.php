@@ -65,9 +65,12 @@ class PerpusController extends Controller
         // Simpan file utama
         if ($request->hasFile('filePerpus')) {
             $file = $request->file('filePerpus');
+
             $namaFile = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('perpus/files', $namaFile, 'public');
-            $data['filePerpus'] = $path;
+
+            $file->move(public_path('uploads/perpus/files'), $namaFile);
+            $data['filePerpus'] = 'uploads/perpus/files/' . $namaFile;
+
             $data['judulFileAsli'] = $file->getClientOriginalName();
         }
 
@@ -75,8 +78,8 @@ class PerpusController extends Controller
         if ($request->hasFile('cover')) {
             $cover = $request->file('cover');
             $namaCover = 'cover_' . time() . '.' . $cover->getClientOriginalExtension();
-            $pathCover = $cover->storeAs('perpus/covers', $namaCover, 'public');
-            $data['cover'] = $pathCover;
+            $cover->move(public_path('uploads/perpus/covers'), $namaCover);
+            $data['cover'] = 'uploads/perpus/covers/' . $namaCover;
         }
 
         $data['user_id'] = Auth::id(); // Penting! Biar tahu siapa yang upload
@@ -132,8 +135,8 @@ class PerpusController extends Controller
 
             $file = $request->file('filePerpus');
             $namaFile = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('perpus/files', $namaFile, 'public');
-            $data['filePerpus'] = $path;
+            $file->move(public_path('uploads/perpus/files'), $namaFile);
+            $data['filePerpus'] = 'uploads/perpus/files/' . $namaFile;
             $data['judulFileAsli'] = $file->getClientOriginalName();
         }
 
@@ -145,8 +148,8 @@ class PerpusController extends Controller
 
             $cover = $request->file('cover');
             $namaCover = 'cover_' . time() . '.' . $cover->getClientOriginalExtension();
-            $pathCover = $cover->storeAs('perpus/covers', $namaCover, 'public');
-            $data['cover'] = $pathCover;
+            $cover->move(public_path('uploads/perpus/covers'), $namaCover);
+            $data['cover'] = 'uploads/perpus/covers/' . $namaCover;
         }
 
         $perpus->update($data);

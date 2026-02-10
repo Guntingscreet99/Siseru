@@ -63,10 +63,24 @@ class DataForumController extends Controller
         $filePath = null;
         $fileNameAsli = null;
 
+        // if ($request->hasFile('fileForum')) {
+        //     $file = $request->file('fileForum');
+        //     $fileNameAsli = $file->getClientOriginalName();
+        //     $filePath = $file->store('forum-files', 'public');
+        // }
+
         if ($request->hasFile('fileForum')) {
             $file = $request->file('fileForum');
+
             $fileNameAsli = $file->getClientOriginalName();
-            $filePath = $file->store('forum-files', 'public');
+            $namafile = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(
+                public_path('uploads/forum-files'),
+                $namafile
+            );
+
+            $filePath = 'uploads/forum-files/' . $namafile;
         }
 
         DataForum::create([
@@ -130,7 +144,12 @@ class DataForumController extends Controller
 
             $file = $request->file('fileForum');
             $data['judulFileAsli'] = $file->getClientOriginalName();
-            $data['fileForum']     = $file->store('forum-files', 'public');
+            $namafile = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(
+                public_path('uploads/forum-files'),
+                $namafile
+            );
+            $data['fileForum'] = 'uploads/forum-files/' . $namafile;
         }
         // Jika tidak ada file baru → tetap pakai yang lama
 

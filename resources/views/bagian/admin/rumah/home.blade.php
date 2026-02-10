@@ -8,68 +8,25 @@
 
     @include('bagian.admin.gaya.css')
     @stack('css')
-    <!-- CSS tambahan untuk fix sidebar offcanvas di mobile/tablet -->
+
     <style>
         @media (max-width: 991.98px) {
-
-            /* Force semua teks di dalam offcanvas jadi putih/cerah */
-            #sidebarOffcanvas,
-            #sidebarOffcanvas * {
-                color: #ffffff !important;
+            .main-header {
+                display: block !important;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1300;
+                background: #fff;
             }
 
-            /* Khusus heading section (MENU UTAMA dll) */
-            #sidebarOffcanvas .text-section,
-            #sidebarOffcanvas .nav-section h4,
-            #sidebarOffcanvas .nav-section .text-section {
-                color: #ffffff !important;
-                opacity: 1 !important;
-                font-weight: 600 !important;
+            .sidebar .sidebar-logo {
+                display: none !important;
             }
 
-            /* Item menu utama & ikon */
-            #sidebarOffcanvas .nav-secondary>.nav-item>a,
-            #sidebarOffcanvas .nav-secondary>.nav-item>a>i,
-            #sidebarOffcanvas .nav-secondary>.nav-item>a>p,
-            #sidebarOffcanvas .nav-secondary .nav-link {
-                color: #f0f0f0 !important;
-                /* lebih cerah dari #e0e0e0 */
-            }
-
-            /* Hover & active state */
-            #sidebarOffcanvas .nav-secondary .nav-item>a:hover,
-            #sidebarOffcanvas .nav-secondary .nav-item.active>a,
-            #sidebarOffcanvas .nav-secondary .nav-item.active>a>i,
-            #sidebarOffcanvas .nav-secondary .nav-item.active>a>p {
-                color: #ffffff !important;
-                background: rgba(23, 125, 255, 0.25) !important;
-                /* biru agak lebih kuat biar kontras */
-            }
-
-            /* Submenu */
-            #sidebarOffcanvas .nav-collapse .nav-item a,
-            #sidebarOffcanvas .nav-collapse .sub-item {
-                color: #e8e8e8 !important;
-            }
-
-            #sidebarOffcanvas .nav-collapse .nav-item a:hover,
-            #sidebarOffcanvas .nav-collapse .sub-item:hover {
-                color: #ffffff !important;
-                background: rgba(255, 255, 255, 0.08) !important;
-            }
-
-            /* Logo header di sidebar */
-            #sidebarOffcanvas .logo-header,
-            #sidebarOffcanvas .logo-header * {
-                color: #ffffff !important;
-                background-color: #000000 !important;
-            }
-
-            /* Hilangkan opacity/muted yang mungkin override */
-            #sidebarOffcanvas .text-muted,
-            #sidebarOffcanvas [class*="opacity-"] {
-                color: #ffffff !important;
-                opacity: 1 !important;
+            .main-panel {
+                padding-top: 72px;
             }
         }
     </style>
@@ -82,91 +39,9 @@
         <!-- End Sidebar -->
 
         <div class="main-panel">
-            @php
-                $user = Auth::user();
-
-                if ($user?->datadiri && $user->datadiri->fotoMhs) {
-                    $fotoNavbar = asset('storage/' . $user->datadiri->fotoMhs);
-                } elseif ($user?->foto) {
-                    $fotoNavbar = asset('storage/' . $user->foto);
-                } else {
-                    $fotoNavbar = asset('admin/img/profile.jpg');
-                }
-            @endphp
-
-            {{-- <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom mt-4"> --}}
-            <div class="main-header">
-                <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
-                    <div class="container-fluid">
-
-                        <!-- tombol toggle sidebar mobile (jika belum pakai offcanvas di sidebar) -->
-                        <!-- Di dalam <div class="container-fluid"> navbar -->
-                        <button class="navbar-toggler d-lg-none me-3" type="button" data-bs-toggle="offcanvas"
-                            data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas" aria-expanded="false"
-                            aria-label="Toggle sidebar">
-                            <i class="fa-solid fa-bars text-white"></i>
-                        </button>
-
-                        <a href="#" class="logo d-flex align-items-center me-auto">
-                            <img src="{{ asset('landing/img/logo_UMK.png') }}" alt="RUPAKU Logo" class="me-2"
-                                height="50">
-                            <img src="{{ asset('landing/img/logo_PGSD.png') }}" alt="RUPAKU Logo" class="me-2"
-                                height="50">
-                            <img src="{{ asset('landing/img/LogoRupaku.png') }}" alt="RUPAKU Logo" class="me-2"
-                                height="55">
-                        </a>
-
-                        <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-                            <li class="nav-item topbar-user dropdown hidden-caret">
-                                <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
-                                    aria-expanded="false">
-                                    <div class="avatar-sm">
-                                        <img src="{{ $fotoNavbar }}" class="avatar-img rounded-circle"
-                                            style="object-fit: cover;">
-
-                                    </div>
-                                    <span class="profile-username">
-                                        <span class="op-7">Hi,</span>
-                                        <span class="fw-bold">{{ Auth::user()->nama_lengkap ?? '-' }}</span>
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user animated fadeIn">
-                                    <div class="dropdown-user-scroll scrollbar-outer">
-                                        <li>
-                                            <div class="user-box">
-                                                <div class="avatar-lg">
-                                                    <img src="{{ $fotoNavbar }}" class="avatar-img rounded"
-                                                        style="object-fit: cover; width:100%; height:100%;">
-                                                </div>
-                                                <div class="u-text">
-                                                    <h4>{{ Auth::user()->nim ?? '-' }}</h4>
-                                                    <p class="text-muted">{{ Auth::user()->nama_lengkap ?? '-' }}</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="{{ url('mahasiswa/data-diri') }}">Data
-                                                Diri</a>
-                                            <a class="dropdown-item" href="{{ route('landing.index') }}">Beranda</a>
-                                            <div class="dropdown-divider"></div>
-                                            <form action="{{ url('logout') }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="btn btn-warning"
-                                                    style="margin-left: 5px;">Keluar</button>
-                                            </form>
-                                        </li>
-                                    </div>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-
             @include('bagian.admin.gaya.navbar')
 
-            <section>
+            <section class="mt-5">
                 @yield('isi')
             </section>
 
