@@ -69,22 +69,22 @@
                                         data-deskripsi="{{ $item->deskripsi ?? 'Tidak ada deskripsi' }}"
                                         data-kategori="{{ $item->kategori }}" data-topik="{{ $item->topik }}"
                                         data-tahun="{{ $item->tahun }}"
-                                        data-file="{{ $item->filePerpus ? Storage::url($item->filePerpus) : '' }}"
+                                        data-file="{{ $item->filePerpus ? asset($item->filePerpus) : '' }}"
                                         data-type="{{ $item->filePerpus ? strtolower(pathinfo($item->filePerpus, PATHINFO_EXTENSION)) : '' }}">
 
                                         <!-- Thumbnail -->
                                         @if ($item->cover)
-                                            <img src="{{ Storage::url($item->cover) }}" class="w-100 h-100 object-fit-cover"
+                                            <img src="{{ asset($item->cover) }}" class="w-100 h-100 object-fit-cover"
                                                 alt="{{ $item->judul }}">
                                         @elseif($item->filePerpus)
                                             @php $ext = strtolower(pathinfo($item->filePerpus, PATHINFO_EXTENSION)) @endphp
                                             @if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']))
-                                                <img src="{{ Storage::url($item->filePerpus) }}"
+                                                <img src="{{ asset($item->filePerpus) }}"
                                                     class="w-100 h-100 object-fit-cover" alt="{{ $item->judul }}">
                                             @elseif(in_array($ext, ['mp4', 'mkv', 'avi']))
                                                 <div class="ratio ratio-1x1 position-relative bg-dark">
                                                     <video class="w-100 h-100 object-fit-cover">
-                                                        <source src="{{ Storage::url($item->filePerpus) }}"
+                                                        <source src="{{ asset($item->filePerpus) }}"
                                                             type="video/{{ $ext }}">
                                                     </video>
                                                     <div class="play-icon"><i class="fas fa-play-circle fa-4x"></i></div>

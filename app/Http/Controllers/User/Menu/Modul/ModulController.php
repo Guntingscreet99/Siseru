@@ -63,13 +63,16 @@ class ModulController extends Controller
 
         $file = $request->file('fileModul');
 
-        $namaFile = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $folder = 'uploads/fileModul';
 
-        $path = public_path('uploads/fileModul');
+        $namaFile = time().'_'.$file->getClientOriginalName();
 
-        $file->move($path, $namaFile);
+        $file->move(public_path($folder), $namaFile);
 
-        $idKelas = $request->id_kelas;        // dari form (user bisa pilih beda kalau mau)
+        $path = $folder.'/'.$namaFile;
+
+        $idKelas = $request->id_kelas;
+                // dari form (user bisa pilih beda kalau mau)
         $idSemester = $request->id_semester;
 
         // dd($idKelas, $idSemester);
@@ -126,22 +129,26 @@ class ModulController extends Controller
         $namaAsli = $modul->judulFileAsli;
 
         if ($request->hasFile('fileModul')) {
-            // Hapus file lama
-            if ($path && Storage::disk('public')->exists($path)) {
-                Storage::disk('public')->delete($path);
+            // Hapus file lama (kalau ada)
+            if ($modul->fileModul && file_exists(public_path($modul->fileModul))) {
+                unlink(public_path($modul->fileModul));
             }
 
-            // Simpan file baru
+            // Upload file baru
             $file = $request->file('fileModul');
-            $namaBaru = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            $path = public_path('uploads/fileModul');
+            $folder = 'uploads/fileModul';
 
-            $file->move($path, $namaBaru);
-            $path = 'uploads/fileModul/' . $namaBaru;
+            $namaBaru = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+
+            $file->move(public_path($folder), $namaBaru);
+
+            // Path untuk database
+            $path = $folder.'/'.$namaBaru;
 
             $namaAsli = $file->getClientOriginalName();
         }
+
 
         $modul->update([
             'judul'         => $request->judul,

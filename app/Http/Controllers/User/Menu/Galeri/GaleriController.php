@@ -80,11 +80,13 @@ class GaleriController extends Controller
 
         $file = $request->file('fileKarya');
 
-        $namaFile = time() . '_' . $file->getClientOriginalName();
+        $folder = 'uploads/fileKarya';
 
-        $path = public_path('uploads/fileKarya');
+        $namaFile = time().'_'.$file->getClientOriginalName();
 
-        $file->move($path, $namaFile);
+        $file->move(public_path($folder), $namaFile);
+
+        $path = $folder.'/'.$namaFile;
 
         DataKarya::create([
             'user_id'       => $user->id,
@@ -133,22 +135,21 @@ class GaleriController extends Controller
         $data = $request->only(['namaKarya', 'id_kelas', 'id_semester', 'deskripsi']);
 
         if ($request->hasFile('fileKarya')) {
-            // Hapus file lama
-            if ($karya->fileKarya && Storage::disk('public')->exists($karya->fileKarya)) {
-                Storage::disk('public')->delete($karya->fileKarya);
+
+            if ($karya->fileKarya && file_exists(public_path($karya->fileKarya))) {
+                unlink(public_path($karya->fileKarya));
             }
 
             $file = $request->file('fileKarya');
 
+            $folder = 'uploads/fileKarya';
+
+            $namafile = uniqid().'_'.time().'.'.$file->getClientOriginalExtension();
+
+            $file->move(public_path($folder), $namafile);
+
+            $data['fileKarya'] = $folder.'/'.$namafile;
             $data['judulFileAsli'] = $file->getClientOriginalName();
-            $namafile = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
-
-            $file->move(
-                public_path('uploads/fileKarya'),
-                $namafile
-            );
-
-            $data['fileKarya'] = 'uploads/fileKarya/' . $namafile;
         }
 
         $karya->update($data);

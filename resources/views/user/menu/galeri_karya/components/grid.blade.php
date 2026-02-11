@@ -7,10 +7,10 @@
             data-nim="{{ $item->user->nim ?? '—' }}" data-kelas="{{ $item->kelas->nama_kelas ?? '-' }}"
             data-semester="{{ $item->semester->nama_semester ?? '-' }}" data-karya="{{ $item->namaKarya }}"
             data-deskripsi="{{ $item->deskripsi ?? '' }}"
-            data-file="{{ $item->fileKarya ? Storage::url($item->fileKarya) : '' }}"
+            data-file="{{ $item->fileKarya ? asset($item->fileKarya) : '' }}"
             data-type="{{ $item->fileKarya ? (in_array(strtolower(pathinfo($item->fileKarya, PATHINFO_EXTENSION)), ['mp4', 'mkv', 'avi']) ? 'video' : 'image') : '' }}"
             data-foto="{{ $item->user && $item->user->datadiri && $item->user->datadiri->fotoMhs
-                ? Storage::url($item->user->datadiri->fotoMhs)
+                ? asset($item->user->datadiri->fotoMhs)
                 : asset('landing/img/profil_dasar.png') }}">
 
             {{-- Thumbnail --}}
@@ -19,12 +19,12 @@
                 @if (in_array($ext, ['mp4', 'mkv', 'avi']))
                     <div class="ratio ratio-1x1">
                         <video class="w-100 h-100 object-fit-cover" preload="metadata">
-                            <source src="{{ Storage::url($item->fileKarya) }}#t=0.5" type="video/{{ $ext }}">
+                            <source src="{{ asset($item->fileKarya) }}#t=0.5" type="video/{{ $ext }}">
                         </video>
                         <div class="play-icon"><i class="fas fa-play-circle"></i></div>
                     </div>
                 @else
-                    <img src="{{ Storage::url($item->fileKarya) }}" class="w-100 h-100 object-fit-cover" loading="lazy"
+                    <img src="{{ asset($item->fileKarya) }}" class="w-100 h-100 object-fit-cover" loading="lazy"
                         alt="{{ $item->namaKarya }}">
                 @endif
             @else

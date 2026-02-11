@@ -2,7 +2,7 @@
     @php
         $ext = $item->fileModul ? strtolower(pathinfo($item->fileModul, PATHINFO_EXTENSION)) : '';
 
-        $fileUrl = $item->fileModul ? Storage::url($item->fileModul) : '';
+        $fileUrl = $item->fileModul ? asset($item->fileModul) : '';
     @endphp
 
     <div class="col animate__animated animate__fadeIn">
@@ -81,7 +81,7 @@
                             overflow: hidden;
                         ">
                         {{ $item->judul }}
-                        
+
                         {{ $item->topik ? ' - ' . $item->topik : '' }}
                     </h6>
 

@@ -64,22 +64,40 @@ class PerpusController extends Controller
 
         // Simpan file utama
         if ($request->hasFile('filePerpus')) {
+
             $file = $request->file('filePerpus');
 
-            $namaFile = time() . '_' . $file->getClientOriginalName();
+            $folderFile = 'uploads/perpus/files';
 
-            $file->move(public_path('uploads/perpus/files'), $namaFile);
-            $data['filePerpus'] = 'uploads/perpus/files/' . $namaFile;
+            if (!file_exists(public_path($folderFile))) {
+                mkdir(public_path($folderFile), 0755, true);
+            }
 
+            $namaFile = uniqid().'_'.time().'.'.$file->getClientOriginalExtension();
+
+            $file->move(public_path($folderFile), $namaFile);
+
+            $data['filePerpus'] = $folderFile.'/'.$namaFile;
             $data['judulFileAsli'] = $file->getClientOriginalName();
         }
 
-        // Simpan cover (opsional)
+        /* ========= COVER ========= */
+
         if ($request->hasFile('cover')) {
+
             $cover = $request->file('cover');
-            $namaCover = 'cover_' . time() . '.' . $cover->getClientOriginalExtension();
-            $cover->move(public_path('uploads/perpus/covers'), $namaCover);
-            $data['cover'] = 'uploads/perpus/covers/' . $namaCover;
+
+            $folderCover = 'uploads/perpus/covers';
+
+            if (!file_exists(public_path($folderCover))) {
+                mkdir(public_path($folderCover), 0755, true);
+            }
+
+            $namaCover = 'cover_'.uniqid().'_'.time().'.'.$cover->getClientOriginalExtension();
+
+            $cover->move(public_path($folderCover), $namaCover);
+
+            $data['cover'] = $folderCover.'/'.$namaCover;
         }
 
         $data['user_id'] = Auth::id(); // Penting! Biar tahu siapa yang upload
@@ -129,28 +147,52 @@ class PerpusController extends Controller
 
         // Ganti file utama kalau ada upload baru
         if ($request->hasFile('filePerpus')) {
-            if ($perpus->filePerpus && Storage::disk('public')->exists($perpus->filePerpus)) {
-                Storage::disk('public')->delete($perpus->filePerpus);
+
+            // Hapus file lama
+            if ($perpus->filePerpus && file_exists(public_path($perpus->filePerpus))) {
+                unlink(public_path($perpus->filePerpus));
             }
 
             $file = $request->file('filePerpus');
-            $namaFile = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/perpus/files'), $namaFile);
-            $data['filePerpus'] = 'uploads/perpus/files/' . $namaFile;
+
+            $folderFile = 'uploads/perpus/files';
+
+            if (!file_exists(public_path($folderFile))) {
+                mkdir(public_path($folderFile), 0755, true);
+            }
+
+            $namaFile = uniqid().'_'.time().'.'.$file->getClientOriginalExtension();
+
+            $file->move(public_path($folderFile), $namaFile);
+
+            $data['filePerpus'] = $folderFile.'/'.$namaFile;
             $data['judulFileAsli'] = $file->getClientOriginalName();
         }
 
-        // Ganti cover kalau ada upload baru
+        /* ========= COVER ========= */
+
         if ($request->hasFile('cover')) {
-            if ($perpus->cover && Storage::disk('public')->exists($perpus->cover)) {
-                Storage::disk('public')->delete($perpus->cover);
+
+            // Hapus cover lama
+            if ($perpus->cover && file_exists(public_path($perpus->cover))) {
+                unlink(public_path($perpus->cover));
             }
 
             $cover = $request->file('cover');
-            $namaCover = 'cover_' . time() . '.' . $cover->getClientOriginalExtension();
-            $cover->move(public_path('uploads/perpus/covers'), $namaCover);
-            $data['cover'] = 'uploads/perpus/covers/' . $namaCover;
+
+            $folderCover = 'uploads/perpus/covers';
+
+            if (!file_exists(public_path($folderCover))) {
+                mkdir(public_path($folderCover), 0755, true);
+            }
+
+            $namaCover = 'cover_'.uniqid().'_'.time().'.'.$cover->getClientOriginalExtension();
+
+            $cover->move(public_path($folderCover), $namaCover);
+
+            $data['cover'] = $folderCover.'/'.$namaCover;
         }
+
 
         $perpus->update($data);
 

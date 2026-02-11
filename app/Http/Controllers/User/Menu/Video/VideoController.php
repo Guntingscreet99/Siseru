@@ -73,18 +73,25 @@ class VideoController extends Controller
         $originalName = null;
 
         if ($request->hasFile('fileVideo')) {
-            $originalName = $request->file('fileVideo')->getClientOriginalName();
-            $namafile = uniqid() . '_' . time() . '.' . $request->file('fileVideo')->getClientOriginalExtension();
 
-            $request->file('fileVideo')->move(
-                public_path('uploads/fileVideo'),
-                $namafile
-            );
+            $file = $request->file('fileVideo');
 
-            $filePath = 'uploads/fileVideo/' . $namafile;
+            $folder = 'uploads/fileVideo';
 
-            // $filePath     = $request->file('fileVideo')->store('fileVideo', 'public');
-        }
+            // Pastikan folder ada
+            if (!file_exists(public_path($folder))) {
+                mkdir(public_path($folder), 0755, true);
+            }
+
+            $originalName = $file->getClientOriginalName();
+
+            $namafile = uniqid().'_'.time().'.'.$file->getClientOriginalExtension();
+
+            $file->move(public_path($folder), $namafile);
+
+            // Path untuk database
+            $filePath = $folder.'/'.$namafile;
+        }   
 
         DataVideo::create([
             'judul'         => $request->judul,
@@ -126,21 +133,28 @@ class VideoController extends Controller
 
         $filePath = $video->fileVideo;
 
-        if ($request->hasFile('fileVideo')) {
+       if ($request->hasFile('fileVideo')) {
+
             // Hapus file lama
-            if ($filePath) {
-                Storage::disk('public')->delete($filePath);
+            if ($filePath && file_exists(public_path($filePath))) {
+                unlink(public_path($filePath));
             }
 
-            $originalName = $request->file('fileVideo')->getClientOriginalName();
-            $namafile = uniqid() . '_' . time() . '.' . $request->file('fileVideo')->getClientOriginalExtension();
+            $file = $request->file('fileVideo');
 
-            $request->file('fileVideo')->move(
-                public_path('uploads/fileVideo'),
-                $namafile
-            );
+            $folder = 'uploads/fileVideo';
 
-            $filePath = 'uploads/fileVideo/' . $namafile;
+            if (!file_exists(public_path($folder))) {
+                mkdir(public_path($folder), 0755, true);
+            }
+
+            $originalName = $file->getClientOriginalName();
+
+            $namafile = uniqid().'_'.time().'.'.$file->getClientOriginalExtension();
+
+            $file->move(public_path($folder), $namafile);
+
+            $filePath = $folder.'/'.$namafile;
         }
 
         $video->update([

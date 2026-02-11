@@ -6,14 +6,14 @@
                     transition-all duration-300 hover:shadow-xl hover:-translate-y-2 cursor-pointer"
             data-bs-toggle="modal" data-bs-target="#detailModal" data-id="{{ $item->kdvideo }}"
             data-judul="{{ $item->judul }}" data-deskripsi="{{ $item->deskripsi ?? '' }}" data-link="{{ $item->link }}"
-            data-file="{{ $item->fileVideo ? Storage::url($item->fileVideo) : '' }}">
+            data-file="{{ $item->fileVideo ? asset($item->fileVideo) : '' }}">
 
             <!-- Thumbnail Video -->
             <div class="ratio ratio-16x9 overflow-hidden">
                 @if ($item->fileVideo)
                     <video class="w-100 h-100 object-fit-cover transition-all duration-500 hover:scale-110"
                         preload="metadata" muted playsinline>
-                        <source src="{{ Storage::url($item->fileVideo) }}#t=0.5" type="video/mp4">
+                        <source src="{{ asset($item->fileVideo) }}#t=0.5" type="video/mp4">
                     </video>
                     <div
                         class="play-icon position-absolute top-50 start-50 translate-middle z-3
